@@ -1,0 +1,1539 @@
+\documentclass{kuisthesis}           % 日本語 
+%\documentclass[english]{kuisthesis} % 英語
+
+\usepackage{comment}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage [dvipdfmx]{graphicx}
+
+
+\jtitle[DAG型パス分解の性質の考察及び構成アルゴリズムの提案]%	% 和文題目（内容梗概／目次用）
+	{DAG型パス分解の性質の考察\\及び構成アルゴリズムの提案}	% 和文題目
+\etitle{Properties and algorithms of DAG-path decomposition}	% 英文題目
+\jauthor{伊豆　真哉}				% 和文著者名
+\eauthor{Shinya Izu}			% 英文著者名
+\supervisor{川原　純　准教授}			% 指導教員名
+\date{2023年1月31日}				% 提出年月日
+
+
+\begin{document}
+\maketitle					% 「とびら」の出力
+
+
+
+\begin{jabstract}
+一般の無向グラフにおけるNP困難な問題に対し，グラフが木であれば頂点数の多項式時間で解ける場合がある．したがって無向グラフを木と見ることで，NP困難な問題に対して高速に解くことを考える．一般の無向グラフにおいて，グラフが木からどれだけ離れた構造をしているかを表す値を木幅という．木幅の値が小さいほどそのグラフが木に近い構造をしており，それによってNP困難な問題に対しても比較的高速に解くことができる．木幅を求めるためには木分解という操作を行う，この木分解を求める問題自体はNP困難な問題である．現在では木幅を定数とみなせる状況を仮定し，様々なNP困難な問題を頂点数の多項式時間で解くアルゴリズムが多く研究されている．
+
+グラフが木からどれだけ離れた構造をしているかを表す値を木幅というのに対し，パスからどれだけ離れているかを表す値をパス幅という．パス幅は木幅を特殊化したものであり，パス幅の値が小さいほどそのグラフがパスに近い構造をしている．木幅と同様に，パス幅を定数とみなせる状況では，NP困難な問題でも頂点数の多項式時間で解ける問題がある．グラフのパス幅を求めるにはパス分解という操作を行い，こちらもパス幅を与えるパス分解の構成はNP困難な問題であることが知られている．また，パス分解を用いて，NP困難な問題についても高速に解を求めるアルゴリズムが研究されている．
+
+無向グラフのみならず，有向グラフでも様々な幅が考えられてきた．例えば，有向グラフに対する木幅やパス幅，そして有向非巡回グラフに対する幅などである．2022年にはKasaharaらが有向グラフに対するDAGパス幅の定義を行っている．従来の有向グラフに対するパス幅の定義では有向非巡回グラフに対してはパス幅が0になるため意味をなさなかったが，DAGパス幅はDAGに対しても有向パスからの遠さに沿ったパス幅を与える．DAGパス幅を求めるためにはDAG型パス分解という操作を行う．以下では，DAGパス幅，DAG型パス分解を単にパス幅，パス分解と表現する．
+
+
+今回の研究では，パス幅の性質をさらに深く調べるべく，有向非巡回グラフを用いた一人用のゲームであるグラフ小石ゲームとの関係性を調べている．グラフ小石ゲームは一つの頂点に向かって各頂点上に小石を設置したり取り除いたりするゲームであり，Proof of Spaceというブロックチェーン技術の中で応用されている理論である．グラフ小石ゲームにおいて使用されるペブリング数というパラメータの大小によって，ブロックチェーンの信頼性を保証している．パス幅とグラフ小石ゲームの関係を調べる具体的な方法としては，両者に新たに一つずつルールを追加し，パス分解と小石ゲームの戦略の構成についての比較をしている．その結果，ルール追加後のパス分解とグラフ小石ゲームの戦略の構成が，逆順を辿ることでお互いに一致することを示した．またペブリング数を用いてパス幅を評価した．
+
+パス幅の性質を調べる別のアプローチとして，一般のグラフではNP困難なパス分解の構成に対し，特殊なグラフでは計算量がどのように変化するかを調べた．その結果，木の一種である有向木や反有向木，そして準ハミルトングラフについては頂点数の多項式時間でパス分解を構成するアルゴリズムをそれぞれ提案した．アルゴリズムの動作としては，有向木では各頂点に対して3つのパラメータを用意し，葉側からボトムアップにそれぞれの値を決定していく．その後パラメータの値によって頂点の位置の入れ替えを行い，最後に根から帰りがけ順にパス分解の処理をしている．反有向木では各頂点に対して1つのパラメータを用意し，葉側からボトムアップにその値を決定していく．その後パラメータの値によって頂点の位置の入れ替えを行い，最後に根から行きがけ順にパス分解の処理をしている．また準ハミルトングラフでは，入力グラフに対してトポロジカルソートを行い，ソートされた頂点の後方から順にパス分解の処理を行っている．以上の方法により，有向木，反有向木に対しては，頂点数を$|V|$として$O(|V|\log |V|)$の計算量でパス分解を構成することができ，準ハミルトングラフに対しては，枝数を$|E|$として$O(|V|+|E|)$の計算量でパス分解を構成することができた．
+
+さらに，一般の有向非巡回グラフに対しても具体的なパス分解の構成アルゴリズムを提案した．このアルゴリズムでは，入力グラフに対して木構造を用いてトポロジカルソートを全列挙していき，途中で不必要な節点の枝刈りを行っている．その後幅が最小となるトポロジカル順序を出力し，準ハミルトングラフに対するアルゴリズムを適用してパス分解を得ている．一般のDAGに対するパス幅を求めるには，愚直な方法だと頂点数の階乗時間かかってしまうが，今回提案した手法を用いることで，計算量を$O(|V|(|V|+|E|)\cdot2^{|V|-1})$にまで小さくしている．
+
+\end{jabstract}
+
+\begin{eabstract}				% 英文梗概
+
+NP-hard problems for undirected graphs may be solved in polynomial time over the number of vertices if the graph is a tree. Therefore, by viewing an undirected graph as a tree, we can solve NP-hard problems faster. The treewidth of a graph is a value that indicates how far away from the tree the graph is. The smaller the treewidth, the closer the graph is to the tree, and thus the faster it can be used to solve NP-hard problems. To find the treewidth, an operation called tree decomposition is performed, and the problem of finding the tree decomposition itself is NP-hard. Currently, many algorithms are designed to solve various NP-hard problems in polynomial time in the number of vertices, assuming that the treewidth can be regarded as a constant.
+
+
+The value that indicates how far a graph is from a tree is called treewidth, whereas the value that indicates how far a graph is from a path is called pathwidth. Pathwidth is a specialization of treewidth, and the smaller the value of pathwidth, the closer the graph is to the path. As with treewidth, some NP-hard problems can be solved in polynomial time over the number of vertices in situations where the pathwidth can be considered as a constant. Finding the pathwidth of a graph involves an operation called path decomposition, and the construction of a path decomposition that gives the pathwidth is known to be an NP-hard problem. Algorithms that use path decomposition to fast find solutions to NP-hard problems have also been studied.
+
+
+Various widths have been considered not only for undirected graphs but also for directed graphs, such as treewidth, pathwidth, and width for directed acyclic graphs. In 2022, Kasahara et al. defined DAG pathwidth for directed graphs. To obtain the DAG pathwidth, we perform an operation called DAG-type path decomposition. In the following, DAG pathwidth and DAG-type path decomposition are simply referred to as pathwidth and path decomposition.
+
+In this study, to further investigate the properties of pathwidth, we investigate its relationship to the graph pebbling game, a one-player game using directed acyclic graphs. The graph pebbling game is a game in which pebbles are placed and removed on each vertex toward a single vertex, witch is a theory applied in the blockchain technology called Proof of Space. The parameter called pebbling number used in the graph pebbling game guarantee the reliability of the blockchain. To investigate the relationship between path width and the graph pebbling game, we add a new rule to them and compare the composition of strategies in the path decomposition and pebbling game. The results show that the path decomposition and the strategy structure of the graphing pebbling game after the addition of the rule are consistent with each other by following the reverse order. We also evaluate the pathwidth using the pebbling number.
+
+As another approach to investigate the nature of pathwidth, we investigate how the computational complexity of constructing NP-hard path decompositions for general graphs changes for special graphs. We propose algorithms for constructing path decompositions in polynomial time in the number of vertices for directed trees and antidirected trees, which are a kind of trees, and for semi-Hamiltonian graphs. The algorithm for directed trees works by determining three parameters for each vertex in a directed tree from leaves in a bottom-up manner. Then, the positions of the vertices are swapped according to the parameter values, and finally the path decomposition is performed from the root in the preorder. For antidirected trees, semi-Hamiltonian graphs, and general directed trees, we use similar methods. 
+
+%In an antidirected tree, one parameter is prepared for each vertex and its value is determined bottom-up from the leaf side. Then, the positions of the vertices are swapped according to the value of the parameter, and finally the paths are decomposed from the root in the order of their destinations. For semi-Hamiltonian graphs, topological sorting is performed on the input graph, and path decomposition is performed on the sorted vertices in backward order. 
+
+Using the above methods, we construct path decompositions for directed and antidirected trees with a computational complexity of $O(|V|\log|V|)$, where $|V|$ is the number of vertices, and for semi-Hamiltonian graphs with the complexity of $O(|V|+|E|)$, where $|E|$ is the number of edges, and for general directed trees of $O(|V|(|V|+|E|)\cdot2^{|V|-1})$.
+
+%We also proposed a specific path decomposition composition algorithm for general directed acyclic graphs. The algorithm enumerates all topological sorts of the input graph using a tree structure, pruning unnecessary nodes along the way. It then outputs the topological order with the minimum width, and applies the algorithm to semi-Hamiltonian graphs to obtain the path decomposition. The proposed method reduces the computational complexity to $O(|V|(|V|+|E|)\cdot2^{|V|-1})$, whereas a straightforward method would require a factorial of the number of vertices to obtain the pathwidth for a general DAG.
+
+
+\end{eabstract}
+
+\tableofcontents				% 目次の出力
+
+\section{はじめに}\label{sec-intro}		% 本文の開始
+
+NP困難な問題に対して高速に解を求める方法の一つとして木分解という手法が存在する．木分解とは，一般のグラフに対して全頂点をいくつかの頂点集合に分解し，それぞれを一つの節点と見なして木のような構造に変換する操作である．木分解を行うと，一般のグラフでも木に対するアルゴリズムが適応できるため，NP困難な問題でも比較的高速に解を求めることができる．木分解を行ったとき，一つの節点に含まれる最大の頂点数を幅といい，あるグラフに対して全ての木分解を試したときの幅の最小値を木幅という．木幅が小さいほど木に近い構造をしていることを表す．この木幅が定数で抑えられる場合，NP困難な問題に対しても頂点数の多項式時間で解くことができる．
+
+木分解と同様に，グラフ上の頂点をいくつかの頂点集合に分解し，グラフ全体をパス型の構造に変換する操作をパス分解という．また一つの節点に含まれる最大の頂点数をパス幅という．こちらも一般のグラフをパスのように扱うことができるため，パス幅が定数で抑えられる場合，NP困難な問題に対しても頂点数の多項式時間で解くことができる．
+
+
+無向グラフに対するパス幅は，Robertsonら [1]によって1983年に初めて提案された．また，同氏らによって無向グラフに対する木幅 [2]も初めて提案されている．1987年には，無向グラフの木幅とパス幅を求める問題はNP困難であることがArnborgら [3]によって明らかにされ，1989年には同氏らによって木幅やパス幅を用いた様々な多項式時間アルゴリズム [4]が研究されている．さらに，今研究ではパス分解の性質を調べるために，比較対象としてDAG上の一人用ゲームであるグラフ小石ゲーム [5]を扱っている．グラフ小石ゲームについては，1986年にKirousisらが研究を行っており，グラフ小石ゲームの応用例のひとつであるProof of Spaceについては2015年にDziembowskiら [6]によって研究されている．
+
+有向グラフに対しても様々な幅が考えられてきた．1997年にReed [7]が有向グラフに対するパス幅を提案しており，2001年にはJohnsonら [8]が有向グラフに対する木幅を提案している．また2012年には，Berwangerら [9]によってDAGに対する幅が提案されている．さらに2022年にはKasaharaら [10]によって，新たに有向グラフに対するパス幅であるDAGパス幅の提案がされている．
+
+DAGパス幅は，新たに提案された有向グラフに対するパス幅・パス分解の方法であり，従来の手法と違って木を構成する節点に含まれる頂点集合は強連結であるという条件を加えている．この条件によって特にDAGについて有効なパス幅が得られ，DAGに対して有効なアルゴリズムの適用が期待されている．
+
+今回の研究の目的は，DAGパス幅の性質をさらに深く研究することである．その一環として．DAG上の1人用ゲームであるグラフ小石ゲームとの関連性を第3章で調べている．また，KasaharaらはDAGパス幅を求める問題がNP困難であることを明らかにしているが，木や準ハミルトングラフといった特殊な有向グラフに対しては，計算量がどのように変化するのかを第4章で調べている．具体的な方法としては，実際に木や準ハミルトングラフに対して幅が最小のパス分解の構成アルゴリズムを与え，そのアルゴリズムの計算量を解析している．その結果，DAG上の木や準ハミルトングラフに対するパス分解は頂点数の多項式時間で構成できることを明らかにした．この結果によって，有向グラフが木や準ハミルトングラフに限られる場合，高速にパス幅を求めることが可能であることを示した．
+
+
+\section{準備}\label{sec-instruction}
+ \subsection{数学的準備}
+ 本節では数学的な準備を行う．有向枝$(u, v)$に対して，$u$を$v$の先行頂点といい，$u \in pred(v)$ ($pred(v)$は$v$の先行頂点集合)と表す．また，$v$を$u$の後続頂点といい，$v \in suc(u)$ ($suc(u)$は$u$の後続頂点集合)と表す．頂点$v$の入次数，出次数はそれぞれ$indeg(v), outdeg(v)$と表す．DAGとは有向非巡回グラフの略称であり，閉路のない有向グラフである．すなわち，グラフ$G(V, E)$上の任意の2頂点 $ \forall u, v \in V $に対して，$u$から$v$へのパスが存在するならば，$v$から$u$へのパスが存在しないとき，$G$はDAGであると定義する．DAGの一種である有向木とは次の条件を満たす有向グラフであり，in-treeともよばれる．
+ \begin{itemize}
+  \item 根と呼ばれる，入次数が0の頂点が存在する．
+  \item 根以外の頂点の入次数は1である．
+  \item 各頂点には，根からそれに至る有向道が存在する．
+\end{itemize}
+反有向木とは次の条件を満たすDAGであり，out-treeともよばれる．
+ \begin{itemize}
+  \item 根と呼ばれる，出次数が0の頂点が存在する．
+  \item 根以外の頂点の出次数は1である．
+  \item 各頂点から根に至る有向道が存在する．
+\end{itemize}
+準ハミルトングラフとは，グラフ上のすべての頂点を一度ずつ通る道が存在するグラフである．トポロジカルソートとは，DAGの各頂点に対して，どの頂点もその後続頂点よりも前に来るように並べることである．すなわち，頂点の間の全順序 $\prec$ であって有向枝$(u, v)$ に対して $u \prec v$ が成り立つ.
+
+
+ \subsection{DAG型パス分解}
+ 本節ではDAG型パス分解について説明する．パス分解とは，グラフ上の頂点をいくつかの頂点集合に分解してパスのように変換する操作である．またDAG型パス分解とは，無向グラフに対するパス分解を有向グラフに拡張したものである．グラフをパス分解することによって，そのグラフをパスとして扱うことができ，NP完全な問題に対しても，パス幅が定数とみなせるならば頂点数の多項式時間で解けるようになるといった利点がある．以下では，DAG型パス分解，パス幅，そして素敵なパス分解をそれぞれ説明する．
+
+ \subsubsection{DAG型パス分解}
+ $G=(V, E)$とする．GのDAG型パス分解とは，以下の3つの条件をみたすようなVの各部分集合$ X_i (i = 1, 2,  \ldots, s)$の列 $X=(X_1, X_2,  \ldots, X_s)$ である [10]．
+
+ \begin{enumerate}
+  \item $ X_1 \cup X_2 \cup \cdots \cup X_s = V $ 
+  \item 任意の有向枝 $ (u, v) \in E $ について，以下のいずれかが成り立つ．
+  \begin{itemize}
+      \item $u, v \in X_1$
+      \item ある $i$ $(i \geq 2)$ があり，$u \in X_i$, $u \notin X_{i-1}$, $v \in X_i$　が成り立つ．
+  \end{itemize}
+  \item 任意の$ i, j, k (1 \leq i \leq j \leq k \leq s)$ について， $X_i \cap X_k \subseteq X_j$ が成り立つ．すなわち，各頂点$v$について，$v$は$X$上で非空な部分道を誘導する．
+\end{enumerate}
+
+ 以下ではDAG型パス分解をDAG-PDと表現する．また$V$の各部分集合$X_i$を節点と表現する．
+
+ \subsubsection{パス幅}
+ DAG-PD $(X_1, X_2,   \ldots, X_s)$ に対し，$ \underset{i}{\max} \{ |X_i|-1 \}$ を幅という．DAG $G$のパス幅とは，$G$の全てのDAG-PDを考えたときの幅の最小値である．パス幅はそのグラフがパスからどれだけ離れているかを表す尺度であり，パス幅の値が小さいほどパスに近い構造をしている．有向グラフに対してパス幅を求める問題はNP困難である．
+
+ 
+ \subsubsection{素敵なパス分解}
+ 素敵なパス分解とは，有向グラフGのパス分解$X=(X_1, X_2,   \ldots, X_s)$が以下の条件を満たすことをいう [10]．
+
+ 
+ \begin{enumerate}
+  \item $X_1 = X_s = \emptyset$
+  \item $ X_1 \cup X_2 \cup \cdots \cup X_s = V $ 
+  \item 任意の有向枝 $ (u, v) \in E $ に対して，ある $i$ $(i \geq 2)$ があり，$u \in X_i$, $u \notin X_{i-1}$, $v \in X_i$　が成り立つ．
+  \item 任意の$ i, j, k (1 \leq i \leq j \leq k \leq s)$ について， $X_i \cap X_k \subseteq X_j$ が成り立つ．すなわち，各頂点$v$について，$v$は$X$上で非空な部分道を誘導する．
+  \item 各$i = 2, 3,   \ldots, s-1$に対して，以下のいずれかが成立する．
+  \begin{itemize}
+      \item (introduce) ある強連結成分$S$について，$S \cap X_i = \emptyset$, $X_{i+1} = X_i \sqcup S$
+      \item (forget) ある頂点$v$について，$X_{i+1} = X_i \backslash \{ v \}$
+  \end{itemize}
+ \end{enumerate}
+
+ 
+ introduceは，現在の節点に強連結な頂点集合を追加したものを次の節点とする操作であり，forgetは，現在の節点から頂点を一つ取り除いたものを次の節点とする操作である．また$G$がDAGであるとき，強連結成分$S$は1つの頂点からなるため，素敵なパス分解の条件は以下のようになる．
+ 
+
+ \begin{enumerate}
+  \item $X_1 = X_s = \emptyset$
+  \item $ X_1 \cup X_2 \cup \cdots \cup X_s = V $ 
+  \item 任意の$ i, j, k (1 \leq i \leq j \leq k \leq s)$ について， $X_i \cap X_k \subseteq X_j$ が成り立つ．すなわち，各頂点$v$について，$v$は$X$上で非空な部分道を誘導する．
+  \item 各$i = 2, 3,   \ldots, s-1$に対して，以下のいずれかが成立する．
+  \begin{itemize}
+      \item (introduce) $X_i$で$v$をintroduceするとき，全ての$u \in pred(v)$に対して，$u, v \in X_i$かつ$v \notin X_{i-1}$が成り立つ．
+      \item (forget) $X_i$で$v$をforgetするとき，$suc(v) \not\subseteq X_{i-1}$が成り立つ．
+  \end{itemize}
+ \end{enumerate}
+
+       %素敵なパス分解の例をつける
+ 素敵なパス分解では，操作が1つの頂点のintroduceかforgetに限られるため，DPの設計が容易になる利点がある．またパス分解を行ったとき，多項式時間でそれと同じ幅を持つ素敵なパス分解に変換できる．今研究ではDAGを扱うため，特に断りがない限り後者の素敵なパス分解の定義を用いる．
+ 
+
+ \subsection{グラフ小石ゲーム}
+ 本節ではグラフ小石ゲームについて説明する．グラフ小石ゲームは一人用のゲームであり，DAGの頂点上でルールに従って複数の小石の設置・除去を行う．以下では，戦略，ペブリング数，使用場面についてそれぞれ説明する．
+
+ 
+ \subsubsection{戦略}     %ペブリングの例をつける
+ DAG $G$について，Gは出次数が0の頂点zをただ一つもつとする．グラフ小石ゲームの戦略とは，以下の4つのルールを満たすような$V$の各部分集合$ P_i (i = 0, 1,   \ldots, s)$ の列 $P = (P_0, P_1,   \ldots, P_{\tau})$ である [5]．
+
+ 
+ \begin{enumerate}
+  \item $P_0 = \emptyset, P_{\tau} = \{ z \}$
+  \item (pebble) 空の頂点$v$に対し，$pred(v)$にすべて小石を置いている場合，$v$に小石を設置してもよい．
+  \item (unpebble) 小石はいつでもどの頂点からも取り除くことができる．
+  \item 一度小石を取り除いた頂点には，再び小石を設置することはできない．
+ \end{enumerate}
+
+ 
+ pebbleは頂点に小石を設置する操作を表し，forgetは頂点から小石を取り除く操作を表す．以下では，グラフ小石ゲームをPebblingと表現する．
+
+ 
+ \subsubsection{ペブリング数}
+ 戦略 $P = (P_0, P_1,   \ldots, P_{\tau})$ に対し，$space$と$time$を以下のように定義する [5]．
+
+ 
+ \begin{itemize}
+  \item $space(P) =  \underset{i}{\max} \{ |P_i| \}$
+  \item $time(P) = \tau$
+ \end{itemize}
+
+
+ 
+ DAG $G$のペブリング数とは，$G$の全ての戦略を考えたときの$space$の最小値である．DAGに対してペブリング数を求める問題はNP困難である [5]．以下ではDAG $G$に対するペブリング数を$Peb(G)$と表現する．
+
+ 
+ \subsubsection{使用場面}
+ Pebblingは，Proof of Space [6]とよばれるブロックチェーン技術の中で用いられる．Proof of Spaceは空きディスク容量をいくら保持しているかを証明する手法であり，PebblingのDAGのサイズが空きディスク容量に対応する．またペブリング数は同時に使用するメモリの量に対応する．ペブリング数が大きいほど，より多くのメモリやデータを使うため，その証明が難しいことを表す．すなわち証明の安全性が高くなることを表す．
+
+
+ 
+ \section{DAG-PDとPebblingの関係性}\label{sec-structure}
+ 本章ではDAG-PDとPebblingの関係，及びパス幅とペブリング数の関係について以下の2つの定理が成り立つことを証明する．
+
+ \textbf{定理1}．
+ DAG-PDに次のルールを追加したものをBounded-PDとする．
+
+ \begin{itemize}
+  \item $X_i$でforgetできる頂点は，その後続頂点が$X_{i-1}$に一つも含まれていない頂点のみである．
+ \end{itemize}
+
+ また，Pebblingに次のルールを追加したものをBounded-Pebblingとする．
+
+ \begin{itemize}
+  \item $P_i$でunpebbleできる頂点は，その先行頂点が$X_{i-1}$に一つも含まれていない頂点のみである．
+ \end{itemize}
+
+ このとき，Bounded-PDとBounded-Pebblingは逆を辿ると互いに一致する．
+
+ \textbf{定理2}
+ あるDAGのDAG-PD, Bounded-PDのパス幅をそれぞれ$w$, $w'$とし、Pebbling, Bounded-Pebblingのペブリング数をそれぞれ$Peb$, $Peb'$とする．このとき次が成立する．
+ \[ w \leq w'=Peb'-1 \]
+ \[ Peb \leq Peb'=w'+1 \]
+
+
+ \subsection{定理1の証明}
+ 以下を証明すれば十分である．
+ 
+ \begin{enumerate}
+ \item Bounded-PDのintroduceを逆から辿ると，Bounded-Pebblingのunpebbleになっている
+ \item Bounded-Pebblingのunpebbleを逆から辿ると，Bounded-PDのintroduceになっている
+ \item Bounded-PDのforgetを逆から辿ると，Bounded-Pebblingのpebbleになっている
+ \item Bounded-Pebblingのpebbleを逆から辿ると，Bounded-PDのforgetになっている
+ \end{enumerate}
+
+ \textbf{1の証明}. 
+ 背理法で導く．$X_k$で$v$をintroduceしたとき，逆から見るとunpebbleの条件を満たさない，すなわち，ある$u \in pred(v)$が$X_k$に含まれると仮定して矛盾を導く．$u \in X_k$であり，$X_{k-1}$から$X_k$では$v$をintroduceしているため$u \in X_{k-1}$も成り立つ．またBounded-PDのルール3より，$v$が現れるのは$X_k$以降の節点であるから，introduceの条件における$X_i$は，初めて$(u, v)$が同時に現れる$X_k$とすることができる．よって$u \notin X_{k-1}$も成り立つが，これは$u \in X_{k-1}$と矛盾する．
+
+ 
+ \begin{figure}[tbh]
+ \centering
+ \includegraphics[height=3.5cm]{1.PNG}
+ \caption{1の証明で$v$をintroduceすると矛盾が生じる様子}
+ \label{fig:1}
+ \end{figure}
+
+
+
+ \textbf{2の証明}. 
+ 背理法で導く．$P_i$で$v$をunpebbleしたとき，逆から見るとintroduceの条件を満たさない，すなわち，ある$u \in pred(v)$について$u, v \in P_{i-1}$かつ$u \in P_i$と仮定して矛盾を導く．$u \in P_i$であり，$P_{i-1}$から$P_i$では$v$をunpebbleしているため，$u \in P_{i-1}$も成り立つ．すると$P_{i-1}$に$pred(v)$が含まれていながら$P_i$で$v$をunpebbleしていることになり，unpebbleのルールと矛盾する
+
+ 
+ \begin{figure}[tbh]
+ \centering
+ \includegraphics[height=3.5cm]{2.PNG}
+ \caption{2の証明で$v$をunpebbleすると矛盾が生じる様子}
+ \label{fig:2}
+ \end{figure}
+
+
+ \textbf{3の証明}.
+  背理法で導く．$X_i$で$v$をforgetしたとき，逆から見るとpebbleの条件を満たさない，すなわちある$u \in pred(v)$が$X_i$に含まれないと仮定して矛盾を導く．Bounded-PDのルール3より，$v$は$X_i$より前の節点で非空な部分道を誘導する．よって$v$は$X_i$より前にのみ現れる．これとintroduceのルールとより，辺$(u, v)$についてある$k<i-1$が存在し，$u, v \in X_k$かつ$u \notin X_{k-1}$がいえる．仮定より$u \notin X_i$であり，$X_i$でforgetしたのは$v$であるから， $u \notin X_{i-1}$も成り立つ．したがって$u$は$X_k$には含まれ，$X_{i-1}$には含まれないことから，その間の節点$X_m (k < m \leq i-1)$でforgetされたと考えることができる．$v$は$X_k$にも$X_{i-1}$にも含まれるため，その間の節点$X_{m-1}$にも含まれる．ところが$v \in suc(u)$が$X_{m-1}$に含まれるにも関わらず$X_m$で$u$をforgetしていることになり，Bounded-PDのforgetのルールと矛盾する．
+
+ 
+ \begin{figure}[tbh]
+ \centering
+ \includegraphics[height=2.7cm]{3.PNG}
+ \caption{3の証明で$u$をforgetすると矛盾が生じる様子}
+ \label{fig:3}
+ \end{figure}
+
+
+ \textbf{4の証明}.
+ 背理法で導く．$P_i$で$v$をpebbleしたとき，逆から見るとforgetの条件を満たさない，すなわちある$u \in suc(v)$が$P_i$に含まれると仮定して矛盾を導く．PDのルール3より，$v$は$P_i$以降の節点で非空な部分道を誘導する．よって$v$は$P_i$より前には現れない．背理法の仮定より$u \in P_i$であり，$P_i$は$v$をpebbleしているため$u \in P_{i-1}$も成り立つ．これと二度以上同じ頂点にpebbleされることはないことに注意すると，$u$はある$P_k (k \leq i-1)$でpebbleされたと考えることができる．ところが$v$は$P_i$より前には現れないため$v \notin P_{k-1}$であり，$P_{k-1}$に$v (= pred(u))$が含まれないにもかかわらず$P_k$で$u$をpebbleしている．これはpebbleのルールと矛盾する．
+
+ 
+ \begin{figure}[tbh]
+ \centering
+ \includegraphics[height=3.5cm]{4.PNG}
+ \caption{4の証明で$u$をpebbleすると矛盾が生じる様子}
+ \label{fig:4}
+ \end{figure}
+
+
+ 
+
+ \subsection{定理2の証明}
+ 
+ 定理1より，Bounded-PDとBounded-Pebblingは逆から辿ると互いに一致する．よって$w'=Peb'-1$が成立する．またBounded-PDの条件はDAG-PDの条件を含むので, $Peb \leq Peb'$が成立．さらにBounded-PebblingのルールはPebblingのルールを含むので，$w \leq w'$も成立．以上の関係を合わせると上式が得られる．
+ 
+
+
+
+
+
+\section{様々なDAGに対する最小幅パス分解の構成アルゴリズムの提案}\label{sec:advice}
+本章では有向木，反有向木，準ハミルトングラフ，一般のDAGの4種類のグラフについて，最小のパス幅を持つDAG-PDの構成アルゴリズムを提案する．
+
+ \subsection{有向木}
+ 有向木$G=(V, E)$が与えられたとき，そのグラフに対するパス幅とパス分解を構成するアルゴリズムを提案する．
+ 
+ \subsubsection{有向木に対するDAG-PD構成多項式時間アルゴリズム}
+
+ 入力グラフに対し，帰りがけ順で頂点をintroduceする．このとき，各頂点の兄弟の位置を入れ替えると幅が変わるため，最小の幅を与えるような入れ替えを行う必要がある．そのために以下の3つのパラメータを用意する．
+
+ \begin{itemize}
+     \item $c_v$: current. $v$の出次数を表す．すなわち$v$をintroduceする瞬間にはその後続頂点を全てintroduceしている必要があることを表す．
+     \item $p_v$: previous. $v$の子を根とする各部分木のパス分解を行うときに，その部分木のパス幅が大きい順にパス分解を行う必要があることを表す．
+     \item $o_v$: order. $v$の兄弟の中で$v$をintroduceする順番．一番目から順に$0, 1, 2, \cdots$ と定める．
+ \end{itemize}
+ 
+ 有向木に対するDAG-PD構成多項式時間アルゴリズムは$Algorithm1$で与えられる．このアルゴリズムでは，各頂点$v$に対して，左下から右上に向かって，同じ深さの頂点を優先しながら3つのパラメータの組$(c_v, p_v, o_v)$を決定していく．頂点が葉であるか否かで処理を変えており，葉なら直ちに$c_v, p_v$の値が定まる．葉でないなら先に$v$の後続頂点の$o_v$の値を決定した後，$c_v, p_v$の値を決定する．$o_v$を決定するときに後続頂点の並べ替えを行い，頂点の入れ替えを行ったあとに根から帰りがけ順に頂点をintroduceしている．このアルゴリズムは幅が最小のDAG-PDを出力し，パス幅は$w= \max\{c_{v_n}, p_{v_n}\}$で与えられる．
+
+ 図\ref{fig:5}にアルゴリズムの動作例を示す．左が入力されたグラフを表し，右が各頂点$v$に対して3つ組$(c_v, p_v, o_v)$を決定した後の様子を表す．$\max\{c_{v_{20}}, p_{v_{20}}\}=4$より，パス幅は4となる．
+ 
+ \begin{figure}[!t]
+ \begin{algorithm}[H]
+    \caption{有向木に対するDAG-PD構成多項式時間アルゴリズム}
+    \label{alg1}
+    \begin{algorithmic}[1]    %行番号をつけないときは[1]は不要
+    \State 頂点数$n$の有向木に対して根を上，葉を下にする．各頂点を深さが同じものから深い順に左側から$v_1, v_2,   \ldots, v_n$と順序付ける．
+    \For{$i = 1,   \ldots, n$}
+    \If{$v_i$が葉である}
+    \Comment{各頂点について葉か否かで処理を分離}
+    \State $c_{v_i} = 0$
+    \State $p_{v_i} = 0$
+    \Else
+    \State $v_i$の子を$ \max\{c_{v_i}, p_{v_i}\}$が大きい順に左から並べ替える．それらを順に$u_0, u_1, u_2,  \ldots $とする(値が等しいときは任意に並べ替える)
+    \For{$j = 0,   \ldots, outdeg(v_i)-1$}
+    \State $o_{u_j} = j$
+    \Comment{各$u$に対する$o$の値を決定}
+    \EndFor
+    \State $c_{v_i} = outdeg(v_i)$
+    \Comment{各$v$に対する$c, p$の値を決定}
+    \State $p_{v_i}= \underset{u}{\max}\{ \max\{c_u, p_u\}+o_u\}$
+    \If{$i == n$}
+    \Comment{頂点が根ならば$o$を決定}
+    \State $o_v=0$
+    \EndIf
+    \EndIf
+    \EndFor
+    \State 頂点の入れ替えを行ったあとのグラフに対し，根から帰りがけ順に頂点をintroduceしていく．$v$をintroduceした直後に$suc(v)$を全てforgetする．
+    \end{algorithmic}
+ \end{algorithm}
+ \end{figure}
+
+
+     
+ 
+ \begin{figure}[htbp]
+  \begin{minipage}[b]{.5\linewidth}
+    \centering
+    \includegraphics[width=.7\linewidth]{5.PNG}
+  \end{minipage}%
+  \begin{minipage}[b]{.5\linewidth}
+    \centering
+    \includegraphics[width=1.0\linewidth]{6.PNG}
+  \end{minipage}
+  \caption{$Algorithm1$の動作例．各頂点の番号は$(c, p, o)$を決定する順番を表す．}
+  \label{fig:5}
+ \end{figure}
+
+
+ \subsubsection{パス幅の取り得る範囲}
+
+　頂点数が2以上の有向木がとり得るパス幅の範囲は，最大で$|V|-1$，最小で1である．パス幅が$|V|-1$であるグラフの例として，根を除く全ての頂点が根の先行頂点となっているグラフが考えられる．パス幅が1であるグラフの例として，パスが考えられる．
+
+ \subsubsection{アルゴリズムの計算量}
+
+ アルゴリズムの計算量は以下の3つの和であり，$O(|V| \log |V|)$である．
+
+ \begin{itemize}
+     \item 各頂点$v$に対する$c_v, p_v, o_v$の決定：$O(|V|)$
+     \item 各頂点の並べ替え：$O(|V| \log |V|)$
+     \item 各頂点のintroduceとforget：$O(|V|)$
+ \end{itemize}
+ 
+ \subsubsection{アルゴリズムが最小のパス幅を持つDAG-PDを与えることの証明}
+ 以下を証明すれば十分．ただし$r$を有向木の根とする．また，DAG-PDの節点列を$X=(X_1, X_2,   \ldots, X_s)$とする
+ 
+ \begin{enumerate}
+ \item アルゴリズムがあるDAG-PDを出力し、その幅が$ \max\{c_r, p_r\}$である
+ \item パス幅が$ \max\{c_r, p_r\}$未満であるようなDAG-PDは存在しない
+ \end{enumerate}
+
+ \textbf{1の証明}.
+ まず，アルゴリズムがあるDAG-PD $X$を出力することを示す．アルゴリズムが構成する木を$T$とする．$T$を帰りがけ順でintroduceすると葉側からintroduceされるため，$X_i$で$v$をintroduceしたときに，$X_{i-1}$にはすべての$suc(v)$がforgetされずに含まれている．したがってintroduceのルールを満たす．また$suc(v)$は$X_i$より後でintroduceされる頂点と接続されていないため，$X_i$の直後にforgetしてもPDのルールに反しない．したがってアルゴリズムはあるDAG-PD $X$を出力する．
+ 次に，$X$の幅が$ \max\{c_r, p_r\}$であることを示す． $T$は有向木であるため，根から各葉までのパスが存在する．そのパスを葉から根に向かって順に$v_1, v_2,   \ldots, v_n(=r)$とする．このとき「各$v_i$を根とする部分有向木のDAG-PDの幅が$ \max\{c_{v_i}, p_{v_i}\}$で表されること」(*)を示せば十分．これを$i$に関する数学的帰納法で示す．
+ 
+・$i=1$のとき，$c_{v_1}=p_{v_1}=0$より$ \max\{c_{v_1}, p_{v_1}\}=0$. 一方$v_1$のみからなる部分有向木のPDの幅は0であるから(*)が成立する．
+
+・ある$i(1 \leq i \leq n-1)$での(*)の成立を仮定する．このとき$v_i \in suc(v_{i+1})$であり，$p_{v_i}= \underset{u \in suc(v_{i+1})}{\max}\{ \max\{c_u, p_u\}+o_u\}$であるので，$p_{v_i}+1 \geq  \max\{c_{v_i}, p_{v_i}\}+o_{v_i}$が成り立つ．仮定より$ \max\{c_{v_i}, p_{v_i}\}$は$v_i$を根とする部分有向木の幅であり，$v_i$をintroduceするとき，$v_i$の兄弟のうち$o_{v_i}$個が既にintroduceされていることに注意すると，幅が$ \max\{c_{v_i}, p_{v_i}\}+o_{v_i}$以上あれば$v_i$をその兄弟の中で$o_{v_i}+1$番目にintroduceできる．ここで$p_{v_i}+1 \geq  \max\{c_{v_i}, p_{v_i}\}+o_{v_i}$が成り立つことに注意すると，幅が$p_{v_{i+1}}$以上あれば$v_i$をその兄弟の中で$o_{v_i}+1$番目にintroduceできる．すなわち$suc(v_{i+1})$はすべて$o$の順番通りにintroduceできることになる．また$v_{i+1}$を$X_m$でintroduceするとき，$X_{m-1}$には$suc(v_{i+1})$のみが含まれているので，幅が$|suc(v_{i+1})|$，つまり$c_{v_{i+1}}$以上あれば$v_{i+1}$をintroduceできる．以上より，$v_{i+1}$を根とする部分有向木の幅は$ \max\{c_{v_{i+1}}, p_{v_{i+1}}\}$とすることができる．よって$i+1$でも(*)が成立する．
+
+数学的帰納法より$i=1, 2,   \ldots, n$について(*)が成立．すなわち$T$の幅は$r$を根として$ \max\{c_r, p_r\}$と表せる．
+
+ \textbf{2の証明}.
+ 次に，パス幅が$ \max\{c_r, p_r\}$未満であるようなDAG-PDは存在しないことを示す．そのために以下の2つの補題を先に示す．ただし，ある$v$を根とする部分有向木を$T$と表し，$v$の後続頂点$u_1, u_2,  \ldots $をそれぞれ根とする部分有向木を$T_1, T_2,  \ldots $とする．
+
+
+ \begin{itemize}
+  \item 補題1：各$T_i$のDAG-PDを並列的に行っても、逐次的に行った場合と比べて$T$のパス幅は小さくならない
+  \item 補題2：各$T_i$をどのような順序でパス分解しても、各$T_i$のパス幅が大きい順にパス分解した場合に比べて、$T$のパス幅は小さくならない
+ \end{itemize}
+
+ \textbf{補題1の証明}.
+ 任意の2つの部分有向木$T_m, T_n$について考える．$T_m, T_n$のPD構成に必要なパス幅をそれぞれ$w_m, w_n$とする．$T_m$のPDを完成させてから$T_n$のPDの構成を始める場合，$T_n$のPD構成中は$T_m$の根$v_m$を常にintroduceしているため，$T_m, T_n$のPDを完成させるまでに必要なパス幅$w_{m,n}$は$ \max\{w_m, w_{n+1}\}$と表せる．一方，$T_m$のPD構成中に$T_n$のPDを構成し始める場合，それぞれのPDには少なくとも1つの頂点がintroduceされているため，$T_m, T_n$のPDを完成させるまでに必要なパス幅$w'_{m,n}$について，$ \max\{w_m, w_{n+1}\} \leq w'_{m,n} \leq w_m+w_n$が成り立つ．したがって$w_{m,n} \leq w'_{m,n}$であるため，$T_m, T_n$のPDを並列的に行っても，逐次的に行った場合と比べて$T$のパス幅は小さくならない．
+
+ \textbf{補題2の証明}.
+ $u_j \in \operatorname*{argmax}_{u \in suc(v)} \{\max\{c_u, p_u\}+o_u\}$とし，$T_k (j \neq k)$と$T_j$のPD構成の順序を逆にすることを考える．以下では$o_{u_k}$と$o_{u_j}$の大小で場合分けして考える．なお，$o_{u_k}$と$o_{u_j}$は等しくならないことに注意する．
+
+
+ \textbf{\underline{$o_{u_k}<o_{u_j}$の場合}}.
+ $o$の決定手順より$ \max\{c_{u_k}, p_{u_k}\} \geq  \max\{c_{u_j}, p_{u_j}\}$(*)が成り立つ．ここで$o$の値を入れ替えて新しく$o_{u_k}', o_{u_j}'$とすると$o_{u_k}'=o_{u_j}$が成り立ち，(*)に注意して$ \max \{c_{u_k}, p_{u_k}\}+o_{u_k}' \geq  \max \{c_{u_j}, p_{u_j}\}+o_{u_j}=p_v$とできる．すなわち$T_k$をPDするときに$p_v$以上の幅が必要となる．
+
+ \textbf{\underline{$o_{u_k}>o_{u_j}$の場合}}.
+ $o$の決定手順より$ \max\{c_{u_k}, p_{u_k}\} \leq  \max\{c_{u_j}, p_{u_j}\}$(**)が成り立つ．ここで$o$の値を入れ替えて新しく$o_{u_k}', o_{u_j}'$とすると$o_{u_j}'=o_{u_k}$が成り立ち，(**)に注意して$ \max\{c_{u_j}, p_{u_j}\}+o_{u_j}' \geq  \max\{c_{u_j}, p_{u_j}\}+o_{u_j}=p_v$とできる．すなわち$T_j$をPDするときに$p_v$以上の幅が必要となる．
+ 
+ 以上より$T$の幅を最小にするためには$o_{u_j}$は変更できない．したがって$T_j$以外のPDの順序を入れ替えても$T$のパス幅は$p_v$未満にはならない．
+
+ 
+ \textbf{2の証明}.
+ 以下では，補題1と補題2を用いて，パス幅が$ \max\{c_r, p_r\}$未満であるようなDAG-PDは存在しないことを証明する．
+
+ 補題1より，$r$の各後続頂点を根とする部分有向木のPDは逐次的に構成することを前提とする．また補題2より，これらの部分有向木のPDの構成順序を入れ替えてもパス幅が小さくなることはないため，$o$の順序でPDを行うこととする．
+ 以下では，パス幅が$ \max\{c_r, p_r\}$未満であるようなPDは存在しないことを背理法で示す．$ \max\{c_r, p_r\}$未満のパス幅を持つPDが存在すると仮定すると，根$r$は$ \max\{c_r, p_r\}$未満のパス幅でintroduceできることになる．以下では$c_r, p_r$の大小で場合分けをし，それぞれで矛盾を導く．
+
+ \textbf{\underline{$c_r \geq p_r$の場合}}.
+ $ \max\{c_r, p_r\}=c_r$であり，$r$は$c_r$より小さいパス幅でintroduceできることになるが，$c_r=outdeg(r)$に注意すると，$r$をintroduceしたとき$r$の後続頂点でintroduceされていないものが存在する．これはintroduceのルールと矛盾する．
+
+ \textbf{\underline{$p_r > c_r$の場合}}.
+ $ \max\{c_r, p_r\}=p_r$であり，$r$は$p_r= \underset{u \in suc(v)}{\max}\{ \max\{c_u, p_u\}+o_u\}$より小さいパス幅でintroduceできることになる．$u' \in\operatorname*{argmax}_{u \in suc(v)} \{\max\{c_u, p_u\}+o_u\}$とすると，$p_r= \max\{c_u', p_u'\}+o_u'$とできる．補題2より$o_u'$の値は変更できないことに注意すると，$r$を$ \max\{c_u', p_u'\}+o_u'$未満のパス幅でintroduceするためには，$u'$を$ \max\{c_u', p_u'\}$未満のパス幅でintroduceする必要がある．すなわちこれまでの議論より，$u'$について$p_u'>c_u'$が成り立ち，かつ$u'' \in \operatorname*{argmax}_{u \in suc(u')} \{\max\{c_u, p_u\}+o_u\}$が$ \max\{c_{u''}, p_{u''}\}$未満のパス幅でintroduceできる必要がある．この議論を$u'$の子孫に対して繰り返し行うことにより，$u'$の子孫のある葉ノード$l$についても，$p_l>c_l$が成り立つ必要がある．ところが$l$は葉だから$c_l=0, p_l=0$であり，$p_l=c_l$であるため矛盾する．
+
+ 
+
+
+ 
+ \subsection{反有向木}
+反有向木$G=(V, E)$が与えられたとき，そのグラフに対するパス幅とパス分解を構成するアルゴリズムを提案する．
+
+ \subsubsection{反有向木に対するDAG-PD構成多項式時間アルゴリズム}
+ 
+ 入力グラフに対し，行きがけ順で頂点をintroduceする．このとき，各頂点の兄弟同士の位置を入れ替えると幅が変わってしまうため，最小の幅を与えるような入れ替えを行う必要がある．そのために各頂点を根とする部分木のパス幅を表すパラメータ$w$を用意する．
+ 
+ 反有向木に対するDAG-PD構成多項式時間アルゴリズムは$Algorithm 2$で与えられる．このアルゴリズムでは，各頂点$v$に対してボトムアップにパラメータ$w_v$を決定していく．$w_v$は$v$を根とする部分木のパス幅を表しており，頂点が葉であるか否かで$w_v$の決定方法が異なる．葉なら0とし，葉でないなら$v$の先行頂点の$w$の値によって決定する．$w_v$を決定するときには先行頂点の並べ替えも行っており，最後に根から行きがけ順に頂点をintroduceしている．このアルゴリズムは幅が最小のDAG-PDを出力し，パス幅は$r$を根として$w_r$で与えられる．
+
+ 図\ref{fig:6}にアルゴリズムの動作例を示す．左が入力されたグラフを表し，右が各頂点$v$に対して$w_v$を決定した後の様子を表す．$w_{v_{23}}=3$より，パス幅は3となる．
+ 
+
+ 
+ \begin{figure}[!t]
+ \begin{algorithm}[H]
+    \caption{反有向木に対するDAG-PD構成多項式時間アルゴリズム}
+    \label{alg2}
+    \begin{algorithmic}[1]    %行番号をつけないときは[1]は不要
+    \State 頂点数$n$の反有向木に対して根を上，葉を下にする．各頂点を深さが同じものから深い順に左側から$v_1, v_2,   \ldots, v_n$と順序付ける．
+    \For{$i = 1,   \ldots, n$}
+    \If{$v_i$が葉である}
+    \Comment{各頂点について葉か否かで処理を分離}
+    \State $w_{v_i} = 0$
+    \Else
+    \State $w_v= \max\{w_u, w_{u'}+1\}$ (ただし$pred(v)$の中で$w$が最大のものを$u$，次に大きいものを$u'$とする．$|pred(v)|=1$ならば$w_{u'}=0$とする)
+    \EndIf
+    \EndFor
+    \State 各頂点$v$に対して$pred(v)$を$w$の値が小さい順に左から並べ替える(値が同じならば任意に並べ替える)
+    \State 根から行きがけ順に頂点をintroduceする．$v$をintroduceしたとき$v$の他の兄弟がすべてforgetされているか，もしくは$v$の兄弟が存在しないならば，$suc(v)$をforgetする．その後，$v$が葉なら$v$をforgetする
+    \end{algorithmic}
+ \end{algorithm}
+ \end{figure}
+
+
+     
+ 
+ \begin{figure}[htbp]
+  \begin{minipage}[b]{.5\linewidth}
+    \centering
+    \includegraphics[width=.8\linewidth]{8.PNG}
+  \end{minipage}%
+  \begin{minipage}[b]{.5\linewidth}
+    \centering
+    \includegraphics[width=1.0\linewidth]{7.PNG}
+  \end{minipage}
+  \caption{$Algorithm2$の動作例．各頂点の番号は$w$を決定する順番を表す．}
+  \label{fig:6}
+ \end{figure}
+
+
+ \subsubsection{パス幅の取り得る範囲}
+
+　頂点数が2以上の反有向木がとり得るパス幅の範囲は，最大で$\lfloor\log\frac{|V|+1}{3}\rfloor+1$，最小で1である．パス幅が$\lfloor\log\frac{|V|+1}{3}\rfloor+1$であるグラフの例として，完全二分木などが考えられる．パス幅が1であるグラフの例として，パスが考えられる．反有向木のパス幅の最大値が$\lfloor\log\frac{|V|+1}{3}\rfloor+1$であることを以下で示す．
+
+ \textbf{反有向木のパス幅の最大値が$\lfloor\log\frac{|V|+1}{3}\rfloor+1$であることの略証}.
+ $P$の値は，木の深さが1つ深くなっても高々1しか増加しない．また$p_v$の値が増加するためには，葉を除く$v$の先行頂点が2つ以上存在するか，先行頂点が1つ以上の葉のみからなるかのどちらかが必要である．よってパス幅が$w$であるような頂点数が最小のグラフは，深さ$w-1$まで完全2分木で，深さ$w-1$の各頂点が葉を1つずつ持つような深さ$w$のグラフである．このグラフの頂点数は$3 \cdot2^{w-1}-1$．対数を取ると，頂点数が$|V|$のときのパス幅の最大値は$\lfloor\log\frac{|V|+1}{3}\rfloor+1$となる(パス幅は整数値を取ることに注意する)．
+
+ 
+
+ \subsubsection{アルゴリズムの計算量}
+
+ アルゴリズムの計算量は以下の3つの和であり，$O(|V|\log |V|)$である．
+
+ \begin{itemize}
+     \item 各頂点$v$に対する$w_v$の決定：$O(|V|)$
+     \item 各頂点の並べ替え：$O(|V|\log |V|)$
+     \item 各頂点のintroduceとforget：$O(|V|)$
+ \end{itemize}
+ 
+ \subsubsection{アルゴリズムが最小のパス幅を持つDAG-PDを与えることの証明}
+ 以下を証明すれば十分である．ただし$r$を反有向木の根とする．また，DAG-PDの節点列を$X=(X_1, X_2,   \ldots, X_s)$とする
+ 
+ \begin{enumerate}
+ \item アルゴリズムがあるDAG-PDを出力し、その幅が$w_r$である
+ \item パス幅が$w_r$未満であるようなDAG-PDは存在しない
+ \end{enumerate}
+
+ \textbf{1の証明}.
+ まず，アルゴリズムがあるDAG-PD $X$を出力することを示す．アルゴリズムが構成する木を$T$とする．$T$を行きがけ順でintroduceすると根側からintroduceされるため，$X_i$で$v$をintroduceしたときに，$X_{i-1}$にはすべての$suc(v)$がforgetされずに含まれている．したがってintroduceのルールを満たす．また$X_i$で$v$をintroduceしたときに$v$の兄弟が全てforgetされているか，もしくは$v$の兄弟が存在しないならば，$suc(v)$は$X_i$より後でintroduceされる頂点と隣接していないため，$X_i$の直後に$suc(v)$をforgetしてもPDのルールに反しない．したがってアルゴリズムはあるDAG-PD $X$を出力する．
+ 
+ 次に，$X$の幅が$w_r$であることを示す． $T$は反有向木であるため，各葉から根までのパスが存在する．そのパスを葉から根に向かって順に$v_1, v_2,   \ldots, v_n(=r)$とする．このとき「各$v_i$を根とする部分反有向木のDAG-PDの幅が$w_{v_i}$で表されること」(*)を示せば十分である．これを$i$に関する数学的帰納法で示す．
+ 
+・$i=1$のとき，$v_i$は葉であるため$w_{v_1}=0$. 一方$v_1$のみからなる部分反有向木のPDの幅は0であるから(*)が成立する．
+
+・ある$i(1 \leq i \leq n-1)$での(*)の成立を仮定する．このとき，$|pred(v_{i+1})|=1$ならば$w_{v_{i+1}}= \max\{w_{v_i}, 1\}$なので$w_{v_{i+1}} \geq w_{v_i}$が成立する．よって$v_i$を根としてPDを行うときに，$v_i$のintroduceの直前と直後に$v_{i+1}$のintroduceとforgetを行うことで，$v_{i+1}$を根とする部分反有向木のPDを幅$w_{v_{i+1}}$で行うことができる．また$v$の入次数が2以上ならば，$v_i$の兄弟の中で$w$の値が大きい順に$u, u'$として$w_{v_{i+1}}= \max\{w_u, w_{u'}+1\}$と表せる．$v_i=u$ならば，$v_i$を根としてPDを行うときに，$v_i$のintroduceの直後に$v_{i+1}$のforgetを行い，$v_i \neq u$ならば，$v_i$を根としてPDを行うときに，常に$v_{i+1}$をintroduceしておくことで，$v_{i+1}$を根とする部分反有向木のPDを幅$w_{v_i}+1$で行える．$w_{v_i}+1 \leq w_{u'}+1 \leq w_{v_{i+1}}$に注意すると，幅$w_{v_{i+1}}$があればこのPDを行える．以上から$i+1$でも(*)が成立する．
+数学的帰納法より$i=1, 2,   \ldots, n$について(*)が成立する．．すなわち$T$の幅は$r$を根として$w_r$と表せる．
+
+ \textbf{2の証明}. 
+ 次に，パス幅が$w_r$未満であるようなDAG-PDは存在しないことを示す．そのために以下の2つの補題を先に示す．ただし，ある$v$を根とする部分反有向木を$T$と表し，$v$の先行頂点$u_1, u_2,  \ldots $をそれぞれ根とする部分反有向木を$T_1, T_2,  \ldots $とする．
+
+
+ \begin{itemize}
+  \item 補題1：各$T_i$のDAG-PDを並列的に行っても、逐次的に行った場合と比べて$T$の幅は小さくならない
+  \item 補題2：各$T_i$をどのような順序でパス分解しても、各$T_i$の幅が大きい順にパス分解した場合に比べて、$T$の幅は小さくならない
+ \end{itemize}
+
+ \textbf{補題1の証明}.
+ 任意の2つの部分反有向木$T_m, T_n(w_{u_m}\leq w_{u_n})$について考える．アルゴリズムが出力する$T_m, T_n$の幅はそれぞれ$w_{u_m}, w_{u_n}$であることに注意する．以下では$T_m, T_n$をこの順で逐次的にパス分解する場合と，$T_m$のDAG-PD構成中に$T_n$のDAG-PDを構成し始める場合について，$T_n$が最後にDAG-PDされる部分木であるか否かで場合分けして考える．
+
+ \textbf{\underline{$T_n$が最後にDAG-PDされる部分木でない場合}}. 
+ $T_m, T_n$のDAG-PDをこの準で逐次的に行う場合，$T_n$のDAG-PD構成中は根$v$を含んでいるため，それぞれのDAG-PDを完成させるまでに必要な幅は，$w_{u_m} \leq w_{u_n}$に注意すると$w_{u_n+1}$である．一方，$T_m$のDAG-PD構成中に$T_n$のDAG-PDを構成し始める場合，$T_n$のDAG-PD構成中は根$v$を含み，かつ$T_m$の頂点を含んでいる瞬間があるため，それぞれのDAG-PDを完成させるまでに必要な幅は$w_{u_n+1}$以上である．したがって各$T_i$のDAG-PDを並列的に行っても、逐次的に行った場合と比べて$T$の幅は小さくならない．
+
+ \textbf{\underline{$T_n$が最後にDAG-PDされる部分木である場合}}.
+ $T_m, T_n$のDAG-PDをこの順で逐次的に行う場合，$T_m$のDAG-PD構成中は根$v$を含み，$u_n$のintroduce以降は根$v$を含まないため，それぞれのDAG-PDを完成させるまでに必要な幅は$ \max\{w_{u_m}+1, w_{u_n}\}$である．一方，$T_m$のDAG-PD構成中に$T_n$のDAG-PDを構成し始める場合，$T_m$の幅が最大となる節点を$X_k$，$T_n$のDAG-PD構成を開始する節点を$X_j$とする．$k<j$ならば$X_k$では根$v$を含むため，$T_m, T_n$の頂点が同時に含まれる瞬間があることに注意して，少なくとも$ \max\{w_{u_m}+1, w_{u_n}\}$の幅が必要である．$j<k$ならば，$X_k$で少なくとも1つ以上の$T_n$の頂点を含むか，$T_n$の幅が最大となる節点で少なくとも1つ以上の$T_m$の頂点を含むかどちらかなので，少なくとも$ \max\{w_{u_m}+1, w_{u_n}\}$の幅が必要である．したがって各$T_m, T_n$のDAG-PDを並列的に行っても，逐次的に行った場合と比べて$T$の幅は小さくならない．
+
+
+ \textbf{補題2の証明}.
+ 各$u_i$の中で$w$の値が大きいものから順に$u_j, u_k$とする．各$T_i$の幅が小さい順にパス分解した場合，$T_k$のDAG-PD構成中は根$v$を含むため$w_{u_k}+1$の幅が必要で，$T_j$のDAG-PD構成中は$u_j$のintroduceの直後に根$v$をforgetするため$w_{u_j}$の幅が必要である．よって全体の幅は$ \max\{w_{u_j}, w_{u_k+1}\}$である．ここで$T_j$のパス分解が最後でないとすると，$T_j$のDAG-PD構成中は根$v$を含むため$w_{u_j}+1$のパス幅が必要である．よって全体のパス幅は$w_{u_j}+1( \geq  \max\{w_{u_j}, w_{u_k}+1\})$が必要となるので，$T_j$を最後以外でパス分解しても全体の幅は小さくならない．したがって以下では$T_j$は最後にパス分解するものとする．このとき$T_j$以外の部分木のパス分解の順序を入れ替えても，どのDAG-PDも常に根$v$を含むため，少なくとも$w_{u_k}+1$の幅が必要となる．よって全体の幅は$ \max\{w_{u_j}, w_{u_k}+1\}$となり，順序を入れ替える前と変わらない．したがって各$T_i$のDAG-PDの順序を入れ替えても，幅は$ \max\{w_{u_j}, w_{u_k}+1\}$より小さくならない．
+
+ 
+ \textbf{2の証明}.
+ 以下では，補題1と補題2を用いて，パス幅が$w_r$未満であるようなDAG-PDは存在しないことを証明する．
+
+ 補題1より，$r$の各先行頂点を根とする部分反有向木のDAG-PDは逐次的に構成することを前提とする．また補題2より，これらの部分反有向木のDAG-PDの構成順序を入れ替えても幅が小さくなることはないため，$w$の値が小さい順序にDAG-PDを行うこととする．
+ 以下ではパス幅が$w_r$未満であるようなDAG-PDは存在しないことを背理法で示す．$pred(r)$のうち$w$の値が大きい順に頂点を$v_1, v_2$とする($|pred(r)|=1$ならば$v_1$のみを考える)．$w_r$未満のパス幅を持つDAG-PDが存在すると仮定すると，$v_1, v_2$をそれぞれ根とする部分木$T_1, T_2$は，$w_r= \max\{w_{v_1}, w_{v_2}+1\}$未満のパス幅でパス分解できることになる．したがって$T_1$が$w_{v_1}$未満のパス幅でDAG-PDできる，もしくは$T_2$が$p_{v_2}$未満のパス幅でDAG-PDできることになるが，これはこれまでの議論で$r$を$v_1$もしくは$v_2$に置き換えたものとみなせる．したがって同様の議論を$v_1$もしくは$v_2$の各先行頂点についても行い，この議論を$v_1$もしくは$v_2$の子孫に対しても繰り返し行うことで，ある葉$l$についても$w_l$未満のパス幅でDAG-PDできることがいえる．ところが$w_l=0$であり，$l$のみからなる部分木は0未満のパス幅でDAG-PDすることは出来ないため矛盾する．
+
+ 
+ \subsection{準ハミルトングラフ}
+DAG上の準ハミルトングラフ$G=(V, E)$が与えられたとき，そのグラフに対するパス幅とパス分解を構成するアルゴリズムを提案する．
+
+ \subsubsection{準ハミルトングラフに対するDAG-PD構成多項式時間アルゴリズム}
+
+ 入力グラフに対し，トポロジカル順序の逆順で頂点をintroduceする．このとき，forgetのタイミングによって幅が変わるため，最小の幅を与えるようにforgetを行う．そのために，各頂点$v$の先行頂点$pred(v)$のうち，まだintroduceされていない頂点の数を表すパラメータ$I_v$を用意する．
+
+ 準ハミルトングラフに対するDAG-PD構成多項式時間アルゴリズムは\par \noindent $Algorithm 3$で与えられる．このアルゴリズムでは，DAGに対してトポロジカルソートを行い，後ろから頂点をintroduceしていく．このとき，introduceした頂点の後続頂点の$I$の値を1だけ小さくし，0になればその頂点をforgetする．アルゴリズムは幅が最小のDAG-PD $X=(X_1, X_2,   \ldots, X_s)$を出力し，パス幅は$w= \underset{1 \leq m \leq s}{\max}\{|X_m|\}-1$で与えられる．なお準ハミルトングラフに対し，ハミルトンパスに沿って順序付けることでトポロジカルソートは一意に定まることに注意する．
+
+ 図\ref{fig:7}にアルゴリズムの動作例を示す．左が入力されたグラフを，右がDAG-PDの構成過程の様子を表す．$w= \underset{1\leq m \leq 13}{\max}\{|X_m|\}-1=2$より，パス幅は2となる．
+ 
+
+ 
+ \begin{figure}[!t]
+ \begin{algorithm}[H]
+    \caption{準ハミルトングラフに対するDAG-PD構成多項式時間アルゴリズム}
+    \label{alg3}
+    \begin{algorithmic}[1]
+    \State DAG $G$に対してトポロジカルソートを行い，後ろ(出次数が0の頂点側)から$v_1, v_2,   \ldots, v_n$とする
+    \State $m \leftarrow 1$
+    \State $X_1= \emptyset$
+    \For{$i = 1,   \ldots, n$}
+    \State $I_{v_i} \leftarrow indeg(v_i)$
+    \Comment{各頂点について入次数を$I$に格納}
+    \EndFor
+    \For{$i = 1,   \ldots, n$}
+    \State $X_{m+1} \leftarrow X_m \cup \{v_i\}$
+    \Comment{各頂点を順にintroduceする}
+    \State $m \leftarrow m+1$
+    \Comment{次の節点に移行する}
+    \State 全ての$v_k \in suc(v_i)$に対し，$I_{v_k} \leftarrow I_{v_k}-1$
+    \While{$I_{v_k}==0$なる$v_k \in suc(v_i)$が存在する}
+    \State $X_{m+1} \leftarrow X_m \setminus \{v_k\}$
+    \Comment{先行頂点が全てintroduceされればforget}
+    \State $m \leftarrow m+1$
+    \EndWhile
+    \If{$i==n$}
+    \State $X_{m+1} \leftarrow X_m \setminus \{v_n\}$
+    \Comment{ソートの先頭の頂点ならばforget}
+    \State $m \leftarrow m+1$
+    \EndIf
+    \EndFor
+    \end{algorithmic}
+ \end{algorithm}
+ \end{figure}
+
+
+     
+ 
+ \begin{figure}[htbp]
+  \begin{minipage}[b]{.5\linewidth}
+    \centering
+    \includegraphics[width=.8\linewidth]{9.PNG}
+  \end{minipage}%
+  \begin{minipage}[b]{.5\linewidth}
+    \centering
+    \includegraphics[width=1.0\linewidth]{10.PNG}
+  \end{minipage}
+  \caption{$Algorithm3$の動作例．頂点番号はトポロジカル順序の逆順を表す．}
+  \label{fig:7}
+ \end{figure}
+
+
+ \subsubsection{パス幅の取り得る範囲}
+
+　頂点数が2以上の準ハミルトングラフがとり得るパス幅の範囲は，最大で$|V|-1$，最小で1である．パス幅が$|V|-1$であるグラフの例として，自身より後ろの頂点全てに有向枝を持つようなグラフが考えられる．パス幅が1であるグラフの例として，パスが考えられる．
+
+ \subsubsection{アルゴリズムの計算量}
+
+ アルゴリズムの計算量は以下の3つの和であり，$O(|V|+|E|)$である．
+
+ \begin{itemize}
+     \item トポロジカルソート：$O(|V|+|E|)$
+     \item 各頂点$v$に対するIvの更新：$O(|V|)$
+     \item 各頂点のintroduceとforget：$O(|V|)$
+ \end{itemize}
+ 
+ \subsubsection{アルゴリズムが最小のパス幅を持つDAG-PDを与えることの証明}
+ 以下を証明する．ただしトポロジカルソートされた頂点を後ろから$v_1, v_2,   \ldots, v_n$とする．また，DAG-PDの節点列を$X=(X_1, X_2,   \ldots, X_s)$とする．
+ 
+ \begin{enumerate}
+ \item introduceする順が一意であり，パス幅はforgetの仕方のみに依存する
+ \item 各頂点は最短でforgetされている
+ \end{enumerate}
+
+ \textbf{1の証明}
+ 
+ \textbf{\underline{十分性の証明}}.
+ トポロジカルソートの順で頂点をintroduceした場合を考える．ある$v$を$X_m$でintroduceしたとき，$suc(v)$は全て$X_{m-1}$に含まれる(forgetの判定方法より，$suc(v)$は$X_{m-1}$の時点でまだforgetされていないことに注意する)．このときDAG-PDのintroduceのルールを満たす．
+
+ \textbf{\underline{必要性の証明}}.
+ トポロジカルソートの順で頂点をintroduceしなかった場合を考える．つまり$v_{i-1}$よりも先に$v_i$を$X_m$でintroduceした場合を考える．$v_{i-1}$は$X_m$よりも後の節点$X_k(m<k)$でintroduceされるとでき，$v_i \in X_k$または$v_i \notin X_k$のいずれかであるが，前者ならば$v_i \in X_{k-1}$が成り立つためintroduceのルールに反する．後者ならば$v_i$は$X_k$より前で既にforgetされているため，$v_{i-1}$と$v_i$を同時に含む節点は存在せず，introduceのルールに反する．よってトポロジカルソートの順に頂点をintroduceすることが必要である．
+ 以上よりintroduceする順はトポロジカルソートの順で一意に定まる．よってパス幅はforgetのみに依存する．
+
+
+ \textbf{2の証明}
+
+ \textbf{\underline{十分性の証明}}.
+ アルゴリズムのforgetの判定($I_v$が0となった直後に$v$をforget)はDAG-PDのルールを満たす．なぜなら$X_m$で$I_v=0$となった場合，$v$の先行頂点は全て$X_m$以前に含まれており，またトポロジカルソートの順でintroduceするため，$v$の後続頂点も全て$X_m$以前に含まれている．よって$X_m$より後にintroduceされる頂点は$v$に隣接しておらず，$X_m$の直後に$v$をforgetしてもDAG-PDのルールに反しないからである．
+
+ \textbf{\underline{必要性の証明}}.
+ $I_v$が0になる前に$X_m$で$v$をforgetしたとすると，$v$を後続頂点に持ち，$X_m$より後でintroduceされる頂点$u$が存在する．このとき$(u, v)$が同時に含まれるような節点は存在しないため，introduceのルールに反する．よって$v$は$I_v$が0になるまでforgetできない．
+ 以上より，各頂点は最短でforgetされている．
+
+ 
+ \subsection{一般のDAG}
+一般のDAG $G=(V, E)$が与えられたとき，そのグラフに対するパス幅とパス分解を構成するアルゴリズムを提案する．
+
+ \subsubsection{一般のDAGに対するDAG-PD構成指数時間アルゴリズム}
+
+ 入力グラフのトポロジカル順序をすべて求め，それぞれに対してAlgorithm3を適用することでパス幅やパス分解を得られる．トポロジカル順序を列挙するために木構造を用いるが，全てのトポロジカル順序を列挙すると計算量が$O(|V|!)$と大きくなってしまうため，途中で不必要なトポロジカル順序の構成を停止するために枝刈りを行う．この枝刈りによって計算量を$O(|V|(|V|+|E|)2^{|V|-1})$にまで小さくできる．枝刈りを行うために以下の6つのパラメータを用意する．
+ 
+ \begin{itemize}
+     \item $p$：整数のリスト．トポロジカル順序を求める木構造の各節点を一意に表す．
+     \item $I\_list$: 木の節点$p$を構成した時点でintroduceしている頂点のリスト．トポロジカル順序の逆順を表す．
+     \item $in$: 残入次数．すなわち各頂点$v$について，$pred(v)$のうち，節点$p$を構成した時点でまだintroduceされていない部分頂点集合を表す．
+     \item $out$: 残出次数．すなわち各頂点$v$について，$suc(v)$のうち，節点$p$を構成した時点でまだintroduceされていない部分頂点集合を表す．
+     \item $X$: 節点$p$において，forgetを済ませた後のパス分解の節点．
+     \item $w$: 節点$p$を構成した時点までに必要な最小の幅．
+ \end{itemize}
+
+ 一般のDAGに対するDAG-PD構成指数時間アルゴリズムは$Algorithm 4$, \par $Algorithm5$で与えられる．$Algotithm4$は，DAGの全てのトポロジカル順序を木構造で構成していき，途中でそれ以降のソート結果が同じものがあれば，パス幅が大きい方を枝刈りするアルゴリズムである．構成する木構造の各節点$p=[p_1, p_2,   \ldots, p_i]$に対し，6つ組($p, I\_list, in, out, X, w$)を順次決定していき，最終的に最小の幅を与えるトポロジカルソートを表す節点を出力する．$Algorithm5$では最初に6つ組を初期化し，$Algorithm4$で定義された関数$TREE\_COMPOSE$を使用して最適なトポロジカルソートを得る．その後$Algorithm3$を利用して最小幅DAG-PDを求めている．アルゴリズムの計算量は，枝刈りを行うことで$O(|V|!)$から$O(|V|(|V|+|E|)2^{|V|-1})$まで小さくしている．パス幅はアルゴリズムが出力する節点のパラメータ$w$で与えられる．
+
+ 図\ref{fig:8}にアルゴリズムの動作例を示す．左上が入力されたグラフを表し，左上がアルゴリズムが構成する木構造を表し，下が6つ組の決定過程の様子を表す．アルゴリズムが最後に決定した木の節点は$p=1111111$であり，このとき$w=3$より，パス幅は3となる．
+
+
+
+
+ \begin{figure}[!t]
+ \begin{algorithm}[H]
+    \caption{最小幅を与えるトポロジカルソートの木構造の構成}
+    \label{alg5}
+    \begin{algorithmic}[1]
+    \Function {$TREE\_COMPOSE$}{$node\_list$}
+    \State $return\_list \leftarrow []$
+    \Comment{$node\_list$は複数の頂点の6つ組のリスト}
+    \For{$l=0$ to $len(node\_list)-1$}
+    \State $m \leftarrow 1$
+    \Comment{$m$は$p$の末尾に追加していく値}
+    \State $n \leftarrow node\_list[l]$
+    \Comment{各頂点の6つ組を$n$に格納}
+    \State $p, I\_list, in, out, X, w \leftarrow n[0], n[1], n[2], n[3], n[4], n[5]$
+    \For{$i=1$ to $n-1$}
+    \If{$out[v_i]==\emptyset$ \& $v_i\notin I\_list$}
+    \Comment{ソートする頂点の決定}
+    \State $p' \leftarrow p.append(m)$
+    \Comment{以下で6つ組を決定}
+    \State $I\_list \leftarrow I\_list.append(v_i)$
+    \For{$k=0$ to $n-1$}
+    \State $in[k] \leftarrow in[k] \setminus \{v_i\}$
+    \State $out[k] \leftarrow out[k] \setminus \{v_i\}$
+    \EndFor
+    \State $X \leftarrow X \cup \{v_i\}$
+    \Comment{頂点をintroduce}
+    \For{$j=0$ to $n-1$}
+    \If{$v_j \in X$ \& $in[j] == \emptyset$}
+    \State $X \leftarrow X \setminus \{v_j\}$
+    \Comment{頂点をforget}
+    \EndIf
+    \EndFor
+    \State $w \leftarrow  \max\{|X|, w\}$
+    \State $m \leftarrow m+1$
+    \State $return\_list \leftarrow return\_list.append([p', I\_list, in, out, X, w])$
+    \EndIf
+    \EndFor
+    \EndFor
+    \For{$i=0$ to $len(return\_list)-1$}
+    \Comment{以下は枝刈りの処理}
+    \For{$j=i+1$ to $len(return\_list)-1$}
+    \If{$return\_list[i][1]==return\_list[j][1]$}
+    \If{$return\_list[i][5] \leq return\_list[j][5]$}
+    \State $del$ $return[j]$
+    \Comment{$I\_list$が等しいなら一方を枝刈り}
+    \Else \, $del$ $return[i]$
+    \EndIf
+    \EndIf
+    \EndFor
+    \EndFor
+    \If{$return\_list==\emptyset$}
+    \Return $node\_list$
+    \Comment{ソート終了の判定}
+    \Else{} \Return $TREE\_COMPOSE(return\_list)$
+    \Comment{終了でなければ再帰}
+    \EndIf
+    \EndFunction
+    \end{algorithmic}
+ \end{algorithm}
+ \end{figure}
+
+
+ \clearpage
+
+
+ \begin{figure}[!t] %ここから
+ \begin{algorithm}[H]
+    \small
+    \caption{一般のDAGに対するDAG-PD構成指数時間アルゴリズム}
+    \label{alg4}
+    \begin{algorithmic}[1]
+    \State $root \leftarrow [1, [], [pred(v_1), pred(v_2),   \ldots, pred(v_n)], [suc(v_1), suc(v2),   \ldots, suc(v_n)], \emptyset, 0]$
+    \State $leaf \leftarrow TREE\_COMPOSE([root])[0]$
+    \Comment{Algorithm4の出力をleafに格納}
+    \State $I\_list_{leaf} \leftarrow leaf[1]$
+    \Comment{leafの$I\_list$を取り出す}
+    \State $I\_list_{leaf}$をトポロジカルソートの逆順として，$algorithm3$を適用
+    \end{algorithmic}
+ \end{algorithm}
+ \end{figure}
+
+
+ \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{14.PNG}
+    \caption{$Algorithm4$の動作例．トポロジカル順序を表す木を構成する様子．}
+    \label{fig:8}
+ \end{figure}
+
+
+
+ \subsubsection{アルゴリズムの計算量}
+
+ アルゴリズムの計算量は$O(|V|(|V|+|E|)2^{|V|-1})$である．計算量がこの式で表せることを以下で証明する．
+
+ \textbf{証明}.
+ 一つの木の節点に対する6つ組($p, I\_list, in, out, X, w$)の計算量は以下のようになるため，合計で$O(|V|+|E|)$である．
+
+ \begin{itemize}
+     \item $p, I\_list, w$の計算量：$O(1)$
+     \item $X$の計算量：$O(|V|)$
+     \item $in, out$の計算量：$O(|V|+|E|)$
+ \end{itemize}
+ 
+ したがってアルゴリズム全体の計算量は$O((|V|+|E|)\cdot(\mbox{木の節点数}))$で表される．以下では木の節点数が$O(|V|\cdot 2^{|V|-1})$で表されることを示す．
+
+ 頂点数が$n$のDAGに対して，枝の向きを考えずに各頂点を並べ替え，図\ref{fig:9}のように空集合を根とする木を構成することを考える．実際には枝の向きによる制限があるため，トポロジカルソートの総数はそれ以下である．枝刈りを行わなかった場合，$n!$個の並べ替えがあり．このとき構成した木の総節点数は，各深さ$k$における節点数がそれぞれ${}_{n}P_{k}$で表されることに注意すると，
+ \[\sum_{k=1}^{n}{}_{n}P_{k}=\lfloor e\cdot n!\rfloor\]
+ である．ただし$e$はネイピア数である．よってトポロジカルソートを全列挙したときの木の総節点数は$O(n!)$でおさえられる．
+ 一方，枝刈りを行った場合は，ある同じ深さの2節点に対し，それまでに並べ替えを行った頂点集合が一致する場合，一方の節点におけるそれ以降の木の構成を停止する．しがたって各深さ$k$における節点のうち，それ以降も木の構成を続ける節点数は${}_{n}C_{k}$と表される．よって深さ$k$における節点数は，上記の節点に加えて深さ$k$でそれ以降の木の構成を停止する節点も含まれることに注意すると，
+ %
+ \begin{align*}
+    &\mbox{(深さk-1の節点のうち，それ以降も木の構成を続ける節点数)} \\
+    &\times\mbox{(そのような各節点に対する，深さkでの並べ替えの候補数)} \\
+    &={}_{n}C_{k-1}(n-(k-1)) = k{}_{n}C_{k}
+ \end{align*}
+ %
+ したがって木の総節点数は，
+ 
+ \[
+ \sum_{k=1}^{n}k\cdot{}_{n}C_{k}= n\cdot2^{n-1}
+ \]
+ 
+ である．よってトポロジカルソートを全列挙したときの木の総節点数は$O(n\cdot2^{n-1})$でおさえられる．
+
+ \begin{figure}[H]
+  \begin{minipage}[b]{.5\linewidth}
+    \centering
+    \includegraphics[width=1.\linewidth]{15.PNG}
+  \end{minipage}%
+  \begin{minipage}[b]{.5\linewidth}
+    \centering
+    \includegraphics[width=1.\linewidth]{16.PNG}
+  \end{minipage}
+  \caption{n=3のときの並べ替えの木の構成}
+  \label{fig:9}
+ \end{figure}
+
+ 
+ 
+ \subsubsection{アルゴリズムが最小のパス幅を持つDAG-PDを与えることの略証}
+
+ $I\_list$には$out$が空集合になった頂点から順に追加される．すなわち$I\_list$はトポロジカルソートの逆順の一つになっている．また$in$が空集合になった頂点はその直後にforgetされるため，アルゴリズムが出力するトポロジカルソートに対し，このアルゴリズムは準ハミルトングラフに対するアルゴリズムと同様の動作を行う．よって各時点での$w$の値は最小である．したがってアルゴリズムが出力するトポロジカルソートは最小の幅をもつDAG-PDを与える．
+
+ 
+\section{まとめ}\label{sec-conclusion}
+
+本研究においては，DAG型パス分解とグラフ小石ゲームの関係性について，両者にルールを1つずつ追加することで，パス分解とペブリング戦略の構成が逆順から辿ると互いに一致することを明らかにした．また有向木，反有向木，準ハミルトングラフに対して最小の幅を与えるDAG-PD構成の具体的な多項式時間アルゴリズムを提案し，一般のDAGについては枝刈りを行うような指数時間アルゴリズムを提案した．
+
+本研究の役割は，DAG-PDのパス幅とPebblingのペブリング数についてお互い評価しあった点と，一般にはNP困難である最小幅DAG-PDの構成に対し，特殊なグラフでは頂点数の多項式時間で可能であることを示した点，および一般のDAGに対しても，枝刈りを行うことで頂点数の階乗時間から指数時間にまで計算量を小さくした点である．
+
+今後の課題は，今回提案した4つのアルゴリズムの計算時間の測定・比較を行うことである．また最小幅DAG-PDの構成はNP困難であるため，パス分解の構成を多項式時間で行う近似アルゴリズムの考案などが考えられる．例えば，パス幅の2倍程度の幅を持つパス分解の構成を多項式時間で行うアルゴリズムの研究などである．さらに，パス幅を固定パラメータとしたときのFPTアルゴリズムの考案も今後の課題である．
+
+
+\acknowledgments				% 謝辞
+本論文を作成するにあたり，ご指導を頂いた指導教員の川原純先生に感謝の意を表します．また，研究をする上で様々な指導をしてくださった湊真一先生，岩政勇仁先生に心より感謝いたします．そして助言をくださった湊研究室の皆様に感謝いたします．
+
+\nocite{*}
+\bibliographystyle{kuisunsrt}			% 文献スタイルの指定
+\bibliography{kuisthesis_jp}				% 参考文献の出力
+
+
+
+
+
+
+
+\begin{comment}
+
+\begin{jabstract}				% 和文梗概
+この手引は，京都大学工学部情報学科計算機科学コースにおける
+特別研究報告書の構成と形式について説明したものである．
+また，当コースで定めた形式に則った論文を日本語\LaTeX を用いて作成するための
+スタイル・ファイル\verb|kuisthesis|の使い方についても説明している．
+なお，この手引自体も\verb|kuisthesis|を用い，
+定められた形式に従って作成されているので，
+必要に応じてソース・ファイルを参照されたい．
+\end{jabstract}
+
+\begin{eabstract}				% 英文梗概
+This guide describes how to write your guraduation thesis
+according to the regulation of Computer Science Course, 
+School of InFormatics and Mathematical Science,
+Faculty of Engineering Kyoto University. 
+This regulation specIfies the rules about the structure 
+and Format of the thesis which you need to follow in writing.
+This guide also explains how to use a \LaTeX{} style file For
+graduation thesis, named \verb|kuisthesis|, 
+with which you can easily produce a well-Formatted thesis. 
+This guide itself is written using \verb|kuisthesis|; 
+the source code may be helpful 
+If you would like to know how to use this style file.
+\end{eabstract}
+
+\section{はじめに}\label{sec-intro}		% 本文の開始
+特別研究報告書は，学部で行なった研究の成果をまとめて提出するものである．
+学部における学修研究の締めくくりとして，また自分の研究成果をある程度の
+分量の文章に分かりやすくまとめる経験として，重要な意義を持っている．こ
+れらは永く保管され，広く教員，学生の閲覧に供せられることになっている．
+
+この手引では，報告書作成の基本的な要領と形式について，ある程度の指針を
+述べている．論文や報告書を執筆する際のスタイルは研究分野によって異なる
+ところも多いので，本手引を参考にした上で，指導教員のアドバイスや各々の
+研究分野の優れた論文や技術文献を参考にし，またアカデミック・ライティン
+グに関する文献も参考にしながら，良い報告書を提出されたい．
+
+手引が示す要領や指示は最低限のものであり，それらに従いさえすればよい論
+文ができあがるというものではない．与えられた紙数の枠内で，研究の内容を
+簡潔に分かりやすくまとめる能力はなかなか奥が深く，これからの皆さんが人
+生をかけて涵養すべき能力である．本報告書の執筆を契機に，日頃から内外の優
+れた論文に触れ，自分のライティングの力を高められたい．
+
+% 全体の構成，文章，字句などについて細心
+% の注意を払うことが大切である．
+%% 記述や表現の能力を養うことが大切である．
+%% ことを心がけ，
+%% ．，各自の研究の成果が読者に正しく理解される
+%% ように記述することが最も重要である．このためには，
+
+%% また，
+
+以下，論文の構成と執筆上の注意事項を述べ，付録として論文執筆用の日本語\LaTeX 
+スタイルファイル\verb|kuisthesis|の使い方を示す．
+
+\section{報告書の形式について}\label{sec-instruction}
+% \subsection{用語}\label{subsec-language}
+
+特別研究報告書は以下の形式に従ってまとめ，別途告知される期日
+（厳守：締め切りを過ぎての提出は認められない）までに提出すること．
+
+\begin{itemize}
+  \item 特別研究報告書は\emph{日本語}あるいは\emph{英語}で書くこと．
+%    計算機科学においては
+%    研究成果を英語で発表することが重要となっている一方，日本語で論文を
+%    綴る能力も依然として重要であることに鑑み，本コースでは特別研究報告
+%    書を日本語で記述することとしている．
+
+  \item 報告書は，A4の用紙の片面に印刷して提出すること．
+
+  \item 報告書には\emph{日本語および英語}の内容梗概を含むこと．
+    \emph{それぞれ1ページ半から2ページ}にまとめること．始め
+    には，題目および氏名を書くこと．
+
+  % \item 目次の始めにも題目を記載すること．
+
+  \item 報告書本文は25ページ$\pm 10\%$にまとめること．このページ数には
+    図表を含み，参考文献は除く．図表の分量は全体の$40\%$程度を限度とし，
+    これを超過する場合は適宜付録にまわすこと．
+  \item 報告書には，内容梗概のまえに「とびら」をつけ，全体を
+    所定のファイルにとじて提出すること．とびらは本文と同じ用紙を用い，
+    特別研究報告書である旨，題目，指導教員名，所属学科名，氏名，提出年
+    月を記入すること．
+  \item 報告書全体はファイルに綴じ，ファイルの表紙にはとびらと同様の事
+    項を記載すること．
+    
+  \item 報告書は手書きではなく，ワープロソフトもしくは\LaTeX{}を用いて
+    清書すること．\LaTeX{}を用いる場合は\verb|kuisthesis|スタイルファ
+    イルを用いること．ページレイアウトは以下の通りとすること．（配布さ
+      れているスタイルファイルを用いれば，これらの要件は満たされるよう
+      になっているはずである．）
+    \begin{itemize}
+    \item 論文の各ページの\emph{左端3\,cmと右端1\,cm}は必ず空白とする
+      こと．
+    \item 日本語で報告書を執筆する場合は，12\,pt（あるいは相当の大きさ）
+      のフォントを用い，\emph{1行当り35 文字， 1ページあたり32行}で製
+      版すること．ただし，用いるソフトウェアの都合でこの基準が守れない
+      場合は1ページ当りの字数が同程度となるようにして，1行当りの字数や，
+      1ページあたりの行数を調整してもよい．
+    \item
+      英文で報告書を執筆する場合は12\,pt（あるいは相当の大きさ）のフォ
+      ントを用い，\emph{1行の幅を14.2\,cm, 1ページあたり32行}とするこ
+      と．日本文／英文にかかわらず，章・節の見出しは2行分とし，それ以
+      下の小節の見出しは1行分とする．また箇条書の前後や項目間に余分な
+      空白は挿入しないこと．
+    \end{itemize}
+\end{itemize}
+
+\section{DAG型パス分解とグラフ小石ゲームの関係性の発見}\label{sec-structure}
+
+本節では特別研究報告書の構成について説明する．報告書には，内容梗概，目
+次，本文を含まなければならない．必要であれば付録を加えることができる．
+
+論文の書き方については，研究分野によるスタイルの違いも多く，本ガイドで
+統一的な指針を提供するのが難しいところがある．指導教員のアドバイスを受
+けつつ，各分野の論文を読み，何より多くの論文を自分で書くことで，スタイ
+ルを身に付けていくことが必要である．なお，特別研究報告書のような自然科
+学や科学技術に関する文章のまとめ方については，多くの良書がある．
+%これらを一読されたい．
+%\begin{itemize}
+%  \item 
+%\end{itemize}
+%本節では，特別研究報告書において特に留意すべき点について述べる．
+
+%% これらの区分を明確にすることと，それぞれの目的に従って記述すること
+%% が必要である．
+
+\subsection{内容梗概}\label{subsec-abstract}
+
+内容梗概は，報告書の内容をまとめた短い文章である．内容梗概はそれ自身の
+みを読んで報告書の内容が分かるように記述する必要がある．したがって，本
+文を単に圧縮・要約するのではなく，研究の背景，目的，方法，得られた結論
+が，その分野を専門とする研究者以外にもある程度分かりやすいようにまとめ
+られている必要がある．
+
+%% \footnote{内容梗概の多くの部分を後に述べる緒論
+  %% （序論）が占める例がしばしば見られるが，内容梗概の目的からして不
+  %% 適切であることはいうまでもない．}
+
+特別研究報告書においては，前述の通り，報告書執筆に使用する用語（日本語
+  または英語）にかかわらず，日本文と英文の内容梗概をそれぞれ1ページ半
+から2ページにまとめることが定められている．専門外の研究者や技術者にも
+伝わるように研究の内容を要約することは，それ自体が高度な知的作業である．
+しっかり時間をかけて取り組まれたい．
+
+\subsection{目次}\label{subsec-toc}
+
+目次は一般の著書と同様の形式で，本文の直前に置く．これは単に各章や節が
+どのページに書いてあるかを読者に知らせるためのみではなく，読者に論文全
+体の構成や内容を伝えるために重要な情報となる．
+
+\subsection{本文}\label{subsec-main}
+
+本文は序論，本論，結論に分けて構成することが多い．
+
+\subsubsection{序論}\label{subsubsec-intro}
+
+序論は自分の研究が人間の知においてどのように位置づけられるかを読者に知
+らせる目的がある．したがって，研究の文脈にあたる研究の歴史的背景や主要
+な関連研究等の説明等から始めて，その研究で解決しようとする問題を読者に
+理解させることが重要である．また，その研究がどのような方法で目的を達成
+しようとするのか，どのような結果や貢献が得られたのかを説明することも，
+序論の重要な目的である．
+
+%% 研究の背景，目的，性格などを記述し，これによって，読む者にある程
+%% 度の心構えを与え，その研究のおよその意義をあらかじめ理解させるように留
+%% 意すべきである．
+
+%% ただしこれは，上述の内容梗概とはおのずから目的が異なり，あくまで本論を
+%% 読むための準備としての機能に重点を置くべきであって，問題の種類によって
+%% は，歴史的な経過の記述，あるいは現状の展望を加え，また他の研究との関係
+%% および相違点などにも触れることが必要である．
+
+\subsubsection{本論}\label{subsubsec-main}
+
+本論においては研究によってどのような成果が得られたかを説得的に記述する．
+本論をどのような構成にするか，何を記述すべきかは，上記のように研究分野
+によるスタイルの違いが大きい．しかし，どの分野においても，研究成果とし
+て主張する貢献をサポートするのに必要かつ十分な内容が論理的に記述される
+べきである．
+
+%% 論文の主体であって，多くの紙数をこれに当てるのが普通である．また
+%% 論理的に一貫した流れの中に重点が強調され，全体としてのまとまりが保たれ
+%% るように工夫するとともに，引用と創意の区別を明らかにするなど，良心的な
+%% 記述に心がけなければならない．
+
+%% 前述のとおり，論文は分かりやすいことが第一の要件であるから，本論の記述
+%% に当たっては，つぎの事項に注意する必要がある．
+%% \begin{itemize}%{
+%% \item
+%% 適当な長さの章・節に分け，その順序，標題なども十分に検討する．必要ならば，節
+%% をさらに細分し，適当な見出しをつける．
+%% \item
+%% 各章・節ごとに一応のまとまりをもつとともに，他の章・節への自然なつながりが保
+%% たれるように留意する．
+%% \item
+%% だらだらとした表現を避け，記述の精疎の配分を工夫して，重要な点，独創的な部分
+%% を強調する．
+%% \item
+%% 使用する記号の意味を正確に定義し，数式の誘導は，十分に整理された形で記載する．
+%% 長い式の扱いは，全体を付録にまわし本論には重要な部分のみを書くほうが読みやす
+%% くなる場合が多い．
+%% \item
+%% 近似式，実験式などは，その根拠を明示する．
+%% \item
+%% 図表はしばしば極めて重要な要素となるが，説明的な目的で入れるものと結論的な意
+%% 味を持つものとの区別を明確にし，また引用した図表はその出典を明らかにする．
+%% \item
+%% 図はていねいに，正確に書き，図中の文字や記号，図表の見出し（標題または簡単な
+%% 説明）にも十分な注意を払うこと．
+%% \item
+%% 引用文献は，研究に関係の深い重要なものを掲げ，無意味な羅列を避けること．文献
+%% 表の挿入場所は本文の末尾（付録がある場合には，付録の前）とする．
+%% \end{itemize}%}
+
+\subsubsection{結論}\label{subsubsec-conclusion}
+
+結論は論文のまとめとして，得られた研究成果を簡潔に述べる．序論において
+も研究成果を簡潔にまとめることが多いが，これから論文を読もうとする読者
+に伝えるべき研究成果の要約と，論文を一通り読んだ読者に伝えるべき研究成
+果の要約とでは，含むべき情報がやや異なることが多い．研究途上に派生した
+副次的な問題や将来に残された研究課題があれば，それらについても触れる．
+
+%% 論文のまとめとして，研究成果の要点を簡潔に記述すべきである．これ
+%% は当然，本論に置ける本質的な部分を圧縮したものとなるが，内容梗概とは異
+%% なり，論文の締めくくりにふさわしい格調のうちに完結するように努めなけれ
+%% ばならない．
+
+%% また
+
+\subsubsection{謝辞}\label{subsubsec-ack}
+
+結論のあとに，研究上の指導，助言，援助を受けた人々に対して，謝辞を書く
+慣習となっている．また（特別研究報告書においては必要ない場合も多いと思
+  われるが）研究資金や研究機器を公的機関や民間企業から得ている場合は，
+それらについて謝辞を書くことが必要な場合がある．
+
+\subsection{付録}\label{subsec-appendix}
+
+報告書は，本文のみで完結するようにまとめなければならないが，さらに本文
+の内容を補足し，より充実したものとするために，本文のあとに付録を加える
+ことができる．付録は，たとえばつぎのような場合に必要である．
+\begin{itemize}%{
+\item
+  細かい証明や数式の変形等は，長さの関係で本文に記載できないことが多く，
+  本文の可読性のためにも付録に含めることがある．（ただし，その定理の証
+    明自体が研究の主目的である場合には，当然これを本文に入れるべきであ
+    る．）この場合，本文および付録の両方に，互いの対応を明示しなければ
+  ならない．
+\item 研究成果の根拠となるデータや数値計算の結果などは，図表の形に整理
+  したうえで本文に入れるべきであるが，その量が多いときには，参考資料と
+  して付録に掲載する．
+\end{itemize}
+
+得られた生データや実験に用いたソースコードは通常は論文に含めない．これ
+らを公開する場合には，適当なリポジトリ等に保存した上で，その URL 等を
+論文中に含めることが多い．（これらを公開してよいか否かには，特許権や著
+  作権等の知財やプライバシー等の問題を検討することが必要である．指導教
+  員と必ず相談すること．）なお，公開しない場合も，研究成果の再現性の担
+保のために，データやプログラムを研究室のサーバ等に保管しておくこと．
+
+%% なども，長いものは付録に収める．
+%% 特に大量のデータや長大なプログラムを添付したいときには，別冊付録としてもよい．
+%% ただしこれも，保管，閲覧の便宜を考慮し，なるべく本文と同様の体裁にまとめるこ
+%% とが望ましい．
+%% 付録（特に別冊付録）には，適当な場所に標題と簡単な説明を付し，それだけで大体
+%% の意味が分かるように配慮すべきである．
+
+\section{報告書の記述に関する一般的なアドバイス}\label{sec:advice}
+
+\subsection{術語}
+術語に関しては，専門の学会誌等を参照して正確を期し，定訳のない術語は原
+語のままとするか，原語を併記することが必要である．固有名詞は言語または
+かたかなで書くが，かな書きの場合にも最初だけは原語を併記するのがよい．
+
+\subsection{記号，単位}\label{subsec-symbol}
+数式を多用する論文は，\LATEX などの数式を扱える組版ソフトで書くこと．
+やむをえず通常のワードプロセッサを用いる場合や，図表などの中で数式を使
+用する場合には，文字のフォント，サブスクリプトやスーパスクリプトの位置
+などに十分な注意が必要である．
+
+記号は全て明確に定義するべきである．多数の記号を使用する場合には，「記
+  号表」を適当な場所に挿入する研究分野もある．
+
+物理量の単位の略記法は，学会誌などで広く用いられている標準的なものに従
+うべきであるが，標準化されていないものについては，説明を加える必要があ
+る（脚注を利用してもよい）．
+
+\subsection{図表}\label{subsec-figure}
+図表は\emph{全て本文中に挿入し}，できるだけ本文で参照している箇所の近
+くに配置する．
+
+表の上側には表番号（たとえば表1.3）と簡単な見出しをつける．また図の下
+側には図番号（たとえば図2.1）と簡単な見出し（必要ならば簡単な説明）を
+つける．
+
+図はできるだけ作図ツールなどを用いて電子的に作成すべきであるが，やむを
+えず手書きで作成する場合には，いわゆる「版下」に使うつもりでていねいに
+書かなければならない（鉛筆書きは許されない）．
+
+一般に，図表はそれをみただけで，およその意味が分かるように作成すること
+が望ましい．また，本文にも対応する図表の番号が必ず現れるように注意しな
+ければならない．
+
+大量の観測データや計算結果に対する図表は，代表的なもののみを本文に入れ，
+全体は付録や web 上にまとめるほうがよい．
+
+\subsection{脚注}\label{subsec-footnote}
+
+脚注はむやみに挿入すべきではないとされているが，本文を分かりやすくする
+ために，簡単な注釈を脚注として入れることは，場合によっては効果的である．
+
+脚注と本文との対応は下の例のように，ページごとに付けた脚注番号による．
+
+なお引用文献は，原則として参考文献リストの形にまとめるべきであるが，研
+究の本題とあまり関係のない証明などの出所や，オープンソースソフトウェア
+の URL を示す場合には，脚注を用いてもよい．
+
+%% \begin{description}
+%% \item[例{\dm （本文）}]\leavevmode\par  \ldots  この逐次近似法は，微分方
+%%   程式の解の存在定理の証明に用いられ\footnote {この思想はPicardによっ
+%%     て導入されたものである(1890)．}， \ldots , となることが知られてい
+%%   る\footnote{この証明は，例えばwhittaker and watoson: Modern
+%%     Analysis, p.~123にみられる．}．
+%% \end{description}
+
+\subsection{文献}\label{subsec-references}
+
+参考文献リストはタイトル，梗概，本文に並ぶ論文のもう一つの顔である．適
+切に文献を引用できているかどうかで，研究成果をまとめて人類の知の体系に
+位置づけるという論文執筆の目的の成否が決まることもある．引用すべき論文
+はすべて引用し，不要な論文は引用しないようにすべきである．
+
+\emph{参考文献リストの作成は BibTeX 等のツールを用いるべきである．手動
+  で参考文献リストを作成すると，間違いなく誤りが含まれる．}執筆の早い
+段階でこれらのツールの使用方法を調べ，使えるようにしておくこと．
+
+%% 引用文献は本文の末尾に（付録があればそのまえに），表の形にまとめる．文
+%% 献の参照は[1], [2]のように，[ ]つきの通し番号による．この番号は，該当
+%% する文章の切れ目，または人名その他の単語に続いて挿入する．
+
+%% 文献表には，番号に続いて，著者名，表題，雑誌名（または書名），巻，年号，ペー
+%% ジなどを，この手引の「参考文献」にならって記載する．なお文献[1]$\sim$[6]は会
+%% 議録や雑誌に収録された論文の例であり，文献[7]$\sim$[9]は単行本の例である．
+
+%% 雑誌名の略記法は，学会によっても多少異なるが，慣用のものを用いてよい．ただし
+%% 周知でないものは，むしろ雑誌名をそのまま書いたほうがよい．この手引の参考文献
+%% の例では，[2]の``IEEE Trans. Computers''は``IEEE Transactions on Computers''
+%% の略であり，[4]の「信学論(D)」は，「電子情報通信学会論文誌D」の略である．
+
+%% 雑誌に対しては，その「巻」と「発行年」のほか，「号」および（または）「月」を
+%% 入れたほうが検索に便利である．号と月の入れ方はつぎの例による．
+%% \begin{eqnarray*}
+%% &\hbox{第4巻，第10号，1995年，10月発行の雑誌}\\
+%% &\Big\Downarrow\\
+%% &\hbox{Vol.~4, No.~10 (Oct.~1995)}.
+%% \end{eqnarray*}
+
+\subsection{その他のアドバイス}\label{subsec-others}
+
+
+\begin{itemize}
+  \item 執筆した特別研究報告書は，将来的に国際会議やワークショップ等へ
+    の投稿につながることが多い．これらの投稿時に一から書き直すことを避
+    ける意味でも，できるだけ論文として通用するような報告書をまとめてほ
+    しい．
+  \item 提出までに，自分自身で何度も校正を重ね，論旨の飛躍や矛盾のない
+    ように注意するとともに，よく文章を練り，誤字や誤記を除くように心が
+    けなければならない．また，先輩に目を通してもらうことで，自分では気
+    づきにくい不明瞭な点に気づくことができる．
+\end{itemize}
+
+
+						% 付録の開始
+\Appendix[付録：スタイルファイル{\tt kuistheis}の使用法]
+この手引で述べた教室所定の形式に適合した論文を\LaTeX で作成するために，スタ
+イルファイル\|kuisthesis|が用意されている．以下，\|kuisthesis|を使う
+ための準備と，その使用法について解説する．
+なお，この手引自体も\|kuisthesis|を用いて作成したものであるので，必要に
+応じてスタイルファイルとともに配布されるソースファイルを参照するとよい．
+また，論文作成の際に使用する\LaTeX コマンドのほとんどは標準的なものであるの
+で，基本的な使用法やここで解説していないものについては以下の書籍等を適宜参照されたい．
+\begin{quote}%{
+Lamport, L.: {\em A Document Preparation System {\LaTeX} User's Guide \&
+Reference Manual\/}, Addison wesley, Reading, Massachusetts (1986).
+(Cooke, E., et al.訳：文書処理システム{\LaTeX}, アスキー出版局(1990)).
+\end{quote}%}
+
+\section{ソースファイルの構成}\label{app-structure}
+ソースファイルは以下の形式で作る．
+\begin{itemize}\item[]%{
+\|\documentclass{kuisthesis}|または\\
+\|\documentclass[english]{kuisthesis}|\\
+必要ならば他のオプションやスタイルファイルを指定する．\\
+必要ならばユーザのマクロ定義などをここに書く．\\
+\|\jtitle{|\<題目（和文）\>\|}|\\
+\|\etitle{|\<題目（英文）\>\|}|\\
+\|\jauthor{|\<著者名（和文）\>\|}|\\
+\|\eauthor{|\<著者名（英文）\>\|}|\\
+\|\supervisor{|\<指導教官名\>\|}|\\
+\|\date{|\<提出年月日\>\|}|\\
+%\|\department{|\<専攻名\>\|}|\\
+\|\begin{document}|\\
+\|\maketitle|\\
+\|\begin{jabstract}|\\
+\null\qquad\<内容梗概（和文）\>\\
+\|\end{jabstract}|\\
+\|\begin{eabstract}|\\
+\null\qquad\<内容梗概（英文）\>\\
+\|\end{eabstract}|\\
+\|\tableofcontents|\hfill\rlap{\hskip-.5\linewidth{\tt\%}目次の出力}\\
+\|\section{|\<第1章の表題\>\|}|\\
+\null\qquad\hbox to3em{\dotfill}\\
+\null\qquad\<本文\>\\
+\null\qquad\hbox to3em{\dotfill}\\
+\|\acknowledgments|\\
+\null\qquad\<謝辞\>\\
+\|\bibliographystyle{kuisunsrt}|\quad または\\
+\|\bibliographystyle{kuissort}|\\
+\|\bibliography{|\<文献データベース\>\|}|\\
+付録があれば \|\appendix|/\|\Appendix| に続いてここに記す．\\
+\|\end{document}|
+\end{itemize}%}
+
+\subsection{印字の形式}\label{appsub-Format}
+論文の各ページは，幅(\|\textwidth|) 14.2\,cm, 高さ(\|\textheight|) 
+22.2\,cmの領域に印刷される\footnote{NTT版では和文の場合，幅 
+({\tt\string\textwidth})が 13.6\,cmとなる}．この幅は和文の場合には35文字分に
+相当し，高さは和文／英文とも32行分に相当するので，\ref{sec-instruction}章に
+示した基準に合致している．
+和文／英文とも\|\normalsize|のフォントは12\,ptであり，これも
+\ref{sec-instruction}章の基準を満たしている．
+
+\subsection{オプション・スタイル}\label{appsub-option}
+\|\documentclass|の標準オプションとして，以下が用意されている．
+\begin{itemize}%{
+%\item
+%\|master|\\
+%修士論文用．指定がなければ特別研究報告用となる．なお両者の違いは，とびらに印
+%字される論文種別と所属のみであり，ページ数のチェックなどは一切行なわない．
+\item
+\|english|\\
+英文用．指定がなければ和文用となる．
+%特別研究報告書は必ず和文であるので， 
+%\|master|を指定せずに\|english|を指定するのは誤りであるが，特にチェックはしない．
+\item
+\|withinsec|\\
+図表番号や数式番号を，``\<章番号\>.\<章内番号\>''の形式とする．指定がなけれ
+ば，論文全体で通し番号となる．
+\end{itemize}%}
+
+この他に，\|epsf|など補助的なスタイルファイルを指定してもよい．ただしスタイ
+ルファイルによっては，論文スタイルと矛盾するようなものもあるので，スタイルファ
+イルの性格をよく理解して使用すること．たとえば，\|a4|はページの高さである
+\|\textheight|を変更するので，使用してはならない．
+
+\subsection{題目などの記述}\label{appsub-title}
+論文の題目，著者名，および指導教官名を前に示した所定のコマンドで指定した後，
+\|\maketitle|を実行すると，とびらが生成される．
+とびらのページにはページ番号が印字されないが，出力の便宜を図るためにdviファ
+イルにはページ番号1000が付与されている．
+とびらには，以下の項目がそれぞれセンタリングされて，順に印字される．
+\begin{description}%{
+\item[論文種別]
+\|\documentclass|のオプションにしたがって，
+「特別研究報告」または``Graduation Thesis''のいずれかが\|\Large\bf|で印字される．
+
+\item[題目]
+和文の場合には\|\jtitle|で，英文の場合には\|\etitle|で指定した題目が，それぞ
+れ\|\LARGE\bf|で印字される．一行に収まらない場合には自動的に改行されるが，適
+切な箇所に\|\\|を挿入して陽に改行を指示するほうがよい．
+
+\|\jtitle|や\|\etitle|で指定した題目は，とびらだけではなく内容梗概や目次にも
+印字される．したがって和文／英文に関わらず，\|\jtitle|と\|\etitle|の双方を指
+定しなければならない．また，とびらと内容梗概／目次では，題目の改行を違う位置
+で行ないたいこともあるだろう．その場合
+\begin{quote}%{
+\|\jtitle[|\<内容梗概／目次用\>\|]{|\<とびら用\>\|}|\\
+\|\etitle[|\<内容梗概／目次用\>\|]{|\<とびら用\>\|}|
+\end{quote}%}
+のように，オプション引数で内容梗概や目次のページに印字する題目を別途指定することができる．
+
+\item[指導教員名]
+\|\supervisor|で指定した指導教員の氏名と職名を\|\large|で印字する．氏名／職
+名は，本文に用いる言語に応じて適切に指定すること．
+
+\item[所属学科]
+\|\documentclass|のオプションに応じて，以下のいずれかが\|\large|で印字される．
+\begin{itemize}%{
+\item 特別研究報告書\\
+京都大学工学部情報学科
+\item Graduation Thesis\\
+School of InFormatics and Mathematical Science\\
+Faculty of Engineering\\
+Kyoto University
+\end{itemize}
+
+\item[著者名]
+和文の場合には\|\jauthor|で，英文の場合には\|\eauthor|で指定した著者名が，そ
+れぞれ\|\Large|で印字される．題目と同様，\|\jauthor|と\|\eauthor|は内容梗概
+のページにも印字されるので，和文／英文に関わらず双方を指定すること．
+
+\item[提出年月日]
+\|\date|で指定した日付が\|\large|で印字される．日付は，本文に用いる言語に応
+じて適切に指定すること．
+
+%\item[専攻名]
+%修士論文の場合、\|\department|で指定した専攻名が印字される．例えば、
+%和文の場合
+%\begin{quote}\begin{verbatim}
+%\department{社会情報学}
+%\end{verbatim}\end{quote}
+%英文の場合
+%\begin{quote}\begin{verbatim}
+%\department{Social InFormatics}
+%\end{verbatim}\end{quote}
+%のように指定する．
+\end{description}
+
+\subsection{内容梗概}\label{appsub-abstract}
+和文の内容梗概を\|jabstract|環境の中に，また英文の内容梗概を\|eabstract|環境
+の中に，それぞれ記述する．それぞれの内容梗概の前には，前述の\|\jtitle|や
+\|\etitle|で指定した題目と，\|\jauthor|や\|\eauthor|で指定した著者名が出
+力される．
+
+それぞれの内容梗概は，記述した順序で出力される．したがって，本文が和文の場合
+には和文\,$\to$\,英文の順で，また本文が英文の場合には英文\,$\to$\,和文の順で
+記述するのが適当である．
+
+内容梗概のページ番号は，ページの右肩に小文字のローマ数字で印字される．また出
+力の便宜を図るために，dviファイルの各ページには印字されるページ番号に1000を
+加えたものが付与される．
+
+\subsection{目次}\label{appsub-toc}
+コマンド\|\tableofcontents|により，目次が生成される．目次の最上部には，前述
+の\|\jtitle|\slash\|\etitle|で指定した題目が印字される．
+
+デフォルトでは，\|\section|, \|\subsection|, および\|\subsubsection|の見出し
+とそれらのページ番号が目次に含まれる．これを変更し，たとえば\|\section|と
+\|\subsection|のみの目次にしたい時には
+\begin{quote}\begin{verbatim}
+\setcounter{tocdepth}{2}
+\end{verbatim}\end{quote}
+により，カウンタ\|tocdepth|の値を目次に含まれる最下位の章・節レベル
+に設定すればよい．なお\|\section|のレベルは1である．
+
+この他，「謝辞」と「参考文献」も番号のない\|\section|として目次に含まれる．
+さらに（もしあれば）「付録」と，付録の中の\|\section|と\|\subsection|も含ま
+れる．
+
+目次のページにはページ番号を印字しないが，dviファイルには内容梗概に続く1000
+番台のページ番号が付与される．
+
+\subsection{章・節}\label{appsub-sectioning}
+章や節の見出しには，通常どおり\|\section|, \|\subsection|, \|\subsubsection|
+などを使用する．
+
+\|\section|の見出しは2行を占め，\|\Large\bf|で印字される．修士論文の
+場合は改頁が行なわれる．
+\|\subsection|の見出しは1行の空白を置いた後に\|\large\bf|で印字され，引
+き続く文章との間には余分な空白は挿入されない．\|\subsubsection|は
+上部に空白が挿入されず、\|\normalsize\bf|で印字される．
+
+デフォルトでは，上記の3つのコマンドによる章・節の見出しに，章番号や節番号が
+付けられ，下位の章・節コマンドである\|\paragraph|, \|\subparagraph|による見
+出しには番号が付けられない．また，これらの下位コマンドによる見出しと引き続く
+文章の間では改行が行なわれない．
+
+\subsection{図表}\label{appsub-figure}
+図や表は，通常と同じく\|figure|や\|table|環境の中に記述する．図表の番号は，
+デフォルトでは論文全体の通し番号であるが，前述の\|\documentclass|のオプショ
+ン\|withinsec|を使用すると，章の中で番号づけが行なわれ，章番号と組み合わされ
+る．
+
+紙面の節約のために，図表を横に並べて置きたいことがある．このような場合のため
+に，\|subfigure|と\|subtable|という2つの環境が用意されている．たとえば図
+\ref{fig-example}と表\ref{tab-example}は
+\begin{quote}%{
+\|\begin{figure}|\\
+\|\begin{subfigure}{0.6\textwidth}|\\
+\null\qquad\<図\ref{fig-example}の中身\>\\
+\|\caption{図の例}|\\
+\|\end{subfigure}|\\
+\|\begin{subtable}{0.4\textwidth}|\\
+\|\caption{表の例}|\\
+\null\qquad\<表\ref{tab-example}の中身\>\\
+\|\end{subtable}|\\
+\|\end{figure}|
+\end{quote}%}
+により生成したものである．なおこの例では\|figure|環境の中に\|subfigure|と
+\|subtable|を入れているが，\|table|環境の中に入れてもよい．
+
+\|subfigure|と\|subtable|の仕様は，\|minipage|と同様であり
+\begin{itemize}\item[]%{
+\|\begin{subfigure}[|\<位置\>\|]{|\<横幅\>\|}|\quad\<中身\>\quad
+\|\end{subfigure}|\\
+\|\begin{subtable}[|\<位置\>\|]{|\<横幅\>\|}|\quad\<中身\>\quad
+\|\end{subtable}|
+\end{itemize}%}
+である．また環境中の\|\caption|コマンドにより，それぞれの見出しが生成される．
+
+横に並べる\|subfigure|\slash\|subtable|の横幅の合計が，
+\|\textwidth|に一致するようにするのが望ましい\footnote{各々の間に
+{\tt\string\hspace\char`\{\string\fill\char`\}}を挿入するなどして，間隔を置く
+こともできる．}．
+
+\begin{figure}%{
+\begin{subfigure}{.6\textwidth}
+\centerline{\fbox{\vbox to.1\textheight{\vss
+	\hbox to.8\textwidth{\hss This is a figure\hss}\vss}}}
+\caption{図の例}\label{fig-example}
+\end{subfigure}
+\begin{subtable}{.4\textwidth}
+\caption{表の例}\label{tab-example}
+\centerline{\begin{tabular}{r|c|l}
+This&is&a table\\\hline
+placed&beside&a figure.
+\end{tabular}}
+\end{subtable}
+\end{figure}%}
+
+\subsection{箇条書}\label{appsub-itemizing}
+\LaTeX の箇条書環境である\|\enumerate|, \|\itemize|, \|\description|などは，
+すべてそのまま使用することができる．ただし，環境の前後や，項目の間には余分な
+空白が挿入されない．
+
+\subsection{脚注}\label{appsub-footnote}
+脚注には，\LaTeX の標準コマンド\|\footnote|を用いる．脚注のマークは，ここに
+示すように\footnote{脚注の例}や\footnote{もう一つの脚注}である．また，このペー
+ジと前のページを見るとわかるように，脚注番号はページごとに付けられる．ただし，
+正しい脚注番号を得るためには，\LaTeX を2回実行する必要がある．
+
+\subsection{謝辞}\label{appsub-acknowlegments}
+謝辞は，コマンド\|\acknowledgments| に続いて記述する．見出し「謝辞」または
+``Acknowledgments''は自動的に生成され，目次にも登録される．
+
+\subsection{参考文献}\label{appsub-references}
+すべての参考文献を含むようなBib\TeX の文献データベースを作成し，文献スタイル
+ファイル\|kuisunsrt|または\|kuissort|を用いて処理すれば，
+\ref{subsec-references}節に示した形式の文献表が得られる．なお\|kuisunsrt|は文
+献を出現順に並べ，\|kuissort|は著者名のアルファベット順に並べる．
+
+何らかの理由でBib\TeX を利用できない場合は，\|thebibliography|環境を用いて文
+献表を作ってもよいが，この手引の文献表を参考にして指定された形式に従うこと．
+
+なお，いずれの場合にも，見出し「参考文献」または``References''が自動的に生成
+され，目次にも登録される．
+
+\subsection{付録}\label{appsub-appendix}
+付録がもしあれば，コマンド\|\appendix|または\|\Appendix|に引き続いて記述する．
+両者の違いはページ付けであり，\|\appendix|では付録の各ページや目次にページ
+番号が印字されない．一方\|\Appendix|では，付録の先頭ページをA-1とし，順
+にA-2, A-3というページ番号が印字される．なおいずれの場合にも，dviファイルに
+は2001から始まるページ番号が付与される．
+
+どちらのコマンドもオプション引数を持ち，付録全体の見出しをつけることができる．
+たとえば，この付録は
+\begin{quote}
+\|\Appendix[付録：スタイルファイル{\tt kuisthesis}の使い方]|
+\end{quote}
+で始まっている．オプション引数がない場合には，付録全体の見出しは単に「付録」
+または``Appendix''である．
+
+付録の中の\|\section|, \|\subsection|などは，1レベル下のコマンドと同じ動作を
+する．またこれらの番号は，``A.1''や``A.2.3''のように，先頭に``A.''が付加され
+たものとなる．同様に，図表や数式の番号にも，先頭に``A.''が付加される
+\footnote{この番号付けは{\tt\string\documentclass}の{\tt withinsec}オプションと
+は無関係である．}．
+
+\section{その他の注意}\label{app-others}
+\LaTeX の大きな特徴の一つは，文書処理に関するさまざまな機能やパラメータをカ
+スタマイズできることである．したがって，少しでも論文を書きやすくするために，
+学生諸君の創意と工夫で個人用の機能を追加したりするのはもちろん自由であり，む
+しろ推奨される．しかし一方では，教室で定められた形式を守ることも必要であり，
+カスタマイズの際にはこの点に注意しなければならない．
+
+どのようなカスタマイズが許されるかを一般的に述べるのは困難であるが，一つの極
+端な基準は，スタイルファイルを読んでみて大丈夫だと確信が持てること以外はしな
+い，というものである．特に\LaTeX{}nicianであるような諸君には，この基準を厳守
+してもらいたい．
+
+一般の学生諸君のためのもう少し緩やかな基準として，コマンドやパラメータの再定
+義／再設定を行なわない，というものも挙げられる．スタイルファイルを読むのが面
+倒だったり，読んでもよくわからなかったりする場合には，この基準を守ってもらい
+たい．
+
+スタイルファイルの作成に当たっては，バグがないように細心の注意を払っているが，
+% 適用例が少ないこともあり，
+完璧なものとなっているとは断言できない．
+% もし何か問
+% 題が起こった場合には，教室のローカル・ニュース・グループ\|is.misc| に投
+% 稿されたい．またスタイルファイルの改版などの通知も，同じニュース・グループに
+% 投稿されるので，注意しておくこと．なお，担当教員などへの直接の質問には一切応
+% じない．
+
+\end{comment}
+
+\end{document}
