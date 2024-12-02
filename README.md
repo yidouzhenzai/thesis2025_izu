@@ -1,2 +1,3 @@
 # 修士論文
-## texファイル：thesis2025_izuフォルダの2025_master's_thesis_izu.tex
+## texファイル：
+thesis2025_izuフォルダのmain.tex
