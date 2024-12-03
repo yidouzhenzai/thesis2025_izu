@@ -18,6 +18,7 @@
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage[dvipdfmx]{graphicx}
+\graphicspath{{./pictures/}}
 \usepackage[dvipdfmx]{color}
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
 \usepackage{comment}
@@ -25,6 +26,9 @@
 \usepackage{mathrsfs}
 \usepackage{algorithmic}
 \usepackage{algorithm}
+\usepackage{ifthen}
+\newboolean{Draft}
+\setboolean{Draft}{true} %図を挿入するならtrue
 
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}
@@ -956,13 +960,13 @@ Raviらは[19]で以下の補題を示している．
 
 
 
-\subsection{$O(\log ^2 n)$近似アルゴリズム}
+\subsection{$O(\log ^2 n)$-近似アルゴリズム}
 
 \begin{theorem}\label{approximation}
     頂点数$n$，最大出次数$k$，DAG-pathwidthが$pw$のDAG $G$が与えられたとき，幅が$O(k \ pw \log ^2 n)$のDAG-PDを与える多項式時間アルゴリズムが存在する．
 \end{theorem}
 
-上記のアルゴリズムを構成するため，まず関数$Merge$を定義する．$Merge$は，DAG $G$が$G_L$と$G_R$に分割されているとき，$G_L, G_R$のそれぞれのnice DAG-PDである$P_L, P_R$を受け取り，$G$のnice DAG-PD $P$を返す関数である(★★Figure\ref{fig:2}を参照)．このとき，$G_L, G_R$の間の枝の向きは全て$G_L$から出て$G_R$に入る向きであることに注意する．
+上記のアルゴリズムを構成するため，まず関数$Merge$を定義する．$Merge$は，DAG $G$が$G_L$と$G_R$に分割されているとき，$G_L, G_R$のそれぞれのnice DAG-PDである$P_L, P_R$を受け取り，$G$のnice DAG-PD $P$を返す関数である(Figure\ref{fig:2}を参照)．このとき，$G_L, G_R$の間の枝の向きは全て$G_L$から出て$G_R$に入る向きであることに注意する．
 
 \begin{subroutine}[$Merge$]
     $G_L$から出て$G_R$に入る枝の端点のうち，$G_L$に含まれる頂点の集合を$V'$とする．$Merge(P_L, P_R)$では，$P_L=(X_1, X_2, \dots , X_{s_l}), P_R=(Y_1, Y_2, \dots , Y_{s_r})$に対し，以下の操作を全ての$v \in V'$に対して行ってできるnice DAG-PD $P'_L, P'_R$を構成する．
@@ -983,14 +987,15 @@ $P$について，$X'_1 \cup X'_2 \cup \dots \cup X'_{s_l} \cup Y'_1 \cup Y'_2 \
 ルール2について，各$v \in V'$とそれに接続する各頂点$u \in G_R$に対して，$(v, u)$がルール2を満たすことを示せば十分．$v, u$がそれぞれ$P_L, P_R$でintroduceされたバッグを$X_m, Y_n$とすると，$v$は$P$において$X'_m, X'_{m+1}, \dots , Y'_{s_r}$のバッグにのみ含まれ，$u$は$Y'_n, Y'_{n+1}, \dots , Y'_{s_r}$のバッグにのみ含まれる．したがって$v, u \in Y'_n$かつ$u \notin Y'_{n-1}$が成り立ち，ルール3を満たす．
 \end{proof} 
 
-\begin{comment}
+\ifthenelse{\boolean{Draft}}{
 \begin{figure}[t]
 \centering
 \includegraphics[width=15.0cm]{pic2.jpg}
 \caption{$Merge$の動作の様子．$G_L$の頂点のうち$G_R$に向かう枝を持つ頂点集合$V'$は${3, 4}$となる．受け取った$P_L, P_R$をもとに$V'$の各頂点をバッグに加えた$P'_L, P'_R$を構成し，それらを結合してできるnice DAG-PDを返す．}
 \label{fig:2}
 \end{figure}
-\end{comment}
+}
+
 
 
 次に，DAG $G$が与えられたときに，$G$のnice DAG-PDを出力するアルゴリズム$Make$を示す．
@@ -1013,7 +1018,7 @@ $Make(G[V])$
 \end{lemma}
 
 \begin{proof} 
-$G=(V, E)$の最適なnice DAG-PDを$P=(X_1, X_2, \dots , X_s)$とする．$P$のDAG-pathwidthは$pw$である．$G$の各頂点を$P$でintroduceされた順に$v_1, v_2, \dots , v_n$とする．$n$が偶数のとき，$v=v_{\frac{n}{2}}$，$n$が奇数のとき，$v=v_{\frac{n+1}{2}}$とし，$v$が初めてintroduceされたバッグを$X_i$とする．$A= X_1 \cup X_2 \cup \dots \cup X_i, B= X_{i+1} \cup X_{i+2} \cup \dots \cup X_s$とする．例として★★Fiture\ref{fig:3}を示す．このとき$Xi$から出て$B$に入る枝の集合を$S$とすると，DAG-PDのルール3より$G'=(V, E \backslash S)$には$A$と$B$の間に枝はなく，$v$の選び方により$|A| \geq \frac{1}{3}|V|, |B| \geq \frac{1}{3}|V|$を満たす．またDAG-PDのルール2より$A$と$B$の間の枝は$A$から出て$B$に入る向きである．よって$S$は$G$の$\frac{1}{3}$-balanced DAG edge-separatorである．$G$の最大出次数が$k$であることに注意すると，$S$のコスト$C(S)$について以下の不等式が成り立つ．
+$G=(V, E)$の最適なnice DAG-PDを$P=(X_1, X_2, \dots , X_s)$とする．$P$のDAG-pathwidthは$pw$である．$G$の各頂点を$P$でintroduceされた順に$v_1, v_2, \dots , v_n$とする．$n$が偶数のとき，$v=v_{\frac{n}{2}}$，$n$が奇数のとき，$v=v_{\frac{n+1}{2}}$とし，$v$が初めてintroduceされたバッグを$X_i$とする．$A= X_1 \cup X_2 \cup \dots \cup X_i, B= X_{i+1} \cup X_{i+2} \cup \dots \cup X_s$とする．例としてFiture\ref{fig:3}を示す．このとき$Xi$から出て$B$に入る枝の集合を$S$とすると，DAG-PDのルール3より$G'=(V, E \backslash S)$には$A$と$B$の間に枝はなく，$v$の選び方により$|A| \geq \frac{1}{3}|V|, |B| \geq \frac{1}{3}|V|$を満たす．またDAG-PDのルール2より$A$と$B$の間の枝は$A$から出て$B$に入る向きである．よって$S$は$G$の$\frac{1}{3}$-balanced DAG edge-separatorである．$G$の最大出次数が$k$であることに注意すると，$S$のコスト$C(S)$について以下の不等式が成り立つ．
 \begin{align*}
     &C(S) \leq k|X_i| \leq k(pw+1)
 \intertext{一方，$G$のminimum $\frac{1}{3}$-balanced DAG edge-separator $S_{opt}$のコストは高々$C(S)$であるから，}
@@ -1021,16 +1026,14 @@ $G=(V, E)$の最適なnice DAG-PDを$P=(X_1, X_2, \dots , X_s)$とする．$P$�
 \end{align*}
 \end{proof} 
 
-
-\begin{comment}
+\ifthenelse{\boolean{Draft}}{
 \begin{figure}[t]
 \centering
 \includegraphics[width=15.0cm]{pic3.jpg}
 \caption{最適なnice DAG-PD $P$において，初めて半分以上の頂点がintroduceされたバッグを$X_i$とし，それ以前のバッグの和集合を$A$， 残りの頂点集合を$B$とする．$A, B$のサイズはともに全体の$\frac{1}{3}$以上であり，$A, B$の間の枝は$A$から出て$B$に入る向きである．さらに最大出次数を$k$とすると，$A, B$の間の枝数は高々$k|X_i|$本である．}
 \label{fig:3}
 \end{figure}
-\end{comment}
-
+}
 
 最後に次の補題を示すことで，Theorem\ref{approximation}が成り立つことを示す．
 
@@ -1151,7 +1154,7 @@ Theorem\ref{approximation3}を示す前に，以下の補題を示す．
 
 以下のアルゴリズムでは$M_{t, d, l}$の$H'$へのembeddingを見つける．もしembeddingを見つけることができれば$H'$のDAGパス幅は$M_{t, d, l}$のDAGパス幅以上であることがわかる．embeddingの探索では部分的なembeddingを行い，$M_{t, d, l}$の頂点をトークンと呼ぶ．token $T$が$H'$のある頂点に置かれたとき$T$はtokenedであると表し，頂点に置かれていないときuntokenedであると表す．アルゴリズムを通して$H'$の1つの頂点に置くことができるトークンは1つのみである．
 
-以下で各トークンの再帰的なラベル付けを与える．図★★\ref{fig:10}で$H$に対する$H', M_{t, d, l}$の構成例を示す．
+以下で各トークンの再帰的なラベル付けを与える．図\ref{fig:10}で$H$に対する$H', M_{t, d, l}$の構成例を示す．
 
 \begin{enumerate}
     \item 根のトークンは空文字列$\lambda$とラベル付けする．
@@ -1163,14 +1166,15 @@ Theorem\ref{approximation3}を示す前に，以下の補題を示す．
 
 アルゴリズムの初期状態では$H'$のすべての頂点がblueで塗られていると仮定する．アルゴリズムの進行中，$H'$のある頂点$v$にトークンが置かれた場合，$v$の色をredに変更し，トークンが$v$から削除されてもredのままであるとする．このときblueの頂点にのみトークンを置くことができるため，$H'$の各頂点は高々一度しかトークンを置くことができない．
 
-\begin{comment}
+
+\ifthenelse{\boolean{Draft}}{
 \begin{figure}[t]
     \centering
     \includegraphics[width=15.0cm]{pic10.png}
     \caption{$d=2, l=2$である$H$(左)と$t=1$が与えられたときの$H'$(中央)と$M_{t, d, l}$(左)の構成．$H$の各根につながる完全有向$d$分木(赤部分)を追加したものが$H'$である．また$M_{t, d, l}$のラベル付けでは親のラベルに対して文字を1つ右につなげることで再帰的に構成する．}
     \label{fig:10}
 \end{figure}
-\end{comment}
+}
 
 
 
@@ -1291,16 +1295,16 @@ Theorem\ref{approximation3}を示す前に，以下の補題を示す．
 \end{definition*}
 
 
-\begin{comment}
+\ifthenelse{\boolean{Draft}}{
 \begin{figure}[t]
     \centering
     \includegraphics[width=15.0cm]{pic6.png}
     \caption{$G$に対するDAG-TDとDAG-PDの構成例．DAG-TD上での1つのパスは，$G$のある部分グラフに対するDAG-PDになっている．またDAG-PDもDAG-TDの一つであり，DAG-treewidthはDAG-Pathwidthより大きくならない．}
     \label{fig:6}
 \end{figure}
-\end{comment}
+}
 
-DAG-TDの例をFigure★★\ref{fig:6}で示す．以下でDAG-treewidthを定義する．
+DAG-TDの例をFigure\ref{fig:6}で示す．以下でDAG-treewidthを定義する．
 
 \begin{definition*}[DAG-treewidth]
     あるDAG-TD $(T, \beta)$のwidthを$\max_{t \in T}|\beta(t)|$と定義する．このとき，有向グラフ$G$のDAG-treewidthとは，$G$に対する全てのDAG-TDのうち，widthが最小であるDAG-TDのwidthである．
@@ -1327,16 +1331,16 @@ DAG-TDの例をFigure★★\ref{fig:6}で示す．以下でDAG-treewidthを定�
     \end{enumerate}
 \end{definition*}
 
-\begin{comment}
+\ifthenelse{\boolean{Draft}}{
 \begin{figure}[t]
     \centering
     \includegraphics[width=15.0cm]{pic7.png}
-    \caption{Figure★★\ref{fig:6}の$G$に対するnice DAG-TDの構成例．1つの根と複数のsinkをもち，それぞれ空集合からなる．それ以外のバッグは，親のバッグに対して強連結成分が1つ加えられたintroduceか，頂点が1つ除かれたforget，もしくは自身と同じ兄弟をもつunionのいずれかとなる．任意のDAG-TDから，同じwidthをもったnice DAG-TDを効率よく構築できる．}
+    \caption{Figure\ref{fig:6}の$G$に対するnice DAG-TDの構成例．1つの根と複数のsinkをもち，それぞれ空集合からなる．それ以外のバッグは，親のバッグに対して強連結成分が1つ加えられたintroduceか，頂点が1つ除かれたforget，もしくは自身と同じ兄弟をもつunionのいずれかとなる．任意のDAG-TDから，同じwidthをもったnice DAG-TDを効率よく構築できる．}
     \label{fig:7}
 \end{figure}
-\end{comment}
+}
 
-nice DAG-TDの例をFigure★★\ref{fig:7}で示す．あるDAG-TDが与えられたとき，widthが同じである$G$のnice DAG-TDを効率よく構築することができる．
+nice DAG-TDの例をFigure\ref{fig:7}で示す．あるDAG-TDが与えられたとき，widthが同じである$G$のnice DAG-TDを効率よく構築することができる．
 
 \begin{theorem}
     $(T, \beta)$が有向グラフ$G=(V, E)$のDAG-TDであるとする．また$(T, \beta)$のwidthを$w$とする．このとき，widthが$w$であるような$G$のnice DAG-TDを多項式時間で構築できる．
@@ -1512,11 +1516,12 @@ DAG-TD $T$をFPTアルゴリズムに利用する場合，$T$の葉から動的�
     \centering
     \includegraphics[width=15.0cm]{pic6.png}
     \caption{$G$に対するDAG-TDとDAG-PDの構成例．DAG-TD上での1つのパスは，$G$のある部分グラフに対するDAG-PDになっている．またDAG-PDもDAG-TDの一つであり，DAG-treewidthはDAG-Pathwidthより大きくならない．}
-    \label{fig:6}
+    \label{fig:6_2}
 \end{figure}
 \end{comment}
 
-co-DAG-TDの例をFigure★★\ref{fig:6}で示す．以下でco-DAG-treewidthを定義する．
+% co-DAG-TDの例をFigure★★\ref{fig:6_2}で示す．
+以下でco-DAG-treewidthを定義する．
 
 \begin{definition*}[co-DAG-treewidth]
     あるco-DAG-TD $(T, \beta)$のwidthを$\max_{t \in T}|\beta(t)|$と定義する．このとき，有向グラフ$G$のco-DAG-treewidth(co-DAG-treewidth)とは，$G$に対する全てのco-DAG-TDのうち，widthが最小であるco-DAG-TDのwidthである．
@@ -1552,7 +1557,8 @@ co-DAG-TDの例をFigure★★\ref{fig:6}で示す．以下でco-DAG-treewidth�
 \end{figure}
 \end{comment}
 
-nice co-DAG-TDの例をFigure★★\ref{fig:7}で示す．あるco-DAG-TDが与えられたとき，widthが同じである$G$のnice co-DAG-TDを効率よく構築することができる．
+% nice co-DAG-TDの例をFigure★★\ref{fig:7_2}で示す．
+あるco-DAG-TDが与えられたとき，widthが同じである$G$のnice co-DAG-TDを効率よく構築することができる．
 
 \begin{theorem}
     $(T, \beta)$が有向グラフ$G=(V, E)$のco-DAG-TDであるとする．また$(T, \beta)$のwidthを$w$とする．このとき，widthが$w$であるような$G$のnice co-DAG-TDを多項式時間で構築できる．
@@ -1683,25 +1689,6 @@ Theorem\ref{r-np-hard}を証明するため，次で定義されるco-DAG-pathwi
 \subsection{Directed Dominating Set Problemの$O(2^ww^2n)$時間アルゴリズム}
 
 以下では，頂点数$n$のDAG $G$と幅が$w$である$G$のco-DAG-TDが与えられたときに，$G$のDirected Dominating Set Problemを$O(2^ww^2n)$で計算するアルゴリズムを示す．
-
-\begin{comment}
-
-\subsubsection{定義と補題}
-まずDirected Dominating Setに関する定義と定理を与える．
-
-\begin{definition*}[Directed Dominating Set]
-    有向グラフ$G=(V, E)$に対し，$S \subseteq V$が$G$のDirected Dominating Set(DiDS)であるとは，任意の$v \in V\backslash S$に対し，ある$u \in S$があり，$(u, v) \in E$を満たすことである．minimum DiDS(以下mDiDS)とは，全てのDiDS $S$のうち$|S|$が最小のものである．
-\end{definition*}
-
-DiDS problemとは，$G$のmDiDSのサイズを求める問題である．Robertら[2★]は以下を示した．
-
-\begin{theorem}[計算量クラス]
-    DiDS problemは$G$がDAGの場合でもNP-hardである．
-\end{theorem}
-
-\end{comment}
-
-
 
 
 \begin{theorem}
@@ -1944,10 +1931,10 @@ Theorem\ref{np-hard}を証明するため以下のLemmaを示す．
         \item $v_p, v_q \in V$ について$(v_p, v_q) \in E$であるならば，$(v_p, v'_q), (v_q, v'_p), (v'_p, v'_q) \in E'$とする．
     \end{itemize}
     
-    以上の操作によってできる有向グラフを$G'$とする．$G'$の構成例をFigure★★\ref{fig:4}に示す．$G'$は$G$のサイズの多項式時間で構成できる．また$G'$の頂点集合$A, B$を，$A = \{v_i | i =1, 2, \dots, n\}, B = \{v'_i | i =1, 2, \dots, n\}$と定める．このとき$V' = A \cup B \cup \{s\}$とできる．
+    以上の操作によってできる有向グラフを$G'$とする．$G'$の構成例をFigure\ref{fig:4}に示す．$G'$は$G$のサイズの多項式時間で構成できる．また$G'$の頂点集合$A, B$を，$A = \{v_i | i =1, 2, \dots, n\}, B = \{v'_i | i =1, 2, \dots, n\}$と定める．このとき$V' = A \cup B \cup \{s\}$とできる．
 
 
-\begin{comment}
+\ifthenelse{\boolean{Draft}}{
     \begin{figure}[t]
         \centering
         \includegraphics[width=15.0cm]{pic4.jpg}
@@ -1959,10 +1946,10 @@ Theorem\ref{np-hard}を証明するため以下のLemmaを示す．
     \begin{figure}[t]
         \centering
         \includegraphics[width=10.0cm]{pic5.jpg}
-        \caption{Figure★★\ref{fig:4}の$G, G'$に対するDAG-PD $(P, \beta), (P', \gamma)$ (それぞれ上，下)の構成例．$G$の頂点数を$n$とすると，$(P, \beta)$のwidthが$pw(G)$のとき，$(P', \gamma)$のwidthは$pw(G) + n$となる．}
+        \caption{Figure\ref{fig:4}の$G, G'$に対するDAG-PD $(P, \beta), (P', \gamma)$ (それぞれ上，下)の構成例．$G$の頂点数を$n$とすると，$(P, \beta)$のwidthが$pw(G)$のとき，$(P', \gamma)$のwidthは$pw(G) + n$となる．}
         \label{fig:5}
     \end{figure}
-\end{comment}
+}
     
     次に，widthが$pw(G)$である$G$のDAG-PDを$(P, \beta)$ $(P = p_1, p_2, \dots, p_r)$とする．各$m$に対し，$G'$の頂点集合$\gamma(p_m)$を以下のように構成する．
 
@@ -1979,7 +1966,7 @@ Theorem\ref{np-hard}を証明するため以下のLemmaを示す．
         \item $\gamma(p_{r+1}) = B \cup \{s\}$
     \end{itemize}
 
-    以上の操作によってできる$(P', \gamma)$ $(P' = p_1, p_2, \dots, p_{r+1})$が，$G'$のDAG-PDになっていることを示す．Figure★★\ref{fig:4}の$G, G'$に対するDAG-PD $(P, \beta), (P', \gamma)$の構成例をFigure★★\ref{fig:5}で示す．$\gamma$の構成法に注意すると，$\gamma(p_1)$は$A$の頂点をすべて含む．また$\gamma(p_{r+1})$は$B \cup \{s\}$を含む．よって$\sum_{m=1}^{r+1} \gamma(p_m) = V'$が成り立つため，$(P', \gamma)$はDAG-PDのルール1を満たす．また$\gamma$の構成法に注意すると，任意の$v \in V'$に対して，$v$を含む全てのバッグが$(p_1, P_2, \dots, p_r)$上で非連結になることはなく，また$\gamma(p_r)$は$B$の頂点をすべて含み，$s$は$\gamma(p_{r+1})$にのみ含まれるため，任意の$v \in V'$に対して，$v$を含む全てのバッグが$(p_1, P_2, \dots, p_r+1)$上で非連結になることはない．よって$(P', \gamma)$はDAG-PDのルール3を満たす．さらに，$(P', \gamma)$が$G'$の全ての枝に対してDAG-PDのルール2を満たすことを示す．$G'$上の各枝$e \in E'$を次の5つに場合分けして考える．なお，$v, v'$はそれぞれ$A, B$に含まれることに注意する．
+    以上の操作によってできる$(P', \gamma)$ $(P' = p_1, p_2, \dots, p_{r+1})$が，$G'$のDAG-PDになっていることを示す．Figure\ref{fig:4}の$G, G'$に対するDAG-PD $(P, \beta), (P', \gamma)$の構成例をFigure\ref{fig:5}で示す．$\gamma$の構成法に注意すると，$\gamma(p_1)$は$A$の頂点をすべて含む．また$\gamma(p_{r+1})$は$B \cup \{s\}$を含む．よって$\sum_{m=1}^{r+1} \gamma(p_m) = V'$が成り立つため，$(P', \gamma)$はDAG-PDのルール1を満たす．また$\gamma$の構成法に注意すると，任意の$v \in V'$に対して，$v$を含む全てのバッグが$(p_1, P_2, \dots, p_r)$上で非連結になることはなく，また$\gamma(p_r)$は$B$の頂点をすべて含み，$s$は$\gamma(p_{r+1})$にのみ含まれるため，任意の$v \in V'$に対して，$v$を含む全てのバッグが$(p_1, P_2, \dots, p_r+1)$上で非連結になることはない．よって$(P', \gamma)$はDAG-PDのルール3を満たす．さらに，$(P', \gamma)$が$G'$の全ての枝に対してDAG-PDのルール2を満たすことを示す．$G'$上の各枝$e \in E'$を次の5つに場合分けして考える．なお，$v, v'$はそれぞれ$A, B$に含まれることに注意する．
 
     \begin{itemize}
         \item $e = (v_i, v_j)$ $(1 \leq i < j \leq n)$の場合：
@@ -2013,16 +2000,16 @@ Theorem\ref{np-hard}を証明するため以下のLemmaを示す．
         \item $(Q''', \delta''')$をwidthが同じnice DAG-PDに変換する．便宜上，このnice DAG-PDを$(Q, \delta)$ $(Q = (q_1, q_2, \dots, q_{r'})$と表記する．
     \end{enumerate}
 
-\begin{comment}
+\ifthenelse{\boolean{Draft}}{
     \begin{figure}[t]
         \centering
         \includegraphics[width=15.0cm]{pic8.png}
         \caption{構成したnice DAG-PD $(Q, \delta)$の例．$q_i$で$A$の全ての頂点のintroduceが完了し，$q_j$で$B$の全ての頂点のintroduceが完了する．$q_i$と$q_j$の間のバッグ$q_k$では，各$i$に対して$v_i, v'_i$の少なくともどちらか一方が含まれる．}
         \label{fig:8}
     \end{figure}
-\end{comment}
+}
     
-    以上の操作によって構成されたnice DAG-PD $(Q, \delta)$は，はじめ$A$の頂点を順にintroduceし，ある$q_i$で$A$の全ての頂点のintroduceが終わった後，$B$の頂点のintroduceを行いつつ，$A$の頂点のfogetも行っていく．$B$のすべての頂点のintroduceが終わった後，ある$q_j$で$B$のみを含むバッグがあり，直後に$B \cup \{s\}$からなるバッグが続く．Figure★★\ref{fig:8}で構成後の例を示す．このとき，$\delta(q_k)$ $(q_k \in Q, i < k < j)$では，各$v_m, v'_m$ $(m = 1, 2, \dots, n)$について，$v_m, v'_m$の少なくともどちらか一方は$\delta(q_k)$に含まれる．なぜならば，$G'$には枝$(v_m, v'_m)$が存在し，$v_m, v'_m$を同時に含む$\delta(q_{i_m})$が存在すること，そして$\delta(q_i) = A, \delta(q_j) = B$に注意すると，$v_m \in \delta(q_{i_L}), v'_m \in \delta(q_{i_R})$ $(q_{i_L}, q_{i_R} \in Q, i \leq i_L \leq i_m \leq i_R \leq j)$がいえるからである．
+    以上の操作によって構成されたnice DAG-PD $(Q, \delta)$は，はじめ$A$の頂点を順にintroduceし，ある$q_i$で$A$の全ての頂点のintroduceが終わった後，$B$の頂点のintroduceを行いつつ，$A$の頂点のfogetも行っていく．$B$のすべての頂点のintroduceが終わった後，ある$q_j$で$B$のみを含むバッグがあり，直後に$B \cup \{s\}$からなるバッグが続く．Figure\ref{fig:8}で構成後の例を示す．このとき，$\delta(q_k)$ $(q_k \in Q, i < k < j)$では，各$v_m, v'_m$ $(m = 1, 2, \dots, n)$について，$v_m, v'_m$の少なくともどちらか一方は$\delta(q_k)$に含まれる．なぜならば，$G'$には枝$(v_m, v'_m)$が存在し，$v_m, v'_m$を同時に含む$\delta(q_{i_m})$が存在すること，そして$\delta(q_i) = A, \delta(q_j) = B$に注意すると，$v_m \in \delta(q_{i_L}), v'_m \in \delta(q_{i_R})$ $(q_{i_L}, q_{i_R} \in Q, i \leq i_L \leq i_m \leq i_R \leq j)$がいえるからである．
     
     ここで各$m$ $(m = 1, 2, \dots, r')$に対し，$G$の頂点集合$\beta'(q_m)$を$\beta'(q_m) = \{v_i | \{v_i, v'_i\} \subseteq \delta(q_m) \}$と定める．このとき，$(Q, \beta')$が$G$のDAG-PDになっていることを示す．$G'$において任意の頂点対$(v, v')$ $(v \in A, v' \in B)$が隣接していることに注意すると，$(Q, \delta)$では$(v, v')$を同時に含むようなバッグが少なくとも1つ存在する．よって$\sum_{m=1}^{r'}\beta'(q_r') = V$が成り立つため，$(Q, \beta')$はDAG-PDのルール1を満たす．また$G'$のうち$B$によって誘導される部分グラフを$G'_B$とすると，$E(G'_B) = E(G)$であるため，$B$の頂点でintroduceされる順序は，$G'$の強連結成分に対するトポロジカルオーダになる．したがって$(Q, \beta')$も$G'$の強連結成分がトポロジカルオーダでintroduceされていくため，$(Q, \beta')$はDAG-PDのルール2を満たす．さらに，$(Q, \delta)$は$G'$のDAG-PDであるから，$(Q, \delta)$で$A$の頂点が一度forgetされた後，再びintroduceされることはない．よって$(Q, \delta)$で${v, v'}$を含むバッグが非連結になることはないため，$(Q, \beta')$でも$v$を含むバッグが非連結になることはない．したがってDAG-PDのルール3を満たす．
 
@@ -2106,7 +2093,9 @@ Theorem\ref{r-np-hard}を証明するため，次で定義されるco-DAG-pathwi
 
     さらに$\gamma(p_0) = \gamma(p_1) \cup \{s\}$ $((p_0, p_1) \in E[T])$と定める．
 
-    以上の操作によってできる$(P', \gamma)$ $(P' = (p_0, p_1, p_2, \dots, p_r))$が$G'$のco-DAG-PDになっていることを示す．Figure★★\ref{fig:4}の$G, G'$に対するco-DAG-PD $(P, \beta), (P', \gamma)$の構成例をFigure★★\ref{fig:5}で示す．$\gamma$の構成法に注意すると，$A \subseteq \gamma(p_r), B \subseteq \gamma(p_1)$がいえ，さらに$r \in \gamma(p_0)$であることから，$\sum_{m=0}^{r} \gamma(p_m) = V'$が成り立つ．よって$(P', \gamma)$はco-DAG-PDのルール1を満たす．また$\gamma$の構成法に注意すると，任意の$v \in V' \backslash \{r\}$に対して，$v$を含む全てのバッグが$(p_1, p_2, \dots, p_r)$上で非連結になることはなく，また$B \cup \{r\} \subseteq \gamma(p_0)$より，任意の$v \in V'$に対して，$v$を含む全てのバッグが$(p_0, p_1, p_2, \dots, p_r)$上で非連結になることはない．よって$(P', \gamma)$はco-DAG-PDのルール3を満たす．さらに定義\ref{np-hard}の証明と同様の議論により，$(P', \gamma)$がco-DAG-PDのルール2を満たすことがいえる．以上より$(P', \gamma)$は$G'$のco-DAG-PDである．このとき$(P', \gamma)$の幅は$cpw(G)+n$である．
+    以上の操作によってできる$(P', \gamma)$ $(P' = (p_0, p_1, p_2, \dots, p_r))$が$G'$のco-DAG-PDになっていることを示す．
+    % Figure★★\ref{fig:4_2}の$G, G'$に対するco-DAG-PD $(P, \beta), (P', \gamma)$の構成例をFigure★★\ref{fig:5_2}で示す．
+    $\gamma$の構成法に注意すると，$A \subseteq \gamma(p_r), B \subseteq \gamma(p_1)$がいえ，さらに$r \in \gamma(p_0)$であることから，$\sum_{m=0}^{r} \gamma(p_m) = V'$が成り立つ．よって$(P', \gamma)$はco-DAG-PDのルール1を満たす．また$\gamma$の構成法に注意すると，任意の$v \in V' \backslash \{r\}$に対して，$v$を含む全てのバッグが$(p_1, p_2, \dots, p_r)$上で非連結になることはなく，また$B \cup \{r\} \subseteq \gamma(p_0)$より，任意の$v \in V'$に対して，$v$を含む全てのバッグが$(p_0, p_1, p_2, \dots, p_r)$上で非連結になることはない．よって$(P', \gamma)$はco-DAG-PDのルール3を満たす．さらに定義\ref{np-hard}の証明と同様の議論により，$(P', \gamma)$がco-DAG-PDのルール2を満たすことがいえる．以上より$(P', \gamma)$は$G'$のco-DAG-PDである．このとき$(P', \gamma)$の幅は$cpw(G)+n$である．
 
     さらに\ref{np-hard}の証明と全く同様の議論により，$(P', \gamma)$が$G'$に対してwidthが最小のco-DAG-PDであることがいえる．ここで$G'$はsinkを一つしか持たないことに注意すると，Lemma\ref{r-sink}より$ctw(G') = cpw(G')$がいえ，$ctw(G) = cpw(G) + n$が成り立つ．以上より定義\ref{r-np-hard}が示される．
 \end{proof}
