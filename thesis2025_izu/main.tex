@@ -87,17 +87,17 @@
 \end{comment}
 
 
-有向グラフがどれだけ有向パスに近い構造をしているかを表すパラメータとしてDAGパス幅が存在する．DAGパス幅は有向パス幅のルールに対し，任意の枝について両端点を同時に含むバッグが存在するというルールを追加している．DAGパス幅は，有向パス幅が常に0になってしまうDAGに対しても非自明な幅を与えることができ，DAG上でNP-hardな問題に対するパラメータ化アルゴリズムの構築に役立っている．またDAGパス幅に対する近似アルゴリズムは現在まで知られていなかった．
+有向グラフがどれだけ有向パスに近い構造をしているかを表すパラメータとしてDAGパス幅が存在する．DAGパス幅は有向パス幅のルールに対し，任意の枝について両端点を同時に含むバッグが存在するというルールを追加している．DAGパス幅は，有向パス幅が常に0になってしまうDAGに対しても非自明な幅を与えることができ，DAG上でNP困難な問題に対するパラメータ化アルゴリズムの構築に役立っている．またDAGパス幅に対する近似アルゴリズムは現在まで知られていなかった．
 
 
-今回の研究では，まず最初にDAG上でもNP-hardである様々な問題に対し，DAGパス幅を使ったパラメータ化アルゴリズムを紹介する．具体的にはDirected Dominating Set Problem, Max Leaf Outbranching Problem, Directed Steiner Tree Problemの3つの問題に対しては，DAGパス幅を$w$としたときに$f(w)\cdot g(n)$で厳密解を与えるFPTアルゴリズムを紹介する．$k$-Disjoint Path Problemに対しては$O(k^w\cdot f(w)\cdot g(n))$で厳密解を与えるパラメータ化アルゴリズムを紹介する．
+今回の研究では，まず最初にDAG上でもNP困難である様々な問題に対し，DAGパス幅を使ったパラメータ化アルゴリズムを提案する．具体的にはDirected Dominating Set Problem, Max Leaf Outbranching Problem, Directed Steiner Tree Problemの3つの問題に対しては，幅が$w$であるDAGパス分解が与えられたときに$f(w)\cdot g(n)$で厳密解を与えるFPTアルゴリズムを提案する．$k$-Disjoint Path Problemに対しては$O(k^w\cdot f(w)\cdot g(n))$で厳密解を与えるパラメータ化アルゴリズムを提案する．
 
-次にDAGパス幅に対し，$O(\log^2 n)$の近似比をもつ多項式時間アルゴリズムを紹介する．またOne Shot Black Pebbling ProblemがDAGパス分解を求める問題と等価であることを示し，これによって$O(\log^{3/2} n)$の近似比をもつDAGパス分解の近似アルゴリズムの存在を示す．
+次にDAGパス幅に対し，$O(\log^2 n)$の近似比をもつ多項式時間アルゴリズムを提案する．またOne Shot Black Pebbling ProblemがDAGパス分解を求める問題と等価であることを示し，これによって$O(\log^{3/2} n)$の近似比をもつDAGパス分解の近似アルゴリズムの存在を示す．
 
-さらにDAGパス幅とグラフの出次数，根数がそれぞれ$w, d, l$で表されるとき，$O(l\cdot d^w)$の幅を与えるアルゴリズムを紹介する．このアルゴリズムは完全有向$d$分木のembeddingを行うことでアルゴリズムを構築している．
+さらにDAGパス幅とグラフの最大出次数，根数がそれぞれ$w, d, l$で表されるとき，$O(l\cdot d^w)$の幅を与えるアルゴリズムを提案する．このアルゴリズムは完全有向$d$分木のembeddingを行うことでアルゴリズムを構築している．
 
 
-最後にDAGパス幅の一般化となる概念であるDAG木幅を新たに定義する．DAG木幅は有向グラフが有向木からどれだけ近いかを表すパラメータであり，DAG木幅の値が小さいほどグラフが有向木に近い構造をしていることを表す．DAG木幅を与える最適なDAG木分解の構成がNP-hardであることを示し，その後DAG木幅をパラメータとしてDirected Dominating Set Problemを解く$f(w)\cdot g(n)$時間のFPTアルゴリズムを紹介する．
+最後にDAGパス幅の一般化となる概念であるDAG木幅を新たに定義する．DAG木幅は有向グラフが有向木からどれだけ近いかを表すパラメータであり，DAG木幅の値が小さいほどグラフが有向木に近い構造をしていることを表す．DAG木幅を与える最適なDAG木分解の構成がNP困難であることを示し，その後DAG木幅をパラメータとしてDirected Dominating Set Problemを解く$f(w)\cdot g(n)$時間のFPTアルゴリズムを提案する．
 
 \end{jabstract}
 
@@ -149,18 +149,17 @@ NP困難な問題に対して高速に解を求める方法の一つとして木
 木分解と同様に，グラフ上の頂点をいくつかの頂点集合に分解し，グラフ全体をパス型の構造に変換する操作をパス分解という．また一つの節点に含まれる最大の頂点数をパス幅という．こちらも一般のグラフをパスのように扱うことができるため，パス幅が定数で抑えられる場合，NP困難な問題に対しても頂点数の多項式時間で解くことができる場合がある．
 
 
-無向グラフに対するパス幅は，Robertsonら[1]によって1983年に初めて提案された．また，同氏らによって無向グラフに対する木幅[2]も初めて提案されている．1987年には，定数$k$が与えられたとき，入力グラフの木幅やパス幅が$k$以下かどうかを判定する問題がNP-completeであることがArnborgら[3]によって明らかにされている．1989年には同氏らによって木幅やパス幅を用いた様々なFPTアルゴリズム[4]が研究されている．
+無向グラフに対するパス幅は，Robertsonら[1]によって1983年に初めて提案された．また，同氏らによって無向グラフに対する木幅[2]も初めて提案されている．1987年には，定数$k$が与えられたとき，入力グラフの木幅やパス幅が$k$以下かどうかを判定する問題がNP完全であることがArnborgら[3]によって明らかにされている．1989年には同氏らによって木幅やパス幅を用いた様々なFPTアルゴリズム[4]が研究されている．
 
-木幅やパス幅が定数近似可能であるかどうかは未解決である．一方で木幅が$k$で抑えられる場合，木幅の$O(\sqrt{\log k})$の近似比をもつ幅を与える多項式時間アルゴリズムの存在がAmir[5]によって示されている．また$2^{O(k)}$時間の2-近似アルゴリズムがTuukka[6]によって構築されている．同様にパス幅についても先程の$k$を用いて$O(k\sqrt{\log k})$の近似比の多項式時間アルゴリズムがCarlaら[7]によって示されているほか，パス幅$pw$を用いて$O(2^{pw})$の幅を与える多項式時間アルゴリズムがCattellら[8]によって示されている．
-
-
-有向グラフに対しても様々な幅が考えられてきた．1997年にReed[9]が有向パス幅を提案しており，2001年にはJohnsonら[10]が有向木幅を提案している．また2012年には，Berwangerら[11]によってDAGに対する幅が提案されている．さらに2023年にはKasaharaら[12]によって，新たにDAGパス幅が提案されている．
+木幅が$k$であるグラフが与えられたとき，幅が高々$k$の定数倍である木分解を多項式時間で得るアルゴリズムが存在するかどうかはわかっていない．同様にパス幅についても定数近似が可能であるかはわかっていない．一方で木幅が$k$で抑えられる場合，木幅の$O(\sqrt{\log k})$の近似比をもつ幅を与える多項式時間アルゴリズムの存在がAmir [5]によって示されている．また$2^{O(k)}$時間の2-近似アルゴリズムがTuukka [6]によって構築されている．同様にパス幅についても先程の$k$を用いて$O(k\sqrt{\log k})$の近似比の多項式時間アルゴリズムがCarlaら[7]によって示されているほか，パス幅$pw$を用いて$O(2^{pw})$の幅を与える多項式時間アルゴリズムがCattellら[8]によって示されている．
 
 
-DAGパス幅は，近年新たに提案された有向グラフに対するパス幅の概念であり，有向パス分解の条件に加え，任意の枝に対し，その端点を同時に含むバッグが存在することをルールに加えている．これにより有向グラフ上の強連結成分は同時に1つのバッグに含まれていなければならない．この条件によって特にDAGについて非自明な幅が得られ，DAGに対して有効なFPTアルゴリズムの構築が可能となっている．[12]ではDAGパス幅を用いた$k$-独立集合問題のパラメータ化アルゴリズムの構築やDAGパス幅を求めることがNP困難であることの証明などが行われている．一方で$k$-独立集合問題以外でのDAG上でもNP困難な問題に対するパラメータ化アルゴリズムの構築やDAGパス分解自体を求めるアルゴリズムはこれまでわかっていなかった．
+有向グラフに対しても様々な幅が考えられてきた．1997年にReed [9]が有向パス幅を提案しており，2001年にはJohnsonら[10]が有向木幅を提案している．また2012年には，Berwangerら[11]によってDAGに対する幅が提案されている．
+
+有向パス幅は有向グラフがどれだけDAGに近い構造をしているかを表すパラメータである．そのためDAGに対しては有向パス幅は常に０になり，DAG上の問題に対してパラメータ化アルゴリズムの構築が難しい場合があった．これに対し，2023年にKasaharaら[12]によって，新たにDAGパス幅が提案されている．DAGパス幅は有向グラフがどれだけ有向パスに近い構造をしているかを表すパラメータであり，有向パス分解の条件に加え，任意の枝に対してその端点を同時に含むバッグが存在することをルールに加えている．これにより有向グラフ上の強連結成分は同時に1つのバッグに含まれていなければならない．この条件によって特にDAGについて非自明な幅が得られ，DAGに対して有効なFPTアルゴリズムの構築が可能となっている．[12]ではDAGパス幅を用いた$k$-独立集合問題のパラメータ化アルゴリズムの構築やDAGパス幅を求めることがNP困難であることの証明などが行われている．一方で$k$-独立集合問題以外でのDAG上でもNP困難な問題に対するパラメータ化アルゴリズムの構築やDAGパス分解自体を求めるアルゴリズムは著者が知る限りこれまでわかっていなかった．
 
 
-そこで今回は次の3つの研究を行った．1つ目はDAGパス分解を用いてDAG上での様々なNP困難問題に対するパラメータ化アルゴリズムの構築である．2つ目はDAGパス分解を求める近似アルゴリズム，及び制限された幅をもつDAGパス分解の構築を行うパラメータ化アルゴリズムの提案である．3つ目はDAGパス幅の拡張となるDAG木幅の提案である．まず第3章では，DAG上でもNP-hardな問題であるDirected Dominating Set Problem, Max Leaf Outbranching Problemの2つの問題に対して，頂点数を$n$，DAGパス幅を$w$としたときにそれぞれ$O(2^wwn), O(2^wwn+n^2)$時間のFPTアルゴリズムを紹介する．Directed Steiner Tree Problemに対しては，DAGパス幅を$w$，ターミナル集合のサイズを$k$としたときに$O(2^w(k+w)n+n^2)$時間のFPTアルゴリズムを紹介する．また$k$-Disjoint Path Problemに対しては$O((k+1)^w(w^2+k)n+n^2)$時間のパラメータ化アルゴリズムを紹介する．本論文ではDAG上であることを前提としているが，一般の有向グラフに対しても強連結成分分解を行うことで本アルゴリズムを提供することができる．次に第4章ではDAGパス幅に対し，$O(\log^2 n)$-近似アルゴリズムを紹介する．またより近似比の小さい$O(\log^{3/2} n)$-近似アルゴリズムの存在を示す．これはone-shot Black Pebbling ProblemがDAGパス分解を求める問題と等価であることから示される．さらに第5章では，DAGパス幅とグラフの出次数，根数をそれぞれ$w, d, l$と表したとき，$O(l\cdot d^w)$の幅を与えるアルゴリズムを紹介する．このアルゴリズムは無向パス分解に対するアルゴリズム[8]を参考にして構築しており，完全有向$d$分木のembeddingを行うことでアルゴリズムを構築している．最後に第6章, 第7章ではDAGパス幅の一般化となる概念であるDAG木幅の提案を行っている．DAG木幅は有向グラフが有向木からどれだけ近いかを表すパラメータであり，DAG木幅の値が小さいほどグラフが有向木に近い構造をしていることを表す．第6章でDAG木幅を与える最適なDAG木分解の構成がNP-hardであることを示し，第7章でDAG木幅をパラメータとしてDirected Dominating Set Problemを解く$O(2^wwn)$時間のFPTアルゴリズムを紹介している．
+そこで今回は次の3つの研究を行った．1つ目はDAGパス分解を用いてDAG上での様々なNP困難問題に対するパラメータ化アルゴリズムの構築である．2つ目はDAGパス分解を求める近似アルゴリズム，及び制限された幅をもつDAGパス分解の構築を行うパラメータ化アルゴリズムの提案である．3つ目はDAGパス幅の拡張となるDAG木幅の提案である．まず第3章では，DAG上でもNP困難な問題であるDirected Dominating Set Problem, Max Leaf Outbranching Problemの2つの問題に対して，頂点数が$n$のDAG，幅が$w$のDAGパス分解を入力したとき，それぞれ$O(2^wwn), O(2^wwn+n^2)$時間のFPTアルゴリズムを提案する．Directed Steiner Tree Problemに対しては，ターミナル集合のサイズを$k$としたときに$O(2^w(k+w)n+n^2)$時間のFPTアルゴリズムを提案する．また$k$-Disjoint Path Problemに対しては$O((k+1)^w(w^2+k)n+n^2)$時間のパラメータ化アルゴリズムを提案する．本論文ではDAG上であることを前提としているが，一般の有向グラフに対しても強連結成分分解を行うことで本アルゴリズムを提供することができる．次に第4章ではDAGパス幅に対し，$O(\log^2 n)$-近似アルゴリズムを提案する．またより近似比の小さい$O(\log^{3/2} n)$-近似アルゴリズムの存在を示す．これはone-shot Black Pebbling ProblemがDAGパス分解を求める問題と等価であることから示される．さらに第5章では，DAGパス幅とグラフの最大出次数，根数をそれぞれ$w, d, l$と表したとき，$O(l\cdot d^w)$の幅を与えるアルゴリズムを提案する．このアルゴリズムは無向パス分解に対するアルゴリズム[8]を参考にして構築しており，完全有向$d$分木のembeddingを行うことでアルゴリズムを構築している．最後に第6章, 第7章ではDAGパス幅の一般化となる概念であるDAG木幅の提案を行っている．DAG木幅は有向グラフが有向木からどれだけ近いかを表すパラメータであり，DAG木幅の値が小さいほどグラフが有向木に近い構造をしていることを表す．第6章でDAG木幅を与える最適なDAG木分解の構成がNP困難であることを示し，第7章でDAG木幅をパラメータとしてDirected Dominating Set Problemを解く$O(2^wwn)$時間のFPTアルゴリズムを提案している．
 
 
 \section{準備} %\label{preliminary}
@@ -388,7 +387,7 @@ one-shot BPについても同様にペブリング数を定めることができ
 
 
 \section{DAGパス幅を用いた様々なNP困難問題に対するアルゴリズム} %\label{sec_FPTforSomeProblems}
-本節では，DAG上の4つのNP困難問題であるDirected Dominating Set Problem，Max Leaf Outbranching Problem，Disjoint Path Problem，Directed Steiner Tree ProblemのDAGパス幅を用いたパラメータ化アルゴリズムを紹介する．これらの問題は有向木幅や有向パス幅に対しては$W[1]$-hardであるが，DAGパス幅を用いることで容易にパラメータ化アルゴリズムを構築することができる．なお，本論文では入力グラフをDAGとしているが，一般の有向グラフに対しても強連結成分分解を行いDAGに変換することで本アルゴリズムを適応することが可能である．
+本節では，DAG上の4つのNP困難問題であるDirected Dominating Set Problem，Max Leaf Outbranching Problem，Disjoint Path Problem，Directed Steiner Tree ProblemのDAGパス幅を用いたパラメータ化アルゴリズムを提案する．これらの問題は有向木幅や有向パス幅に対しては$W[1]$-hardであるが，DAGパス幅を用いることで容易にパラメータ化アルゴリズムを構築することができる．なお，本論文では入力グラフをDAGとしているが，一般の有向グラフに対しても強連結成分分解を行いDAGに変換することで本アルゴリズムを適応することが可能である．
 
 
 
@@ -413,7 +412,7 @@ one-shot BPについても同様にペブリング数を定めることができ
 DiDS problemとは，$G$のmDiDSのサイズを求める問題である．Ganianら[17]は以下を示した．
 
 \begin{theorem}[計算量クラス]
-    DiDS problemは$G$がDAGの場合でもNP-hardである．
+    DiDS problemは$G$がDAGの場合でもNP困難である．
 \end{theorem}
 
 
@@ -531,7 +530,7 @@ $Compute(P)$
 Ganianら[17]は以下を示した．
 
 \begin{theorem}[計算量クラス]
-    MaxLOBは$G$がDAGの場合でもNP-hardである．
+    MaxLOBは$G$がDAGの場合でもNP困難である．
 \end{theorem}
 
 今回は入力グラフがDAGである場合を考える．
@@ -656,7 +655,7 @@ $Compute(P)$
 Ganianら[17]は以下を示した．
 
 \begin{theorem}[計算量クラス]
-    Disjoint Path problemはNP-hardである．
+    Disjoint Path problemはNP困難である．
 \end{theorem}
 
 
@@ -791,7 +790,7 @@ $Compute(P)$
     枝重み付き有向グラフ$G=(V, E)$，根$r \in V$，ターミナル$R=\{t_1, t_2, \dots, t_k\} \subseteq V$が与えられたとき，$r$を根とし，各$t_i$を含む有向木をDirected Steiner Tree (DST)という．minimum-DSTとは，すべてのDSTのうち枝の総重み(単に総重みと呼ぶ)が最小のものである．
 \end{definition*}
 
-DST problemとは，$G$のminimum-DSTの総重みを求める問題である．各枝の重みが1である場合のDST problemをunit-cost DST problemと呼ぶ．Ganianら[17]はunit-cost DST problemがDAGの場合でもNP-hardであることを示した．これより，ただちにDAG上のDST problemがNP-hardであることが示される．
+DST problemとは，$G$のminimum-DSTの総重みを求める問題である．各枝の重みが1である場合のDST problemをunit-cost DST problemと呼ぶ．Ganianら[17]はunit-cost DST problemがDAGの場合でもNP困難であることを示した．これより，ただちにDAG上のDST problemがNP困難であることが示される．
 
 \subsubsection{FPTの構成}
 Fominら[18]は枝重み付き無向シュタイナー木問題に対し，ターミナル$R$のサイズ$k$をパラメータとした$2^{O(k\log k)}$のFPTアルゴリズムを与えた．これはDST problemに拡張可能である．一方で，入力グラフの基礎グラフに対する木幅をパラメータとしたFPTは，我々の知る限り示されていない．本研究ではDAGパス幅$w$をパラメータとするFPTを構築し，計算量が$O(2^w(k+w)n + n^2)$であることを示す．
@@ -930,7 +929,7 @@ $Compute(P, r, R)$
 
 
 \section{DAGパス分解を求める$O(\log ^2 n)$-近似アルゴリズム} %\label{sec_FPTforPathwidth}
-本節では頂点数$n$，最大出次数$k$，パス幅$pw$であるDAG $G$に対し，幅が高々$O(k \cdot pw \log ^2 n)$であるDAGパス分解を与えるアルゴリズムを紹介する．
+本節では頂点数$n$，最大出次数$k$，パス幅$pw$であるDAG $G$に対し，幅が高々$O(k \cdot pw \log ^2 n)$であるDAGパス分解を与えるアルゴリズムを設計する．
 
 \subsection{定義と補題}
 まず最小化問題に対する近似率の定義を示す．
@@ -1116,7 +1115,7 @@ Perら[20]はone-shot BPの近似アルゴリズムの存在を示している�
 
 \section{$O(ld^t)$の幅のDAGパス分解を求めるアルゴリズム} %\label{sec_FPTforPathwidth}
 
-本節では最大出次数$d$，根の個数$l$であるDAG $H$と非負整数$t$が与えられたとき，$O(ld^t)$の幅を持つDAG-PDを出力するか，$H$のパス幅が$t$よりも大きいことを示す証拠を与えるFPTアルゴリズムを紹介する．
+本節では最大出次数$d$，根の個数$l$であるDAG $H$と非負整数$t$が与えられたとき，$O(ld^t)$の幅を持つDAG-PDを出力するか，$H$のパス幅が$t$よりも大きいことを示す証拠を与えるFPTアルゴリズムを提案する．
 
 \subsection{無向グラフのパス分解を求めるアルゴリズム}
 Kevinら[8]は以下の補題を示している．
@@ -1384,15 +1383,15 @@ nice DAG-TDの例をFigure\ref{fig:7}で示す．あるDAG-TDが与えられた�
 
 \subsection{計算量クラス}
 
-\begin{theorem}\label{np-hard}
-    有向グラフ$G$が与えられたとき，$G$のDAG-treewidthを計算する問題はNP-hardである．
+\begin{theorem}\label{NP困難}
+    有向グラフ$G$が与えられたとき，$G$のDAG-treewidthを計算する問題はNP困難である．
 \end{theorem}
 
-Theorem\ref{np-hard}の証明は付録で示す．
+Theorem\ref{NP困難}の証明は付録で示す．
 
 \begin{comment}
 
-Theorem\ref{np-hard}を証明するために，まず以下のLemmaを示す．
+Theorem\ref{NP困難}を証明するために，まず以下のLemmaを示す．
 
 \begin{lemma}\label{sink}
     有向グラフ$G=(V, E)$の強連結成分$A$があり，$A$から$V \backslash A$への枝が存在しないとき，$A$を$G$の$sink$と呼ぶ．このとき，$G$が$sink$をただ1つしか持たないならば，$tw(G) = pw(G)$が成り立つ．
@@ -1404,9 +1403,9 @@ Theorem\ref{np-hard}を証明するために，まず以下のLemmaを示す．
 \end{proof}
 
 
-上のLemmaを用い，[3]の手法を参考にしてTheorem\ref{np-hard}を示す．
+上のLemmaを用い，[3]の手法を参考にしてTheorem\ref{NP困難}を示す．
 
-\begin{proof}[proof of Theorem\ref{np-hard}]
+\begin{proof}[proof of Theorem\ref{NP困難}]
     ある有向グラフ$G = (V, E)$が与えられたとき，以下の手順で有向グラフ$G' = (V', E')$ $(|V'| = 2|V| + 1, |E'| = \frac{1}{2}(|V|^2 + 3|V|) + 2|E|)$を構成する．
 
     \vskip\baselineskip
@@ -1603,15 +1602,15 @@ DAG-TD $T$をFPTアルゴリズムに利用する場合，$T$の葉から動的�
 
 \subsection{計算量クラス}
 
-\begin{theorem}\label{r-np-hard}
-    有向グラフ$G$が与えられたとき，$G$のco-DAG-treewidthを計算する問題はNP-hardである．
+\begin{theorem}\label{r-NP困難}
+    有向グラフ$G$が与えられたとき，$G$のco-DAG-treewidthを計算する問題はNP困難である．
 \end{theorem}
 
-Theorem\ref{r-np-hard}の証明は付録で示す．
+Theorem\ref{r-NP困難}の証明は付録で示す．
 
 \begin{comment}
     
-Theorem\ref{r-np-hard}を証明するため，次で定義されるco-DAG-pathwidthの計算がNP-hardであることを示す．
+Theorem\ref{r-NP困難}を証明するため，次で定義されるco-DAG-pathwidthの計算がNP困難であることを示す．
 
 
 \begin{definition*}
@@ -1637,7 +1636,7 @@ Theorem\ref{r-np-hard}を証明するため，次で定義されるco-DAG-pathwi
 
 
 \begin{lemma}\label{co-DAG-PD}
-    有向グラフ$G$，整数$k$が与えられたとき，$rpw(G) \leq k$が成り立つかを判定する問題はNP-completeである．
+    有向グラフ$G$，整数$k$が与えられたとき，$rpw(G) \leq k$が成り立つかを判定する問題はNP完全である．
 \end{lemma}
 
 \begin{proof}
@@ -1662,10 +1661,10 @@ Theorem\ref{r-np-hard}を証明するため，次で定義されるco-DAG-pathwi
 
 
 
-最後にTheorem\ref{r-np-hard}を示す．
+最後にTheorem\ref{r-NP困難}を示す．
 
 \begin{proof}
-    ある有向グラフ$G = (V, E)$が与えられたとき，定義\ref{np-hard}の証明と同様の手順で$|V'| = 2|V| + 1, |E'| = \frac{1}{2}(|V|^2 + 3|V|) + 2|E|$である有向グラフ$G' = (V', E')$ を構成する．また$G'$の頂点集合$A, B$を同様に$A = \{v_i | i =1, 2, \dots, n\}, B = \{v'_i | i =1, 2, \dots, n\}$と定める．このとき$V' = A \cup B \cup \{s\}$とできる．$G'$は$G$のサイズの多項式時間で構成できる．
+    ある有向グラフ$G = (V, E)$が与えられたとき，定義\ref{NP困難}の証明と同様の手順で$|V'| = 2|V| + 1, |E'| = \frac{1}{2}(|V|^2 + 3|V|) + 2|E|$である有向グラフ$G' = (V', E')$ を構成する．また$G'$の頂点集合$A, B$を同様に$A = \{v_i | i =1, 2, \dots, n\}, B = \{v'_i | i =1, 2, \dots, n\}$と定める．このとき$V' = A \cup B \cup \{s\}$とできる．$G'$は$G$のサイズの多項式時間で構成できる．
     
     次に，widthが$rpw(G)$である$G$のco-DAG-PDを$(P, \beta)$ $(P = p_1, p_2, \dots, p_r)$とする．各$m$に対し，$G'$の頂点集合$\gamma(p_m)$を以下のように構成する．
 
@@ -1677,9 +1676,9 @@ Theorem\ref{r-np-hard}を証明するため，次で定義されるco-DAG-pathwi
 
     さらに$\gamma(p_0) = \gamma(p_1) \cup \{s\}$ $((p_0, p_1) \in E[T])$と定める．
 
-    以上の操作によってできる$(P', \gamma)$ $(P' = (p_0, p_1, p_2, \dots, p_r))$が$G'$のco-DAG-PDになっていることを示す．Figure★★\ref{fig:4}の$G, G'$に対するco-DAG-PD $(P, \beta), (P', \gamma)$の構成例をFigure★★\ref{fig:5}で示す．$\gamma$の構成法に注意すると，$A \subseteq \gamma(p_r), B \subseteq \gamma(p_1)$がいえ，さらに$r \in \gamma(p_0)$であることから，$\sum_{m=0}^{r} \gamma(p_m) = V'$が成り立つ．よって$(P', \gamma)$はco-DAG-PDのルール1を満たす．また$\gamma$の構成法に注意すると，任意の$v \in V' \backslash \{r\}$に対して，$v$を含む全てのバッグが$(p_1, p_2, \dots, p_r)$上で非連結になることはなく，また$B \cup \{r\} \subseteq \gamma(p_0)$より，任意の$v \in V'$に対して，$v$を含む全てのバッグが$(p_0, p_1, p_2, \dots, p_r)$上で非連結になることはない．よって$(P', \gamma)$はco-DAG-PDのルール3を満たす．さらに定義\ref{np-hard}の証明と同様の議論により，$(P', \gamma)$がco-DAG-PDのルール2を満たすことがいえる．以上より$(P', \gamma)$は$G'$のco-DAG-PDである．このとき$(P', \gamma)$の幅は$rpw(G)+n$である．
+    以上の操作によってできる$(P', \gamma)$ $(P' = (p_0, p_1, p_2, \dots, p_r))$が$G'$のco-DAG-PDになっていることを示す．Figure★★\ref{fig:4}の$G, G'$に対するco-DAG-PD $(P, \beta), (P', \gamma)$の構成例をFigure★★\ref{fig:5}で示す．$\gamma$の構成法に注意すると，$A \subseteq \gamma(p_r), B \subseteq \gamma(p_1)$がいえ，さらに$r \in \gamma(p_0)$であることから，$\sum_{m=0}^{r} \gamma(p_m) = V'$が成り立つ．よって$(P', \gamma)$はco-DAG-PDのルール1を満たす．また$\gamma$の構成法に注意すると，任意の$v \in V' \backslash \{r\}$に対して，$v$を含む全てのバッグが$(p_1, p_2, \dots, p_r)$上で非連結になることはなく，また$B \cup \{r\} \subseteq \gamma(p_0)$より，任意の$v \in V'$に対して，$v$を含む全てのバッグが$(p_0, p_1, p_2, \dots, p_r)$上で非連結になることはない．よって$(P', \gamma)$はco-DAG-PDのルール3を満たす．さらに定義\ref{NP困難}の証明と同様の議論により，$(P', \gamma)$がco-DAG-PDのルール2を満たすことがいえる．以上より$(P', \gamma)$は$G'$のco-DAG-PDである．このとき$(P', \gamma)$の幅は$rpw(G)+n$である．
 
-    さらに\ref{np-hard}の証明と全く同様の議論により，$(P', \gamma)$が$G'$に対してwidthが最小のco-DAG-PDであることがいえる．ここで$G'$はsinkを一つしか持たないことに注意すると，Lemma\ref{r-sink}より$rtw(G') = rpw(G')$がいえ，$rtw(G) = rpw(G) + n$が成り立つ．以上より定義\ref{r-np-hard}が示される．
+    さらに\ref{NP困難}の証明と全く同様の議論により，$(P', \gamma)$が$G'$に対してwidthが最小のco-DAG-PDであることがいえる．ここで$G'$はsinkを一つしか持たないことに注意すると，Lemma\ref{r-sink}より$rtw(G') = rpw(G')$がいえ，$rtw(G) = rpw(G) + n$が成り立つ．以上より定義\ref{r-NP困難}が示される．
 \end{proof}
 
 \end{comment}
@@ -1825,7 +1824,7 @@ $Compute(T, \beta)$
 \section{結論} %\label{sec-conclusion}
 本章では本研究のまとめと今後の課題を示す．本研究では次の3つを行った．
 
-まず1つ目にDAGパス幅をパラメータとして有向支配集合問題，最大葉分岐問題，$k$-有向点素パス問題，有向シュタイナー木問題を解くアルゴリズムを構築した．前提として入力グラフのパス分解がすでに与えられているとし，バッグがintroduceかforgetかで場合分けを行っている．これによりDAGパス幅を$w$としたときにそれぞれ$O(2^w w n)$, $O(2^w w n + n^2)$, $O((k+1)^w(w^2+k)n+n^2)$, $O(2^w (k + w)n + n^2)$で計算できることを示した．
+まず1つ目にDAGパス幅をパラメータとして有向支配集合問題，最大葉分岐問題，$k$-有向点素パス問題，有向シュタイナー木問題を解くアルゴリズムを構築した．前提として入力グラフのパス分解がすでに与えられているとし，バッグがintroduceかforgetかで場合分けを行っている．これにより幅が$w$であるDAGパス分解を入力したときにそれぞれ$O(2^w w n)$, $O(2^w w n + n^2)$, $O((k+1)^w(w^2+k)n+n^2)$, $O(2^w (k + w)n + n^2)$で計算できることを示した．
 
 2つ目にDAGパス分解を求める近似アルゴリズム及びパラメータ化アルゴリズムを構築した．近似アルゴリズムでは，DAG上のセパレータを利用した分割統治法を用いることで$O(\log^2 n)$-近似のアルゴリズムを構築した．またDAG上でのDAGパス分解の構築が\textit{one-shot Black Pebbling}問題と等価であることを示し，近似比がより小さい$O(\log^{2/3} n)$-近似アルゴリズムの存在も示した．さらに入力DAGの最大出次数を$d$，根数を$l$としたとき，入力整数$k$に対して幅が高々$O(ld^k)$のDAGパス分解を出力するか，DAGパス幅が$k$より大きいことの証拠を示すアルゴリズムを構築した．このアルゴリズムは完全有向$d$分木の埋め込みを利用して設計したもので，出次数が制限されたDAGに対して効率的にDAGパス分解を構築できることを初めて示した．
 
@@ -1921,8 +1920,8 @@ $Compute(T, \beta)$
 
 
 
-\section{Theorem\ref{np-hard}の証明}
-Theorem\ref{np-hard}を証明するため以下のLemmaを示す．
+\section{Theorem\ref{NP困難}の証明}
+Theorem\ref{NP困難}を証明するため以下のLemmaを示す．
 
 \begin{lemma}\label{sink}
     有向グラフ$G=(V, E)$の強連結成分$A$があり，$A$から$V \backslash A$への枝が存在しないとき，$A$を$G$の$sink$と呼ぶ．このとき，$G$が$sink$をただ1つしか持たないならば，$tw(G) = pw(G)$が成り立つ．
@@ -1934,9 +1933,9 @@ Theorem\ref{np-hard}を証明するため以下のLemmaを示す．
 \end{proof}
 
 
-上のLemmaを用い，[3]の手法を参考にしてTheorem\ref{np-hard}を示す．
+上のLemmaを用い，[3]の手法を参考にしてTheorem\ref{NP困難}を示す．
 
-\begin{proof}[proof of Theorem\ref{np-hard}]
+\begin{proof}[proof of Theorem\ref{NP困難}]
     ある有向グラフ$G = (V, E)$が与えられたとき，以下の手順で有向グラフ$G' = (V', E')$ $(|V'| = 2|V| + 1, |E'| = \frac{1}{2}(|V|^2 + 3|V|) + 2|E|)$を構成する．
 
     \vskip\baselineskip
@@ -2042,9 +2041,9 @@ Theorem\ref{np-hard}を証明するため以下のLemmaを示す．
 
 
 
-\section{Theorem\ref{r-np-hard}の証明}
+\section{Theorem\ref{r-NP困難}の証明}
 
-Theorem\ref{r-np-hard}を証明するため，次で定義されるco-DAG-pathwidthの計算がNP-hardであることを示す．
+Theorem\ref{r-NP困難}を証明するため，次で定義されるco-DAG-pathwidthの計算がNP困難であることを示す．
 
 \begin{definition*}
      $G=(V, E)$とする．$G$のco-DAG Path Decomposition(co-DAG-PD)とは，以下の3つの条件をみたすようなVの各部分集合$ X_i (i = 1, 2,  \ldots, s)$の列 $X=(X_1, X_2,  \ldots, X_s)$ である．
@@ -2069,7 +2068,7 @@ Theorem\ref{r-np-hard}を証明するため，次で定義されるco-DAG-pathwi
 
 
 \begin{lemma}\label{co-DAG-PD}
-    有向グラフ$G$，整数$k$が与えられたとき，$cpw(G) \leq k$が成り立つかを判定する問題はNP-completeである．
+    有向グラフ$G$，整数$k$が与えられたとき，$cpw(G) \leq k$が成り立つかを判定する問題はNP完全である．
 \end{lemma}
 
 \begin{proof}
@@ -2094,10 +2093,10 @@ Theorem\ref{r-np-hard}を証明するため，次で定義されるco-DAG-pathwi
 
 
 
-最後にTheorem\ref{r-np-hard}を示す．
+最後にTheorem\ref{r-NP困難}を示す．
 
 \begin{proof}
-    ある有向グラフ$G = (V, E)$が与えられたとき，定義\ref{np-hard}の証明と同様の手順で$|V'| = 2|V| + 1, |E'| = \frac{1}{2}(|V|^2 + 3|V|) + 2|E|$である有向グラフ$G' = (V', E')$ を構成する．また$G'$の頂点集合$A, B$を同様に$A = \{v_i | i =1, 2, \dots, n\}, B = \{v'_i | i =1, 2, \dots, n\}$と定める．このとき$V' = A \cup B \cup \{s\}$とできる．$G'$は$G$のサイズの多項式時間で構成できる．
+    ある有向グラフ$G = (V, E)$が与えられたとき，定義\ref{NP困難}の証明と同様の手順で$|V'| = 2|V| + 1, |E'| = \frac{1}{2}(|V|^2 + 3|V|) + 2|E|$である有向グラフ$G' = (V', E')$ を構成する．また$G'$の頂点集合$A, B$を同様に$A = \{v_i | i =1, 2, \dots, n\}, B = \{v'_i | i =1, 2, \dots, n\}$と定める．このとき$V' = A \cup B \cup \{s\}$とできる．$G'$は$G$のサイズの多項式時間で構成できる．
     
     次に，widthが$cpw(G)$である$G$のco-DAG-PDを$(P, \beta)$ $(P = p_1, p_2, \dots, p_r)$とする．各$m$に対し，$G'$の頂点集合$\gamma(p_m)$を以下のように構成する．
 
@@ -2111,9 +2110,9 @@ Theorem\ref{r-np-hard}を証明するため，次で定義されるco-DAG-pathwi
 
     以上の操作によってできる$(P', \gamma)$ $(P' = (p_0, p_1, p_2, \dots, p_r))$が$G'$のco-DAG-PDになっていることを示す．
     % Figure★★\ref{fig:4_2}の$G, G'$に対するco-DAG-PD $(P, \beta), (P', \gamma)$の構成例をFigure★★\ref{fig:5_2}で示す．
-    $\gamma$の構成法に注意すると，$A \subseteq \gamma(p_r), B \subseteq \gamma(p_1)$がいえ，さらに$r \in \gamma(p_0)$であることから，$\sum_{m=0}^{r} \gamma(p_m) = V'$が成り立つ．よって$(P', \gamma)$はco-DAG-PDのルール1を満たす．また$\gamma$の構成法に注意すると，任意の$v \in V' \backslash \{r\}$に対して，$v$を含む全てのバッグが$(p_1, p_2, \dots, p_r)$上で非連結になることはなく，また$B \cup \{r\} \subseteq \gamma(p_0)$より，任意の$v \in V'$に対して，$v$を含む全てのバッグが$(p_0, p_1, p_2, \dots, p_r)$上で非連結になることはない．よって$(P', \gamma)$はco-DAG-PDのルール3を満たす．さらに定義\ref{np-hard}の証明と同様の議論により，$(P', \gamma)$がco-DAG-PDのルール2を満たすことがいえる．以上より$(P', \gamma)$は$G'$のco-DAG-PDである．このとき$(P', \gamma)$の幅は$cpw(G)+n$である．
+    $\gamma$の構成法に注意すると，$A \subseteq \gamma(p_r), B \subseteq \gamma(p_1)$がいえ，さらに$r \in \gamma(p_0)$であることから，$\sum_{m=0}^{r} \gamma(p_m) = V'$が成り立つ．よって$(P', \gamma)$はco-DAG-PDのルール1を満たす．また$\gamma$の構成法に注意すると，任意の$v \in V' \backslash \{r\}$に対して，$v$を含む全てのバッグが$(p_1, p_2, \dots, p_r)$上で非連結になることはなく，また$B \cup \{r\} \subseteq \gamma(p_0)$より，任意の$v \in V'$に対して，$v$を含む全てのバッグが$(p_0, p_1, p_2, \dots, p_r)$上で非連結になることはない．よって$(P', \gamma)$はco-DAG-PDのルール3を満たす．さらに定義\ref{NP困難}の証明と同様の議論により，$(P', \gamma)$がco-DAG-PDのルール2を満たすことがいえる．以上より$(P', \gamma)$は$G'$のco-DAG-PDである．このとき$(P', \gamma)$の幅は$cpw(G)+n$である．
 
-    さらに\ref{np-hard}の証明と全く同様の議論により，$(P', \gamma)$が$G'$に対してwidthが最小のco-DAG-PDであることがいえる．ここで$G'$はsinkを一つしか持たないことに注意すると，Lemma\ref{r-sink}より$ctw(G') = cpw(G')$がいえ，$ctw(G) = cpw(G) + n$が成り立つ．以上より定義\ref{r-np-hard}が示される．
+    さらに\ref{NP困難}の証明と全く同様の議論により，$(P', \gamma)$が$G'$に対してwidthが最小のco-DAG-PDであることがいえる．ここで$G'$はsinkを一つしか持たないことに注意すると，Lemma\ref{r-sink}より$ctw(G') = cpw(G')$がいえ，$ctw(G) = cpw(G) + n$が成り立つ．以上より定義\ref{r-NP困難}が示される．
 \end{proof}
 
 
