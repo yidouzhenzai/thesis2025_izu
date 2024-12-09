@@ -87,7 +87,7 @@
 \end{comment}
 
 
-有向グラフがどれだけ有向パスに近い構造をしているかを表すパラメータとしてDAGパス幅が存在する．DAGパス幅は有向パス幅のルールに対し，任意の枝について両端点を同時に含むバッグが存在するというルールを追加している．DAGパス幅は，有向パス幅が常に0になってしまうDAGに対しても非自明な幅を与えることができ，DAG上でNP困難な問題に対するパラメータ化アルゴリズムの構築に役立っている．またDAGパス幅に対する近似アルゴリズムは現在まで知られていなかった．
+有向有向グラフがどれだけ有向パスに近い構造をしているかを表すパラメータとしてDAGパス幅が存在する．DAGパス幅は有向パス幅のルールに対し，任意の枝について両端点を同時に含むバッグが存在するというルールを追加している．DAGパス幅は，有向パス幅が常に0になってしまうDAGに対しても非自明な幅を与えることができ，DAG上でNP困難な問題に対するパラメータ化アルゴリズムの構築に役立っている．またDAGパス幅に対する近似アルゴリズムは現在まで知られていなかった．
 
 
 今回の研究では，まず最初にDAG上でもNP困難である様々な問題に対し，DAGパス幅を使ったパラメータ化アルゴリズムを提案する．具体的にはDirected Dominating Set Problem, Max Leaf Outbranching Problem, Directed Steiner Tree Problemの3つの問題に対しては，幅が$w$であるDAGパス分解が与えられたときに$f(w)\cdot g(n)$で厳密解を与えるFPTアルゴリズムを提案する．$k$-Disjoint Path Problemに対しては$O(k^w\cdot f(w)\cdot g(n))$で厳密解を与えるパラメータ化アルゴリズムを提案する．
@@ -156,11 +156,20 @@ NP困難な問題に対して高速に解を求める方法の一つとして木
 
 有向グラフに対しても様々な幅が考えられてきた．1997年にReed [9]が有向パス幅を提案しており，2001年にはJohnsonら[10]が有向木幅を提案している．また2012年には，Berwangerら[11]によってDAGに対する幅が提案されている．
 
-有向パス幅は有向グラフがどれだけDAGに近い構造をしているかを表すパラメータである．そのためDAGに対しては有向パス幅は常に０になり，DAG上の問題に対してパラメータ化アルゴリズムの構築が難しい場合があった．これに対し，2023年にKasaharaら[12]によって，新たにDAGパス幅が提案されている．DAGパス幅は有向グラフがどれだけ有向パスに近い構造をしているかを表すパラメータであり，有向パス分解の条件に加え，任意の枝に対してその端点を同時に含むバッグが存在することをルールに加えている．これにより有向グラフ上の強連結成分は同時に1つのバッグに含まれていなければならない．この条件によって特にDAGについて非自明な幅が得られ，DAGに対して有効なFPTアルゴリズムの構築が可能となっている．[12]ではDAGパス幅を用いた$k$-独立集合問題のパラメータ化アルゴリズムの構築やDAGパス幅を求めることがNP困難であることの証明などが行われている．一方で$k$-独立集合問題以外でのDAG上でもNP困難な問題に対するパラメータ化アルゴリズムの構築やDAGパス分解自体を求めるアルゴリズムは著者が知る限りこれまでわかっていなかった．
+有向パス幅は有向グラフがどれだけDAGに近い構造をしているかを表すパラメータである．そのためDAGに対しては有向パス幅は常に０になり，DAG上の問題に対してパラメータ化アルゴリズムの構築が難しい場合があった．これに対し，2023年にKasaharaら[12]によって，新たにDAGパス幅が提案されている．DAGパス幅は有向有向グラフがどれだけ有向パスに近い構造をしているかを表すパラメータであり，有向パス分解の条件に加え，任意の枝に対してその端点を同時に含むバッグが存在することをルールに加えている．これにより有向グラフ上の強連結成分は同時に1つのバッグに含まれていなければならない．この条件によって特にDAGについて非自明な幅が得られ，DAGに対して有効なFPTアルゴリズムの構築が可能となっている．[12]ではDAGパス幅を用いた$k$-独立集合問題のパラメータ化アルゴリズムの構築やDAGパス幅を求めることがNP困難であることの証明などが行われている．一方で$k$-独立集合問題以外でのDAG上でもNP困難な問題に対するパラメータ化アルゴリズムの構築やDAGパス分解自体を求めるアルゴリズムは著者が知る限りこれまでわかっていなかった．
 
 
 そこで今回は次の3つの研究を行った．1つ目はDAGパス分解を用いてDAG上での様々なNP困難問題に対するパラメータ化アルゴリズムの構築である．2つ目はDAGパス分解を求める近似アルゴリズム，及び制限された幅をもつDAGパス分解の構築を行うパラメータ化アルゴリズムの提案である．3つ目はDAGパス幅の拡張となるDAG木幅の提案である．まず第3章では，DAG上でもNP困難な問題であるDirected Dominating Set Problem, Max Leaf Outbranching Problemの2つの問題に対して，頂点数が$n$のDAG，幅が$w$のDAGパス分解を入力したとき，それぞれ$O(2^wwn), O(2^wwn+n^2)$時間のFPTアルゴリズムを提案する．Directed Steiner Tree Problemに対しては，ターミナル集合のサイズを$k$としたときに$O(2^w(k+w)n+n^2)$時間のFPTアルゴリズムを提案する．また$k$-Disjoint Path Problemに対しては$O((k+1)^w(w^2+k)n+n^2)$時間のパラメータ化アルゴリズムを提案する．本論文ではDAG上であることを前提としているが，一般の有向グラフに対しても強連結成分分解を行うことで本アルゴリズムを提供することができる．次に第4章ではDAGパス幅に対し，$O(\log^2 n)$-近似アルゴリズムを提案する．またより近似比の小さい$O(\log^{3/2} n)$-近似アルゴリズムの存在を示す．これはone-shot Black Pebbling ProblemがDAGパス分解を求める問題と等価であることから示される．さらに第5章では，DAGパス幅とグラフの最大出次数，根数をそれぞれ$w, d, l$と表したとき，$O(l\cdot d^w)$の幅を与えるアルゴリズムを提案する．このアルゴリズムは無向パス分解に対するアルゴリズム[8]を参考にして構築しており，完全有向$d$分木のembeddingを行うことでアルゴリズムを構築している．最後に第6章, 第7章ではDAGパス幅の一般化となる概念であるDAG木幅の提案を行っている．DAG木幅は有向グラフが有向木からどれだけ近いかを表すパラメータであり，DAG木幅の値が小さいほどグラフが有向木に近い構造をしていることを表す．第6章でDAG木幅を与える最適なDAG木分解の構成がNP困難であることを示し，第7章でDAG木幅をパラメータとしてDirected Dominating Set Problemを解く$O(2^wwn)$時間のFPTアルゴリズムを提案している．
 
+
+
+
+
+
+
+
+
+★半角の後にスペース(スラッシュ空白)
 
 \section{準備} %\label{preliminary}
 
@@ -169,7 +178,7 @@ NP困難な問題に対して高速に解を求める方法の一つとして木
 本研究では入力グラフをDAGとしたものを多く扱う．DAGは以下のように定義される．
 
 \begin{definition*}
-    DAG(Directed Acyclic graph)とは閉路のない有向グラフのことである．
+    DAG (Directed Acyclic graph)とは閉路のない有向グラフのことである．
 \end{definition*}
 
 またDAGの各頂点に対して先行頂点集合と後続頂点集合を定める．
@@ -204,8 +213,8 @@ NP困難な問題に対して高速に解を求める方法の一つとして木
     
     \begin{enumerate}
         \item $ X_1 \cup X_2 \cup \dots \cup X_s = V $ 
-        \item 任意の枝$(u, v) \in E $に対し，ある$i(\geq 1)$があり，$u, v \in X_i$
-        \item 任意の整数$ i, j, k (1 \leq i \leq j \leq k \leq s)$について，$X_i \cap X_k \subseteq X_j$．すなわち任意の頂点$v \in V$について，$v$は$X$上でただ一つの非空なパスを誘導する．
+        \item 任意の枝$(u, v) \in E $に対し，ある$i\ (\geq 1)$があり，$u, v \in X_i$
+        \item 任意の整数$ i, j, k\ (1 \leq i \leq j \leq k \leq s)$について，$X_i \cap X_k \subseteq X_j$．すなわち任意の頂点$v \in V$について，$v$は$X$上でただ一つの非空なパスを誘導する．
     \end{enumerate}
 \end{definition*}
 
@@ -214,9 +223,7 @@ NP困難な問題に対して高速に解を求める方法の一つとして木
     無向グラフ$G$のパス分解$X=(X_1, X_2,   \dots, X_s)$ に対し，$ \underset{i}{\max} \{ |X_i|-1 \}$ を$X$の幅という．$G$のパス幅とは，$G$の全てのパス分解を考えたときの幅の最小値である．
 \end{definition*}
 
-パス幅はグラフがどれだけパスに近い構造をしているかを表すパラメータであり，パス幅の値が小さいほどパスに近い構造をしていることを表す．一般の無向グラフに対してパス幅を求める問題はNP困難である．
-
-
+パス幅はグラフがどれだけパスに近い構造をしているかを表すパラメータであり，パス幅の値が小さいほどパスに近い構造をしていることを表す．一般の無向グラフに対してパス幅を求める問題はNP困難である[3]．
 
 
  
@@ -228,7 +235,7 @@ NP困難な問題に対して高速に解を求める方法の一つとして木
     \begin{enumerate}
         \item $ X_1 \cup X_2 \cup \dots \cup X_s = V $ 
         \item 任意の有向枝$(u, v) \in E$に対し，ある$i, j$ $(i \leq j)$があり，$u \in X_i$, $v \in X_j$
-        \item 任意の$ i, j, k (1 \leq i \leq j \leq k \leq s)$について，$X_i \cap X_k \subseteq X_j$．すなわち任意の頂点$v \in V$について，$v$は$X$上でただ一つの非空なパスを誘導する．
+        \item 任意の$ i, j, k\ (1 \leq i \leq j \leq k \leq s)$について，$X_i \cap X_k \subseteq X_j$．すなわち任意の頂点$v \in V$について，$v$は$X$上でただ一つの非空なパスを誘導する．
     \end{enumerate}
 \end{definition*}
 
@@ -237,7 +244,7 @@ NP困難な問題に対して高速に解を求める方法の一つとして木
     有向グラフ$G$の有向パス分解$X=(X_1, X_2,   \dots, X_s)$に対し，$ \underset{i}{\max} \{ |X_i|-1 \}$ を$X$の幅という．$G$の有向パス幅とは，$G$の全ての有向パス分解を考えたときの幅の最小値である．
 \end{definition*}
 
-有向パス幅はグラフがどれだけDAGに近い構造をしているかを表すパラメータであり，有向パス幅の値が小さいほどDAGに近い構造をしていることを表す．一般の有向グラフに対して有向パス幅を求める問題はNP困難である．
+有向パス幅はグラフがどれだけDAGに近い構造をしているかを表すパラメータであり，有向パス幅の値が小さいほどDAGに近い構造をしていることを表す．無向パス幅を求める問題がNP困難であることより，一般の有向グラフに対して有向パス幅を求める問題もまたNP困難である．
 
 
 
@@ -256,7 +263,7 @@ NP困難な問題に対して高速に解を求める方法の一つとして木
             \item $u, v \in X_1$
             \item ある $i$ $(i \geq 2)$ があり，$u, v \in X_i$, $v \notin X_{i-1}$ \label{original}
         \end{itemize}
-        \item 任意の$ i, j, k (1 \leq i \leq j \leq k \leq s)$について， $X_i \cap X_k \subseteq X_j$．すなわち任意の頂点$v \in V$について，$v$は$X$上でただ一つの非空なパスを誘導する．
+        \item 任意の$ i, j, k\ (1 \leq i \leq j \leq k \leq s)$について， $X_i \cap X_k \subseteq X_j$．すなわち任意の頂点$v \in V$について，$v$は$X$上でただ一つの非空なパスを誘導する．
     \end{enumerate}
     
 \end{definition*}
@@ -272,11 +279,14 @@ NP困難な問題に対して高速に解を求める方法の一つとして木
     有向グラフ$G$のDAGパス分解$X=(X_1, X_2,   \dots, X_s)$に対し，$ \underset{i}{\max} \{ |X_i|-1 \}$ を$X$の幅という．$G$のDAGパス幅とは，$G$の全てのDAGパス分解を考えたときの幅の最小値である．
 \end{definition*}
 
-DAGパス幅はグラフがどれだけ有向パスに近い構造をしているかを表すパラメータであり，DAGパス幅の値が小さいほど有向パスに近い構造をしていることを表す．ルール２とルール３を組み合わせて考えることにより，DAGパス分解はトポロジカル順序の逆順でバッグを生成していく操作であることがわかる．一般の有向グラフに対してDAGパス幅を求める問題はNP困難であるが，DAGパス幅が1であるグラフクラスは以下のようなキャタピラ型の有向グラフであることがわかっている．
+
+
+DAGパス幅は有向グラフがどれだけ有向パスに近い構造をしているかを表すパラメータであり，DAGパス幅の値が小さいほど有向パスに近い構造をしていることを表す．ルール２とルール３を組み合わせて考えることにより，DAGパス分解はトポロジカル順序の逆順でバッグを生成していく操作であることがわかる．一般の有向グラフに対してDAGパス幅を求める問題はNP困難であるが，DAGパス幅が1であるグラフクラスは以下のようなキャタピラ型の有向グラフであることを以下で示す．
 
 \begin{definition*}[キャタピラ型]
-    有向グラフ$G$がキャタピラ型であるとは，任意の頂点$v \in V[G]$について，$v$を始点とする長さ2以上のパスは高々1つしか存在しないようなグラフである．
+    有向グラフ$G$がキャタピラ型であるとは，有向木であり，かつ$G$の頂点のうち入次数1，出次数0の頂点を除くと単一のパスになるようなグラフである．
 \end{definition*}
+
 
 \begin{lemma}\label{catapillar}
     有向グラフ$G$のDAGパス幅が1であることの必要十分条件は，$G$がキャタピラ型であることである．
@@ -284,7 +294,7 @@ DAGパス幅はグラフがどれだけ有向パスに近い構造をしてい�
     
 
 \begin{proof}
-    $G$がキャタピラ型でないとき，ある頂点$v\in V[G]$が存在し，$v$を始点とする長さ2以上のパスが少なくとも2つ存在する．このパスを$P_1 = v, v_1, v_2, \dots$, $P_2 = v, u_1, u_2, \dots$とする．DAGパス分解のルールに注意すると，$G$の任意のDAGパス分解には次の3つの頂点集合$\{v, v_1, v_2\}, \{v, u_1, u_2\}, \{v, v_1, u_1\}$のうち，少なくとも1つを含むバッグが必ず存在する．したがって$G$のDAGパス幅が1であるためには$G$がキャタピラ型であることが必要．逆に$G$がキャタピラ型であるとき，$G$の各頂点$v$は葉である子$v_1, v_2, \dots, v_s$をもち，葉でない子を高々1つもつ．$v$が葉でない子をもたないとき，順にバッグ$\{v, v_1\}, \{v, v_2\}, \dots , \{v, v_s\}$を生成することで$v$と$suc(v)$に対するDAGパス分解を構築できる．$v$が葉でない子$u$をもつとき，順にバッグ$\{v, v_1\}, \{v, v_2\}, \dots , \{v, v_s\}, \{v, u\}, \{u\}$を生成することで，$v$と$suc(v)$に対するDAGパス分解を構築できる．これを全ての頂点に対して考えることにより，幅が1である$G$のDAGパス分解が得られる．したがって$G$がキャタピラ型であれば$G$のDAGパス幅は1である．
+    $G$がキャタピラ型でないとき，ある頂点$v\in V[G]$が存在し，$v$を始点とする長さ2以上の点素なパスが少なくとも2つ存在する．このパスを$P_1 = v, v_1, v_2, \dots$, $P_2 = v, u_1, u_2, \dots$とする．DAGパス分解のルールに注意すると，$G$の任意のDAGパス分解には次の3つの頂点集合$\{v, v_1, v_2\}, \{v, u_1, u_2\}, \{v, v_1, u_1\}$のうち，少なくとも1つを含むバッグが必ず存在するため，DAGパス幅は2以上となる．したがって$G$のDAGパス幅が1であるためには$G$がキャタピラ型であることが必要．逆に$G$がキャタピラ型であるとき，$G$の各頂点$v$は出次数が0の葉$v_1, v_2, \dots, v_s$をもち，出次数が1以上の葉でない子を高々1つもつ．$v$が葉でない子をもたないとき，順にバッグ$\{v, v_1\}, \{v, v_2\}, \dots , \{v, v_s\}$を生成することで$v$と$suc(v)$に対するDAGパス分解を構築できる．$v$が葉でない子$u$をもつとき，順にバッグ$\{v, v_1\}, \{v, v_2\}, \dots , \{v, v_s\}, \{v, u\}, \{u\}$を生成することで，$v$と$suc(v)$に対するDAGパス分解を構築できる．これを全ての頂点に対して考えることにより，幅が1である$G$のDAGパス分解が得られる．したがって$G$がキャタピラ型であれば$G$のDAGパス幅は1である．
 \end{proof}
 
 
@@ -312,10 +322,7 @@ introduceは，あるバッグに強連結な頂点集合を追加したもの�
     \item (introduce) ある頂点$v \in V$があり，$\{v\} \cap X_i = \emptyset$, $X_{i+1} = X_i \cup \{v\}$
 \end{enumerate}
 
-nice DAGパス分解は，各バッグが1つの頂点のintroduceかforgetかに限られるため，動的計画法の設計が容易になる利点がある．またあるDAGパス分解$X$に対し，$X$と同じ幅をもつnice DAG-PDを多項式時間で構築できる．
-
-
-
+nice DAGパス分解は，各バッグが1つの頂点のintroduceかforgetかに限られるため，動的計画法の設計が容易になる利点がある．またあるDAGパス分解$X$に対し，$X$と同じ幅をもつnice DAG-PDを多項式時間で構築できる[20]．
 
 
 
@@ -334,7 +341,7 @@ nice DAGパス分解は，各バッグが1つの頂点のintroduceかforgetか�
     Black Pebbling gameとは，DAG $G = (V, E)$が与えられたときに，以下のルールを満たす戦略$P=(P_1, P_2, \dots, P_t)$ $(P_i \subseteq V)$を構成するゲームである．
 
 
-    DAG $G$は出次数が0の頂点$z$をただ一つもつとする．グラフ小石ゲームの戦略とは，以下の4つのルールを満たすような$V$の部分集合$ P_i (i = 0, 1,   \dots, s)$ の列 $P = (P_0, P_1,   \dots, P_{\tau})$である．
+    DAG $G$は出次数が0の頂点$z$をただ一つもつとする．グラフ小石ゲームの戦略とは，以下の4つのルールを満たすような$V$の部分集合$ P_i\ (i = 0, 1,   \dots, s)$ の列 $P = (P_0, P_1,   \dots, P_{\tau})$である．
 
     \begin{enumerate}
         \item $P_0 = \emptyset, P_{\tau} = \{ z \}$
@@ -360,7 +367,7 @@ pebbleは頂点に小石を置く操作を表し，forgetは頂点から小石�
 
 一般のDAGに対してペブリング数を求める問題はPSPACE完全である[14]．以下ではDAG $G$に対するペブリング数を$Peb(G)$と表現する．グラフ小石ゲームは，Proof of Space [15]とよばれるブロックチェーン技術の中で用いられる．Proof of Spaceは空きディスク容量をいくら保持しているかを証明する手法であり，入力DAGが空きディスク容量に対応する．またペブリング数は同時に使用するメモリの量に対応する．ペブリング数が大きいほど，より多くのメモリやデータを使うため，その証明が難しいことを表す．すなわち証明の安全性が高くなることを表す．
 
-またone-shot Black Pebbling(one-shot BP)とは，Black Pebbling gameに対して以下のルールを追加したものである．
+またone-shot Black Pebbling\ (one-shot BP)とは，Black Pebbling gameに対して以下のルールを追加したものである．
 \begin{itemize}
     \item DAG $G$の任意の頂点はちょうど1度だけ小石が置かれる．
 \end{itemize}
@@ -406,7 +413,7 @@ one-shot BPについても同様にペブリング数を定めることができ
 まずDirected Dominating Setに関する定義と定理を与える．
 
 \begin{definition*}[Directed Dominating Set]
-    有向グラフ$G=(V, E)$に対し，$S \subseteq V$が$G$のDirected Dominating Set(DiDS)であるとは，任意の$v \in V\backslash S$に対し，ある$u \in S$があり，$(u, v) \in E$を満たすことである．minimum DiDS(以下mDiDS)とは，全てのDiDS $S$のうち$|S|$が最小のものである．
+    有向グラフ$G=(V, E)$に対し，$S \subseteq V$が$G$のDirected Dominating Set\ (DiDS)であるとは，任意の$v \in V\backslash S$に対し，ある$u \in S$があり，$(u, v) \in E$を満たすことである．minimum DiDS\ (以下mDiDS)とは，全てのDiDS $S$のうち$|S|$が最小のものである．
 \end{definition*}
 
 DiDS problemとは，$G$のmDiDSのサイズを求める問題である．Ganianら[17]は以下を示した．
@@ -523,7 +530,7 @@ $Compute(P)$
 \subsubsection{定義と補題}
 以下でMax Leaf Outbranching Problemに関する定義と定理を与える．
 
-\begin{definition*}[Max Leaf Outbranching Problem (MaxLOB)]
+\begin{definition*}[Max Leaf Outbranching Problem\ (MaxLOB)]
     有向グラフ $G=(V, E)$, 根$r \in V$が入力されたとき，$G$の有向全域木のうち葉数が最大となる有向全域木$T$の葉数を求める問題である．
 \end{definition*}
 
@@ -608,7 +615,7 @@ $Compute(P)$
         $b \in B_{k+1}$の場合も同様の議論により定義\ref{def_lob}を満たす．ただし$v$は茎であるため$LOB$の値は大きくならないことに注意する．
 
         \item $X_{k+1}$が$v \in V$をforgetする場合 \\
-        葉数がそれぞれ$LOB(k, A_{K+1} \cup \{v\}, B_{k+1}), LOB(k, A_{k+1}, B_{k+1} \cup \{v\})$である有向全域木を$T^A_k, T^B_k$と表す．まず$LOB(k, A_{K+1} \cup \{v\}, B_{k+1}) \geq \\LOB(k, A_{k+1}, B_{k+1} \cup \{v\})$の場合，$v$が葉であるような$T^A_k$が実際に存在することを示す．このとき$LOB(k, A_{K+1} \cup \{v\}, B_{k+1}) \neq -\infty$であるため，$v$をintroduceしたバッグを$X_j$とすると，$i=j$における$LOB$の値も$-\infty$でない．したがって式\ref{intro_lob}の第一式の条件より，$i=j$において$v$が葉であるような有向全域木の存在が保証される．$X_m$ $(j < m < k+1)$において$v$はintroduceもforgetもされないことに注意すると，$T^A_k$は実際に$v$を葉として含むことが示される．次に$LOB(k, A_{K+1} \cup \{v\}, B_{k+1}) < LOB(k, A_{k+1}, B_{k+1} \cup \{v\})$の場合，$v$が茎であるような$T^B_k$が実際に存在することを示す．上記と同様の議論により，$T^B_k$には$v$の先行頂点が必ず存在する．また$T^B_k$において$v$と共通の子をもつ頂点も存在しない．なぜならば，もしそのような頂点$v'$ (ある$w \in V[T^B_k]$があり，$\{(v, w), (v', w)\} \subseteq E[T^B_k]$)が存在したとすると，$T^B_k$において$v$に$w$以外の子が存在するならば，新たに$T^B_k = (V[T^B_k], E[T^B_k] \backslash \{(v, w)\})$とすることで$v$と$v'$が共通の子を持たないようにすることができる．この操作を繰り返すことで$v$と共通の子をもつ頂点が存在しないような有向全域木を構築できる．$T^B_k$において$v$に$w$以外の子が存在しないならば，$E[T^B_k]$から$(v, w)$を除くことで$v$を葉とする有向全域木$T^A_k$が構築できる．このとき明らかに$|Leaf(T^A_k)| = |Leaf(T^B_k)| + 1$であるが，これは$LOB(k, A_{K+1} \cup \{v\}, B_{k+1}) < LOB(k, A_{k+1}, B_{k+1} \cup \{v\})$と矛盾する．したがって$T^B_k$において$v$と共通の子をもつ頂点は存在せず，$v$が実際に茎であるような$T^B_k$が存在することが示される．\\
+        葉数がそれぞれ$LOB(k, A_{K+1} \cup \{v\}, B_{k+1}), LOB(k, A_{k+1}, B_{k+1} \cup \{v\})$である有向全域木を$T^A_k, T^B_k$と表す．まず$LOB(k, A_{K+1} \cup \{v\}, B_{k+1}) \geq \\LOB(k, A_{k+1}, B_{k+1} \cup \{v\})$の場合，$v$が葉であるような$T^A_k$が実際に存在することを示す．このとき$LOB(k, A_{K+1} \cup \{v\}, B_{k+1}) \neq -\infty$であるため，$v$をintroduceしたバッグを$X_j$とすると，$i=j$における$LOB$の値も$-\infty$でない．したがって式\ref{intro_lob}の第一式の条件より，$i=j$において$v$が葉であるような有向全域木の存在が保証される．$X_m$ $(j < m < k+1)$において$v$はintroduceもforgetもされないことに注意すると，$T^A_k$は実際に$v$を葉として含むことが示される．次に$LOB(k, A_{K+1} \cup \{v\}, B_{k+1}) < LOB(k, A_{k+1}, B_{k+1} \cup \{v\})$の場合，$v$が茎であるような$T^B_k$が実際に存在することを示す．上記と同様の議論により，$T^B_k$には$v$の先行頂点が必ず存在する．また$T^B_k$において$v$と共通の子をもつ頂点も存在しない．なぜならば，もしそのような頂点$v'$ (ある$w \in V[T^B_k]$があり，$\{(v, w),\ (v', w)\} \subseteq E[T^B_k]$)が存在したとすると，$T^B_k$において$v$に$w$以外の子が存在するならば，新たに$T^B_k = (V[T^B_k], E[T^B_k] \backslash \{(v, w)\})$とすることで$v$と$v'$が共通の子を持たないようにすることができる．この操作を繰り返すことで$v$と共通の子をもつ頂点が存在しないような有向全域木を構築できる．$T^B_k$において$v$に$w$以外の子が存在しないならば，$E[T^B_k]$から$(v, w)$を除くことで$v$を葉とする有向全域木$T^A_k$が構築できる．このとき明らかに$|Leaf(T^A_k)| = |Leaf(T^B_k)| + 1$であるが，これは$LOB(k, A_{K+1} \cup \{v\}, B_{k+1}) < LOB(k, A_{k+1}, B_{k+1} \cup \{v\})$と矛盾する．したがって$T^B_k$において$v$と共通の子をもつ頂点は存在せず，$v$が実際に茎であるような$T^B_k$が存在することが示される．\\
         ここで$G_{k+1} = G_k$より，$G_{k+1}$の有向全域木の最大葉数は$G_k$のそれと等しい．したがって$v$を葉に含むような$G_k$の有向全域木の最大葉数と，$v$を茎に含むような$G_k$の有向全域木の最大葉数のうち，より大きい方を$G_{k+1}$の有向全域木の最大葉数とすることができる．仮定より，それぞれ$LOB(i, A_{i+1} \cup \{v\}, B_{i+1}), LOB(i, A_{i+1}, B_{i+1} \cup \{v\})$と表すことができるため，$\max \{LOB(i, A_{i+1} \cup \{v\}, B_{i+1}), LOB(i, A_{i+1}, B_{i+1} \cup \{v\})\}$は$G_{k+1}$の有向全域木の最大葉数と等しい．したがって定義\ref{def_lob}が成立．
     \end{itemize}
     以上より，$i = k+1$でも定義\ref{def_lob}が成立．数学的帰納法によりLemma\ref{lob}が証明された．
@@ -649,7 +656,7 @@ $Compute(P)$
 以下でDisjoint Path Problemに関する定義と定理を与える．
 
 \begin{definition*}[Disjoint Path Problem]
-    DAG $G=(V, E)$, $k$個の頂点対$(s_1, t_1), (s_2, t_2), \dots , (s_k, t_k)$が入力されたとき，各$s_i$から$t_i$までの点素なパスの組を$\mathcal{P}=(P_1, P_2, \dots , P_k)$とする．各パス$P_i$の長さを$P_i$の頂点数$|P_i|$としたとき，Disjoint Path Problemはパスの合計長$\sum_{i=1}^k |P_i|$の最小値を求める問題である．
+    DAG $G=(V, E)$, $k$個の頂点対$(s_1, t_1),\ (s_2, t_2), \dots ,\ (s_k, t_k)$が入力されたとき，各$s_i$から$t_i$までの点素なパスの組を$\mathcal{P}=(P_1, P_2, \dots , P_k)$とする．各パス$P_i$の長さを$P_i$の頂点数$|P_i|$としたとき，Disjoint Path Problemはパスの合計長$\sum_{i=1}^k |P_i|$の最小値を求める問題である．
 \end{definition*}
 
 Ganianら[17]は以下を示した．
@@ -746,7 +753,7 @@ $Compute(P)$
     ある$i$ $(i_s \leq i < i_t)$において，$Cal(i, \mathscr{A}_i, B_i)$が定義\ref{def_cal}を満たすと仮定する．以下で$X_{i+1}$が$v \in V$をintroduceするかforgetするかで場合分けを行う．
     \begin{itemize}
         \item $X_{i+1}$が$v \in V$をintroduceする場合 \\
-        まず$v \in A^m_{i+1}$の場合を考える．$A^m_{i+1}$に含まれ，かつ$v$の直前にintroduceされた頂点を$u$とする．DAG-PDのルール2より，$u, v$の間には枝$(u, v)$が存在するか，$(u, v)$は存在せず$u$以外の頂点$u'$ $(u' \in A^m_{i+1})$との間の枝$(u', v)$が存在するか，$A^m_{i+1}$に含まれるどの頂点との間にも枝が存在しないかのいずれかである．枝$(u, v)$が存在する場合，式\ref{cal2}より$Cal(i+1, \mathscr{A}_{i+1}, B_{i+1}) = Cal(i, \mathscr{A}^m_{i+1}, B_{i+1})+1$となる．DAG-PDのルール2より$u$はパスの端点であることに注意すると，仮定より$Cal(i, \mathscr{A}^m_{i+1}, B_{i+1})$は$m$番目のパスが$s_m$から$u$までのパスであるときの全パスの合計長の最小値を表している．したがって$m$番目のパスの端点$u$に$v$を加えることで合計長を1だけ大きくしており，$Cal(i+1, \mathscr{A}_{i+1}, B_{i+1})$は明らかに全パスの合計長の最小値を表す．よって定義\ref{def_cal}を満たす．枝$(u, v)$が存在せず$u$以外の頂点$u'$ $(u' \in A^m_{i+1})$との間の枝$(u', v)$が存在する場合，上記の$t_m$と同様の議論により，ある頂点$v' \in A^m_{i+1}$ $(v' \neq v)$が存在し，$\{v, v'\} \subseteq suc(u') \cap A^m_{i+1}$が成り立つ．したがって式\ref{cal2}の条件より$Cal$の値は$\infty$となる．これは$A^m_{i+1}$において枝分かれ$\{(u', v), (u', v')\}$が存在し，これらを含むようなパスが存在しないことを表す．したがって定義\ref{def_cal}を満たす．$v$と$A^m_{i+1}$に含まれるどの頂点との間にも枝が存在しない場合，式\ref{cal2}の条件より$Cal$の値は$\infty$となる．これは$A^m_{i+1}$に含まれる頂点を使って$s_m$と$v$をつなぐパスを構成することができないことを表す．したがって定義\ref{def_cal}を満たす．\\
+        まず$v \in A^m_{i+1}$の場合を考える．$A^m_{i+1}$に含まれ，かつ$v$の直前にintroduceされた頂点を$u$とする．DAG-PDのルール2より，$u, v$の間には枝$(u, v)$が存在するか，$(u, v)$は存在せず$u$以外の頂点$u'$ $(u' \in A^m_{i+1})$との間の枝$(u', v)$が存在するか，$A^m_{i+1}$に含まれるどの頂点との間にも枝が存在しないかのいずれかである．枝$(u, v)$が存在する場合，式\ref{cal2}より$Cal(i+1, \mathscr{A}_{i+1}, B_{i+1}) = Cal(i, \mathscr{A}^m_{i+1}, B_{i+1})+1$となる．DAG-PDのルール2より$u$はパスの端点であることに注意すると，仮定より$Cal(i, \mathscr{A}^m_{i+1}, B_{i+1})$は$m$番目のパスが$s_m$から$u$までのパスであるときの全パスの合計長の最小値を表している．したがって$m$番目のパスの端点$u$に$v$を加えることで合計長を1だけ大きくしており，$Cal(i+1, \mathscr{A}_{i+1}, B_{i+1})$は明らかに全パスの合計長の最小値を表す．よって定義\ref{def_cal}を満たす．枝$(u, v)$が存在せず$u$以外の頂点$u'$ $(u' \in A^m_{i+1})$との間の枝$(u', v)$が存在する場合，上記の$t_m$と同様の議論により，ある頂点$v' \in A^m_{i+1}$ $(v' \neq v)$が存在し，$\{v, v'\} \subseteq suc(u') \cap A^m_{i+1}$が成り立つ．したがって式\ref{cal2}の条件より$Cal$の値は$\infty$となる．これは$A^m_{i+1}$において枝分かれ$\{(u', v),\ (u', v')\}$が存在し，これらを含むようなパスが存在しないことを表す．したがって定義\ref{def_cal}を満たす．$v$と$A^m_{i+1}$に含まれるどの頂点との間にも枝が存在しない場合，式\ref{cal2}の条件より$Cal$の値は$\infty$となる．これは$A^m_{i+1}$に含まれる頂点を使って$s_m$と$v$をつなぐパスを構成することができないことを表す．したがって定義\ref{def_cal}を満たす．\\
         $v \in B_{i+1}$の場合，$v \notin A^m_{i+1}$より，$P^m_{i+1}$は$s_m$から$u$までのパスであり，仮定よりこのときのパスの合計長の最小値は$Cal(i, \mathscr{A}^m_{i+1}, B_{i+1} \backslash \{v\})$で表される．したがって式\ref{cal2}より$Cal(i+1, \mathscr{A}^m_{i+1}, B_{i+1})$は$v$がどのパスにも含まれないときのパスの合計長の最小値を表すため，定義\ref{def_cal}を満たす．\\
         
         \item $X_{i+1}$が$v \in V$をforgetする場合 \\
@@ -781,7 +788,7 @@ $Compute(P)$
 
 \subsection{有向シュタイナー木問題の$O(2^w(k+w)n + n^2)$時間アルゴリズム}
 
-本節では，頂点数$n$のDAG $G$と幅が$w$である$G$のDAG-PD，頂点集合$R=\{t_1, t_2, \dots, t_k\}$が与えられたとき，$R$を含むような有向シュタイナー木問題(Directed Steiner Tree Problem)を$O(2^w(k+w)n + n^2)$で解くFPTアルゴリズムを示す．
+本節では，頂点数$n$のDAG $G$と幅が$w$である$G$のDAG-PD，頂点集合$R=\{t_1, t_2, \dots, t_k\}$が与えられたとき，$R$を含むような有向シュタイナー木問題\ (Directed Steiner Tree Problem)を$O(2^w(k+w)n + n^2)$で解くFPTアルゴリズムを示す．
 
 \subsubsection{定義と補題}
 以下でDirected Steiner Treeに関する定義と定理を与える．
@@ -977,8 +984,8 @@ Raviらは[19]で以下の補題を示している．
 \begin{subroutine}[$Merge$]
     $G_L$から出て$G_R$に入る枝の端点のうち，$G_L$に含まれる頂点の集合を$V'$とする．$Merge(P_L, P_R)$では，$P_L=(X_1, X_2, \dots , X_{s_l}), P_R=(Y_1, Y_2, \dots , Y_{s_r})$に対し，以下の操作を全ての$v \in V'$に対して行ってできるnice DAG-PD $P'_L, P'_R$を構成する．
     \begin{itemize}
-      \item $v$が$P_L$でforgetされたバッグを$X_i$とし，各$X_j (j=i, i+1, \dots , s_p)$に$v$を追加する．
-      \item $v$を各$Y_k (k=1, 2, \dots , s_r)$に追加する．
+      \item $v$が$P_L$でforgetされたバッグを$X_i$とし，各$X_j\ (j=i, i+1, \dots , s_p)$に$v$を追加する．
+      \item $v$を各$Y_k\ (k=1, 2, \dots , s_r)$に追加する．
     \end{itemize}
     こうしてできた$P'_L=(X'_1, X'_2, \dots , X'_{s_l}), P'_R=(Y'_1, Y'_2, \dots , Y'_{s_r})$に対し，$P=(X'_1, X'_2, \dots , X'_{s_l}, Y'_1, Y'_2, \dots , Y'_{s_r})$を出力する．
 \end{subroutine}．
@@ -1153,7 +1160,7 @@ Kevinら[8]は以下の補題を示している．
 Theorem\ref{approximation3}を示す前に，以下の補題を示す．
 
 \begin{lemma}\label{comp_tree}
-    $T_{h, d}$を高さ$h$の完全有向$d$分木$(h, d > 1)$とする．このとき$pw(T_{h, d}) = h-1$が成り立つ．
+    $T_{h, d}$を高さ$h$の完全有向$d$分木 $(h, d > 1)$とする．このとき$pw(T_{h, d}) = h-1$が成り立つ．
 \end{lemma}
 
 \begin{proof}
@@ -1255,7 +1262,7 @@ Theorem\ref{approximation3}を示す前に，以下の補題を示す．
     \item $v$に置かれたトークン$T$が2つ以上のtokenedな子をもつ． \label{cond2}
 \end{enumerate}
 
-また，このとき$M_{t, d, l}$においてtokenedであるトークンのパス$\lambda \cdot m_1 \cdot m_2 \cdot \dots m_{\lceil \log_d l \rceil +t+1}$が少なくとも1つ存在する．なぜならば，もしそのようなパスが存在しなければ，上記の議論により$H_{k_{r'}, t}$は階層が高々$\lceil \log_d l \rceil +t+1$しかなく，$H_{k_{r'}, t}$のすべての頂点にトークンを置くことができ矛盾するからである．ここで$P = \lambda \cdot m_1 \cdot m_2 \cdot \dots m_{\lceil \log_d l \rceil +t+1}$とすると，各トークン$m_i \in P$ (ただし$\lambda$を$m_0$と表現する)について$m_i$が置かれた頂点$v_i$は上記の条件\ref{cond1}, \ref{cond2}の少なくとも一方を満たす．条件\ref{cond1}を満たすとき，$v_i$は$v_{\lceil \log_d l \rceil +t+1}$にトークン$m_{\lceil \log_d l \rceil +t+1}$が置かれるまでは$A$のDAG-PDにおいてforgetすることはできない．なぜならばDAG-PDのルール2より，条件\ref{cond1}での$w$のintroduceは$v_{\lceil \log_d l \rceil +t+1}$のintroduceの後，すなわちトークン$m_{\lceil \log_d l \rceil +t+1}$の$v_{\lceil \log_d l \rceil +t+1}$への配置後であり，$w$を後続頂点にもつ$v_i$はそれよりも前にforgetできないからである．このとき$u_i=v_i$とする．$m_i$が条件\ref{cond1}を満たさず\ref{cond2}を満たすとき，$m_i$はtokenedな子$m'_{i+1} (\neq m_{i+1})$を少なくとも1つもつ．$m'_{i+1}$が置かれた頂点についても条件\ref{cond1}，\ref{cond2}の少なくとも一方を満たすため，上記の議論を繰り返すことにより，$M_{t, d, l}$のtokenedな葉は条件\ref{cond1}を満たすことに注意すると，$m'_{i+1}$を根とする有向木には条件\ref{cond1}を満たすような頂点が少なくとも1つ存在する．このような頂点を$u_i$とする．上記と同様の理由により，$u_i$は$v_{\lceil \log_d l \rceil +t+1}$に$m_{\lceil \log_d l \rceil +t+1}$が置かれるまでは$A'$のDAG-PDにおいてforgetすることができない．これをすべての$m_i \in P$に対して考えることにより，各頂点$u_0, u_1, \dots, u_{\lceil \log_d l \rceil +t+1}$を得る．このとき$A'$の任意のDAGパス分解$X'$において$v_{\lceil \log_d l \rceil +t+1}$のintroduceを行うバッグを$X_p$とすると，DAGパス分解のルール2に注意して$X'$のバッグ$X_1$から$X_p$までの間では少なくとも各$v_i$ $(0 \leq i \leq \lceil \log_d l \rceil +t+1)$のintroduceが行われており，かつ先程の議論により$X_p$には各$i$に対して$v_i$から$u_i$までのパス上の頂点が少なくとも1つずつ含まれることがいえる．したがって$|X_p| \geq |P| = \lceil \log_d l \rceil +t+2$より，$A'$のパス幅は少なくとも$\lceil \log_d l \rceil +t+1$以上である．ここでトークン列$P$のうち$A$の頂点に置かれたトークンのみを取り出してできるトークン列を$P_A$とする．$|P \backslash P_A| \leq \lceil \log_d l \rceil$より$|P_A| = |P| - |P \backslash P_A| \geq (\lceil \log_d l \rceil +t+2) - \lceil \log_d l \rceil = t+2$に注意すると，上記と同様の議論により$A$のパス幅は$t$より大きいことが示される．
+また，このとき$M_{t, d, l}$においてtokenedであるトークンのパス$\lambda \cdot m_1 \cdot m_2 \cdot \dots m_{\lceil \log_d l \rceil +t+1}$が少なくとも1つ存在する．なぜならば，もしそのようなパスが存在しなければ，上記の議論により$H_{k_{r'}, t}$は階層が高々$\lceil \log_d l \rceil +t+1$しかなく，$H_{k_{r'}, t}$のすべての頂点にトークンを置くことができ矛盾するからである．ここで$P = \lambda \cdot m_1 \cdot m_2 \cdot \dots m_{\lceil \log_d l \rceil +t+1}$とすると，各トークン$m_i \in P$ (ただし$\lambda$を$m_0$と表現する)について$m_i$が置かれた頂点$v_i$は上記の条件\ref{cond1}, \ref{cond2}の少なくとも一方を満たす．条件\ref{cond1}を満たすとき，$v_i$は$v_{\lceil \log_d l \rceil +t+1}$にトークン$m_{\lceil \log_d l \rceil +t+1}$が置かれるまでは$A$のDAG-PDにおいてforgetすることはできない．なぜならばDAG-PDのルール2より，条件\ref{cond1}での$w$のintroduceは$v_{\lceil \log_d l \rceil +t+1}$のintroduceの後，すなわちトークン$m_{\lceil \log_d l \rceil +t+1}$の$v_{\lceil \log_d l \rceil +t+1}$への配置後であり，$w$を後続頂点にもつ$v_i$はそれよりも前にforgetできないからである．このとき$u_i=v_i$とする．$m_i$が条件\ref{cond1}を満たさず\ref{cond2}を満たすとき，$m_i$はtokenedな子$m'_{i+1}\ (\neq m_{i+1})$を少なくとも1つもつ．$m'_{i+1}$が置かれた頂点についても条件\ref{cond1}，\ref{cond2}の少なくとも一方を満たすため，上記の議論を繰り返すことにより，$M_{t, d, l}$のtokenedな葉は条件\ref{cond1}を満たすことに注意すると，$m'_{i+1}$を根とする有向木には条件\ref{cond1}を満たすような頂点が少なくとも1つ存在する．このような頂点を$u_i$とする．上記と同様の理由により，$u_i$は$v_{\lceil \log_d l \rceil +t+1}$に$m_{\lceil \log_d l \rceil +t+1}$が置かれるまでは$A'$のDAG-PDにおいてforgetすることができない．これをすべての$m_i \in P$に対して考えることにより，各頂点$u_0, u_1, \dots, u_{\lceil \log_d l \rceil +t+1}$を得る．このとき$A'$の任意のDAGパス分解$X'$において$v_{\lceil \log_d l \rceil +t+1}$のintroduceを行うバッグを$X_p$とすると，DAGパス分解のルール2に注意して$X'$のバッグ$X_1$から$X_p$までの間では少なくとも各$v_i$ $(0 \leq i \leq \lceil \log_d l \rceil +t+1)$のintroduceが行われており，かつ先程の議論により$X_p$には各$i$に対して$v_i$から$u_i$までのパス上の頂点が少なくとも1つずつ含まれることがいえる．したがって$|X_p| \geq |P| = \lceil \log_d l \rceil +t+2$より，$A'$のパス幅は少なくとも$\lceil \log_d l \rceil +t+1$以上である．ここでトークン列$P$のうち$A$の頂点に置かれたトークンのみを取り出してできるトークン列を$P_A$とする．$|P \backslash P_A| \leq \lceil \log_d l \rceil$より$|P_A| = |P| - |P \backslash P_A| \geq (\lceil \log_d l \rceil +t+2) - \lceil \log_d l \rceil = t+2$に注意すると，上記と同様の議論により$A$のパス幅は$t$より大きいことが示される．
 \end{proof}
 
 
@@ -1296,7 +1303,7 @@ Theorem\ref{approximation3}を示す前に，以下の補題を示す．
 本節では，DAG-PDをさらに一般化した概念であるDAG Tree Decomposition(DAG-TD)を導入する．
 
 \begin{definition*}
- 有向グラフ$G=(V, E)$のDAG Tree Decomposition(DAG-TD)とは，有向木$T$と，$T$の各ノード$t$について$\beta(t) \subseteq V$であるような$\beta$とのペア$(T, \beta)$である．$(T, \beta)$は以下の3つを満たす．
+ 有向グラフ$G=(V, E)$のDAG Tree Decomposition (DAG-TD)とは，有向木$T$と，$T$の各ノード$t$について$\beta(t) \subseteq V$であるような$\beta$とのペア$(T, \beta)$である．$(T, \beta)$は以下の3つを満たす．
  
 \begin{enumerate}
     \item $\sum_{t\in T} \beta(t) = V$ 
@@ -1373,7 +1380,7 @@ nice DAG-TDの例をFigure\ref{fig:7}で示す．あるDAG-TDが与えられた�
             \item ある$i \in T$と，その子$j \in T$について，$\beta(j) \subseteq \beta(i)$かつ$|\beta(i)| - |\beta(j)| \geq 2$ならば，$i$と$j$の間に$i''$ $(\beta(i'') = \beta(i) \backslash \{v\}, v \in \beta(i) \backslash \beta(j))$を加え，$(i, i'', j)$の順につなぐ．
             \item ある$i \in T$と，その子$j \in T$について，$\beta(i) \subseteq \beta(j)$かつ$\beta(j) \backslash \beta(i)$が強連結成分でないとき，$i$と$j$の間に$i'''$ $(\beta(i''') = \beta(j) \backslash A$，$A$は$\beta(j) \backslash \beta(i)$の強連結成分)を加え，$(i, i''', j)$の順につなぐ．
             \item ある$i$が$k$ $(k \geq 3)$個以上の子を持つとき，$i$の直後に，高さが$\lfloor \log_{2} k \rfloor$の完全二分有向木$T'$ $(^{\forall}t' \in T'$について$\beta(t') = \beta(i))$を追加し，$T'$の各葉に対して2つずつ$i$の子を接続し，枝の向きは葉から子への向きとする．ただし，$\lfloor x \rfloor$は$x$を超えない最大の整数値とする．
-            \item ある$i$が2つの子$j, k$を持つとき，$i$と$j$，$i$と$k$の間にそれぞれ$j', k'$ $(\beta(j') = \beta(k') = \beta(i))$を追加し，それぞれ$(i, j', j), (i, k', k)$の順につなぐ．
+            \item ある$i$が2つの子$j, k$を持つとき，$i$と$j$，$i$と$k$の間にそれぞれ$j', k'$ $(\beta(j') = \beta(k') = \beta(i))$を追加し，それぞれ$(i, j', j),\ (i, k', k)$の順につなぐ．
         \end{enumerate}
     \end{enumerate}
 
@@ -1412,8 +1419,8 @@ Theorem\ref{NP困難}を証明するために，まず以下のLemmaを示す．
     \begin{itemize}
         \item $V = \{v_i | i = 1, 2, \dots, n\}$としたとき，$V' = \{v_i, v'_{i} | i = 1, 2, \dots, n\} \cup \{s\}$とする．
         \item $(v_i, v_j)$ $(v_i, v_u \in V', 1 \leq i < j \leq n)$の全ての組合せに対し，$(v_i, v_j) \in E'$とする．
-        \item 各$i$ $(i = 1, 2, \dots, n)$に対し，$(v_i, v'_i), (v'_i, s) \in E'$とする．
-        \item $v_p, v_q \in V$ について$(v_p, v_q) \in E$であるならば，$(v_p, v'_q), (v_q, v'_p), (v'_p, v'_q) \in E'$とする．
+        \item 各$i$ $(i = 1, 2, \dots, n)$に対し，$(v_i, v'_i),\ (v'_i, s) \in E'$とする．
+        \item $v_p, v_q \in V$ について$(v_p, v_q) \in E$であるならば，$(v_p, v'_q),\ (v_q, v'_p),\ (v'_p, v'_q) \in E'$とする．
     \end{itemize}
     
     以上の操作によってできる有向グラフを$G'$とする．$G'$の構成例をFigure★★\ref{fig:4}に示す．$G'$は$G$のサイズの多項式時間で構成できる．また$G'$の頂点集合$A, B$を，$A = \{v_i | i =1, 2, \dots, n\}, B = \{v'_i | i =1, 2, \dots, n\}$と定める．このとき$V' = A \cup B \cup \{s\}$とできる．
@@ -1430,7 +1437,7 @@ Theorem\ref{NP困難}を証明するために，まず以下のLemmaを示す．
     \begin{figure}[t]
         \centering
         \includegraphics[width=10.0cm]{pic5.jpg}
-        \caption{Figure★★\ref{fig:4}の$G, G'$に対するDAG-PD $(P, \beta), (P', \gamma)$ (それぞれ上，下)の構成例．$G$の頂点数を$n$とすると，$(P, \beta)$のwidthが$pw(G)$のとき，$(P', \gamma)$のwidthは$pw(G) + n$となる．}
+        \caption{Figure★★\ref{fig:4}の$G, G'$に対するDAG-PD $(P, \beta),\ (P', \gamma)$ (それぞれ上，下)の構成例．$G$の頂点数を$n$とすると，$(P, \beta)$のwidthが$pw(G)$のとき，$(P', \gamma)$のwidthは$pw(G) + n$となる．}
         \label{fig:5}
     \end{figure}
     
@@ -1449,7 +1456,7 @@ Theorem\ref{NP困難}を証明するために，まず以下のLemmaを示す．
         \item $\gamma(p_{r+1}) = B \cup \{s\}$
     \end{itemize}
 
-    以上の操作によってできる$(P', \gamma)$ $(P' = p_1, p_2, \dots, p_{r+1})$が，$G'$のDAG-PDになっていることを示す．Figure★★\ref{fig:4}の$G, G'$に対するDAG-PD $(P, \beta), (P', \gamma)$の構成例をFigure★★\ref{fig:5}で示す．$\gamma$の構成法に注意すると，$\gamma(p_1)$は$A$の頂点をすべて含む．また$\gamma(p_{r+1})$は$B \cup \{s\}$を含む．よって$\sum_{m=1}^{r+1} \gamma(p_m) = V'$が成り立つため，$(P', \gamma)$はDAG-PDのルール1を満たす．また$\gamma$の構成法に注意すると，任意の$v \in V'$に対して，$v$を含む全てのバッグが$(p_1, P_2, \dots, p_r)$上で非連結になることはなく，また$\gamma(p_r)$は$B$の頂点をすべて含み，$s$は$\gamma(p_{r+1})$にのみ含まれるため，任意の$v \in V'$に対して，$v$を含む全てのバッグが$(p_1, P_2, \dots, p_r+1)$上で非連結になることはない．よって$(P', \gamma)$はDAG-PDのルール3を満たす．さらに，$(P', \gamma)$が$G'$の全ての枝に対してDAG-PDのルール2を満たすことを示す．$G'$上の各枝$e \in E'$を次の5つに場合分けして考える．なお，$v, v'$はそれぞれ$A, B$に含まれることに注意する．
+    以上の操作によってできる$(P', \gamma)$ $(P' = p_1, p_2, \dots, p_{r+1})$が，$G'$のDAG-PDになっていることを示す．Figure★★\ref{fig:4}の$G, G'$に対するDAG-PD $(P, \beta),\ (P', \gamma)$の構成例をFigure★★\ref{fig:5}で示す．$\gamma$の構成法に注意すると，$\gamma(p_1)$は$A$の頂点をすべて含む．また$\gamma(p_{r+1})$は$B \cup \{s\}$を含む．よって$\sum_{m=1}^{r+1} \gamma(p_m) = V'$が成り立つため，$(P', \gamma)$はDAG-PDのルール1を満たす．また$\gamma$の構成法に注意すると，任意の$v \in V'$に対して，$v$を含む全てのバッグが$(p_1, P_2, \dots, p_r)$上で非連結になることはなく，また$\gamma(p_r)$は$B$の頂点をすべて含み，$s$は$\gamma(p_{r+1})$にのみ含まれるため，任意の$v \in V'$に対して，$v$を含む全てのバッグが$(p_1, P_2, \dots, p_r+1)$上で非連結になることはない．よって$(P', \gamma)$はDAG-PDのルール3を満たす．さらに，$(P', \gamma)$が$G'$の全ての枝に対してDAG-PDのルール2を満たすことを示す．$G'$上の各枝$e \in E'$を次の5つに場合分けして考える．なお，$v, v'$はそれぞれ$A, B$に含まれることに注意する．
 
     \begin{itemize}
         \item $e = (v_i, v_j)$ $(1 \leq i < j \leq n)$の場合：
@@ -1509,11 +1516,11 @@ Theorem\ref{NP困難}を証明するために，まず以下のLemmaを示す．
 
 
 \subsection{co-DAG Tree Decomposition}
-DAG-TD $T$をFPTアルゴリズムに利用する場合，$T$の葉から動的計画法を開始するとFPTを構築しやすい．本節では，よりFPTアルゴリズムの構築に適したDAG-TDであるco-DAG Tree Decomposition(co-DAG-TD)を定義する．
+DAG-TD $T$をFPTアルゴリズムに利用する場合，$T$の葉から動的計画法を開始するとFPTを構築しやすい．本節では，よりFPTアルゴリズムの構築に適したDAG-TDであるco-DAG Tree Decompositionを定義する．
 
 
 \begin{definition*}
- 有向グラフ$G=(V, E)$のco-DAG Tree Decomposition(co-DAG-TD)とは，反有向木$T$と，$T$の各ノード$t$について$\beta(t) \subseteq V$であるような$\beta$とのペア$(T, \beta)$である．$(T, \beta)$は以下の3つを満たす．なお，$T$の根の数を$n_l$とする．
+ 有向グラフ$G=(V, E)$のco-DAG Tree Decomposition (co-DAG-TD)とは，反有向木$T$と，$T$の各ノード$t$について$\beta(t) \subseteq V$であるような$\beta$とのペア$(T, \beta)$である．$(T, \beta)$は以下の3つを満たす．なお，$T$の根の数を$n_l$とする．
  
 \begin{enumerate}
     \item $\sum_{t\in T} \beta(t) = V$ 
@@ -1539,7 +1546,7 @@ DAG-TD $T$をFPTアルゴリズムに利用する場合，$T$の葉から動的�
 以下でco-DAG-treewidthを定義する．
 
 \begin{definition*}[co-DAG-treewidth]
-    あるco-DAG-TD $(T, \beta)$のwidthを$\max_{t \in T}|\beta(t)|$と定義する．このとき，有向グラフ$G$のco-DAG-treewidth(co-DAG-treewidth)とは，$G$に対する全てのco-DAG-TDのうち，widthが最小であるco-DAG-TDのwidthである．
+    あるco-DAG-TD $(T, \beta)$のwidthを$\max_{t \in T}|\beta(t)|$と定義する．このとき，有向グラフ$G$のco-DAG-treewidth (co-DAG-treewidth)とは，$G$に対する全てのco-DAG-TDのうち，widthが最小であるco-DAG-TDのwidthである．
 \end{definition*}
 
 以降では，$G$のco-DAG-treewidthを$rtw(G)$と表す．
@@ -1547,10 +1554,10 @@ DAG-TD $T$をFPTアルゴリズムに利用する場合，$T$の葉から動的�
 
 \subsection{nice co-DAG-TD}
 
-本節では，nice DAG-TDと同様にnice co-DAG-TD(nice co-DAG-TD)を説明する．
+本節では，nice DAG-TDと同様にnice co-DAG-TD (nice co-DAG-TD)を説明する．
 
 \begin{definition*}
- $G=(V, E)$を有向グラフとし，$(T, \beta)$を$G$のco-DAG-TDとする．$(T, \beta)$が以下の２つを満たすとき，$(T, \beta)$は$G$のnice co-DAG-TD(nice co-DAG-TD)であるという．
+ $G=(V, E)$を有向グラフとし，$(T, \beta)$を$G$のco-DAG-TDとする．$(T, \beta)$が以下の２つを満たすとき，$(T, \beta)$は$G$のnice co-DAG-TD (nice co-DAG-TD)であるという．
  
 \begin{enumerate}
     \item $r_m$ $(m = 1, 2, \dots, n_r)$を$T$の各葉としたとき，全ての$m$に対して$\beta(r_m) = \varnothing$ 
@@ -1591,7 +1598,7 @@ DAG-TD $T$をFPTアルゴリズムに利用する場合，$T$の葉から動的�
             \item ある$i \in T$と，その親$j \in T$について，$\beta(j) \subseteq \beta(i)$かつ$|\beta(i)| - |\beta(j)| \geq 2$ならば，$i$と$j$の間に$i''$ $(\beta(i'') = \beta(i) \backslash \{v\}, v \in \beta(i) \backslash \beta(j))$を加え，$(j, i'', i)$の順につなぐ．
             \item ある$i \in T$と，その親$j \in T$について，$\beta(i) \subseteq \beta(j)$かつ$\beta(j) \backslash \beta(i)$が強連結成分でないとき，$i$と$j$の間に$i'''$ $(\beta(i''') = \beta(j) \backslash A, A$は$\beta(j) \backslash \beta(i)$の強連結成分)を加え，$(j, i''', i)$の順につなぐ．
             \item ある$i$が$k$ $(k \geq 3)$個以上の親を持つとき，$i$の直前に，高さが$\lfloor \log_{2} k \rfloor$の完全二分反有向木$T'$ $(^{\forall}t' \in T'$について$\beta(t') = \beta(i))$を追加し，$T'$の各葉に対して2つずつ$i$の親を接続し，枝の向きは親から根への向きとする．ただし，$\lfloor x \rfloor$は$x$を超えない最大の整数値とする．
-            \item ある$i$が2つの親$j, k$を持つとき，$i$と$j$，$i$と$k$の間にそれぞれ$j', k'$ $(\beta(j') = \beta(k') = \beta(i))$を追加し，それぞれ$(j, j', i), (k, k', i)$の順につなぐ．
+            \item ある$i$が2つの親$j, k$を持つとき，$i$と$j$，$i$と$k$の間にそれぞれ$j', k'$ $(\beta(j') = \beta(k') = \beta(i))$を追加し，それぞれ$(j, j', i),\ (k, k', i)$の順につなぐ．
         \end{enumerate}
     \end{enumerate}
 
@@ -1623,7 +1630,7 @@ Theorem\ref{r-NP困難}を証明するため，次で定義されるco-DAG-pathw
             \item $u, v \in X_1$
         \item ある $i$ $(i \geq 2)$ があり，$u, v \in X_i$, $u \notin X_{i-1}$が成り立つ．
         \end{itemize}
-        \item 任意の$ i, j, k (1 \leq i \leq j \leq k \leq s)$ について， $X_i \cap X_k \subseteq X_j$ が成り立つ．すなわち，各頂点$v$について，$v$は$X$上で非空な部分道を誘導する．
+        \item 任意の$ i, j, k\ (1 \leq i \leq j \leq k \leq s)$ について， $X_i \cap X_k \subseteq X_j$ が成り立つ．すなわち，各頂点$v$について，$v$は$X$上で非空な部分道を誘導する．
     \end{enumerate}
     あるco-DAG-PD $P = (X_1, X_2,   \ldots, X_s)$のwidthを$\max_{1 \leq i \leq s} {X_i}$と定義する．このとき，有向グラフ$G$のco-DAG-pathwidthとは，$G$に対する全てのco-DAG-PDのうち，widthが最小であるco-DAG-PDのwidthである．
     
@@ -1676,7 +1683,7 @@ Theorem\ref{r-NP困難}を証明するため，次で定義されるco-DAG-pathw
 
     さらに$\gamma(p_0) = \gamma(p_1) \cup \{s\}$ $((p_0, p_1) \in E[T])$と定める．
 
-    以上の操作によってできる$(P', \gamma)$ $(P' = (p_0, p_1, p_2, \dots, p_r))$が$G'$のco-DAG-PDになっていることを示す．Figure★★\ref{fig:4}の$G, G'$に対するco-DAG-PD $(P, \beta), (P', \gamma)$の構成例をFigure★★\ref{fig:5}で示す．$\gamma$の構成法に注意すると，$A \subseteq \gamma(p_r), B \subseteq \gamma(p_1)$がいえ，さらに$r \in \gamma(p_0)$であることから，$\sum_{m=0}^{r} \gamma(p_m) = V'$が成り立つ．よって$(P', \gamma)$はco-DAG-PDのルール1を満たす．また$\gamma$の構成法に注意すると，任意の$v \in V' \backslash \{r\}$に対して，$v$を含む全てのバッグが$(p_1, p_2, \dots, p_r)$上で非連結になることはなく，また$B \cup \{r\} \subseteq \gamma(p_0)$より，任意の$v \in V'$に対して，$v$を含む全てのバッグが$(p_0, p_1, p_2, \dots, p_r)$上で非連結になることはない．よって$(P', \gamma)$はco-DAG-PDのルール3を満たす．さらに定義\ref{NP困難}の証明と同様の議論により，$(P', \gamma)$がco-DAG-PDのルール2を満たすことがいえる．以上より$(P', \gamma)$は$G'$のco-DAG-PDである．このとき$(P', \gamma)$の幅は$rpw(G)+n$である．
+    以上の操作によってできる$(P', \gamma)$ $(P' = (p_0, p_1, p_2, \dots, p_r))$が$G'$のco-DAG-PDになっていることを示す．Figure★★\ref{fig:4}の$G, G'$に対するco-DAG-PD $(P, \beta),\ (P', \gamma)$の構成例をFigure★★\ref{fig:5}で示す．$\gamma$の構成法に注意すると，$A \subseteq \gamma(p_r), B \subseteq \gamma(p_1)$がいえ，さらに$r \in \gamma(p_0)$であることから，$\sum_{m=0}^{r} \gamma(p_m) = V'$が成り立つ．よって$(P', \gamma)$はco-DAG-PDのルール1を満たす．また$\gamma$の構成法に注意すると，任意の$v \in V' \backslash \{r\}$に対して，$v$を含む全てのバッグが$(p_1, p_2, \dots, p_r)$上で非連結になることはなく，また$B \cup \{r\} \subseteq \gamma(p_0)$より，任意の$v \in V'$に対して，$v$を含む全てのバッグが$(p_0, p_1, p_2, \dots, p_r)$上で非連結になることはない．よって$(P', \gamma)$はco-DAG-PDのルール3を満たす．さらに定義\ref{NP困難}の証明と同様の議論により，$(P', \gamma)$がco-DAG-PDのルール2を満たすことがいえる．以上より$(P', \gamma)$は$G'$のco-DAG-PDである．このとき$(P', \gamma)$の幅は$rpw(G)+n$である．
 
     さらに\ref{NP困難}の証明と全く同様の議論により，$(P', \gamma)$が$G'$に対してwidthが最小のco-DAG-PDであることがいえる．ここで$G'$はsinkを一つしか持たないことに注意すると，Lemma\ref{r-sink}より$rtw(G') = rpw(G')$がいえ，$rtw(G) = rpw(G) + n$が成り立つ．以上より定義\ref{r-NP困難}が示される．
 \end{proof}
@@ -1896,7 +1903,7 @@ $Compute(T, \beta)$
         $b \in B_{k+1}$の場合も同様の議論により定義\ref{def_lob}を満たす．ただし$v$は茎であるため$LOB$の値は大きくならないことに注意する．
 
         \item $X_{k+1}$が$v \in V$をforgetする場合 \\
-        葉数がそれぞれ$LOB(k, A_{K+1} \cup \{v\}, B_{k+1}), LOB(k, A_{k+1}, B_{k+1} \cup \{v\})$である有向全域木を$T^A_k, T^B_k$と表す．まず$LOB(k, A_{K+1} \cup \{v\}, B_{k+1}) \geq \\LOB(k, A_{k+1}, B_{k+1} \cup \{v\})$の場合，$v$が葉であるような$T^A_k$が実際に存在することを示す．このとき$LOB(k, A_{K+1} \cup \{v\}, B_{k+1}) \neq -\infty$であるため，$v$をintroduceしたバッグを$X_j$とすると，$i=j$における$LOB$の値も$-\infty$でない．したがって式\ref{intro_lob}の第一式の条件より，$i=j$において$v$が葉であるような有向全域木の存在が保証される．$X_m$ $(j < m < k+1)$において$v$はintroduceもforgetもされないことに注意すると，$T^A_k$は実際に$v$を葉として含むことが示される．次に$LOB(k, A_{K+1} \cup \{v\}, B_{k+1}) < LOB(k, A_{k+1}, B_{k+1} \cup \{v\})$の場合，$v$が茎であるような$T^B_k$が実際に存在することを示す．上記と同様の議論により，$T^B_k$には$v$の先行頂点が必ず存在する．また$T^B_k$において$v$と共通の子をもつ頂点も存在しない．なぜならば，もしそのような頂点$v'$ (ある$w \in V[T^B_k]$があり，$\{(v, w), (v', w)\} \subseteq E[T^B_k]$)が存在したとすると，$T^B_k$において$v$に$w$以外の子が存在するならば，新たに$T^B_k = (V[T^B_k], E[T^B_k] \backslash \{(v, w)\})$とすることで$v$と$v'$が共通の子を持たないようにすることができる．この操作を繰り返すことで$v$と共通の子をもつ頂点が存在しないような有向全域木を構築できる．$T^B_k$において$v$に$w$以外の子が存在しないならば，$E[T^B_k]$から$(v, w)$を除くことで$v$を葉とする有向全域木$T^A_k$が構築できる．このとき明らかに$|Leaf(T^A_k)| = |Leaf(T^B_k)| + 1$であるが，これは$LOB(k, A_{K+1} \cup \{v\}, B_{k+1}) < LOB(k, A_{k+1}, B_{k+1} \cup \{v\})$と矛盾する．したがって$T^B_k$において$v$と共通の子をもつ頂点は存在せず，$v$が実際に茎であるような$T^B_k$が存在することが示される．\\
+        葉数がそれぞれ$LOB(k, A_{K+1} \cup \{v\}, B_{k+1}), LOB(k, A_{k+1}, B_{k+1} \cup \{v\})$である有向全域木を$T^A_k, T^B_k$と表す．まず$LOB(k, A_{K+1} \cup \{v\}, B_{k+1}) \geq \\LOB(k, A_{k+1}, B_{k+1} \cup \{v\})$の場合，$v$が葉であるような$T^A_k$が実際に存在することを示す．このとき$LOB(k, A_{K+1} \cup \{v\}, B_{k+1}) \neq -\infty$であるため，$v$をintroduceしたバッグを$X_j$とすると，$i=j$における$LOB$の値も$-\infty$でない．したがって式\ref{intro_lob}の第一式の条件より，$i=j$において$v$が葉であるような有向全域木の存在が保証される．$X_m$ $(j < m < k+1)$において$v$はintroduceもforgetもされないことに注意すると，$T^A_k$は実際に$v$を葉として含むことが示される．次に$LOB(k, A_{K+1} \cup \{v\}, B_{k+1}) < LOB(k, A_{k+1}, B_{k+1} \cup \{v\})$の場合，$v$が茎であるような$T^B_k$が実際に存在することを示す．上記と同様の議論により，$T^B_k$には$v$の先行頂点が必ず存在する．また$T^B_k$において$v$と共通の子をもつ頂点も存在しない．なぜならば，もしそのような頂点$v'$ (ある$w \in V[T^B_k]$があり，$\{(v, w),\ (v', w)\} \subseteq E[T^B_k]$)が存在したとすると，$T^B_k$において$v$に$w$以外の子が存在するならば，新たに$T^B_k = (V[T^B_k], E[T^B_k] \backslash \{(v, w)\})$とすることで$v$と$v'$が共通の子を持たないようにすることができる．この操作を繰り返すことで$v$と共通の子をもつ頂点が存在しないような有向全域木を構築できる．$T^B_k$において$v$に$w$以外の子が存在しないならば，$E[T^B_k]$から$(v, w)$を除くことで$v$を葉とする有向全域木$T^A_k$が構築できる．このとき明らかに$|Leaf(T^A_k)| = |Leaf(T^B_k)| + 1$であるが，これは$LOB(k, A_{K+1} \cup \{v\}, B_{k+1}) < LOB(k, A_{k+1}, B_{k+1} \cup \{v\})$と矛盾する．したがって$T^B_k$において$v$と共通の子をもつ頂点は存在せず，$v$が実際に茎であるような$T^B_k$が存在することが示される．\\
         ここで$G_{k+1} = G_k$より，$G_{k+1}$の有向全域木の最大葉数は$G_k$のそれと等しい．したがって$v$を葉に含むような$G_k$の有向全域木の最大葉数と，$v$を茎に含むような$G_k$の有向全域木の最大葉数のうち，より大きい方を$G_{k+1}$の有向全域木の最大葉数とすることができる．仮定より，それぞれ$LOB(i, A_{i+1} \cup \{v\}, B_{i+1}), LOB(i, A_{i+1}, B_{i+1} \cup \{v\})$と表すことができるため，$\max \{LOB(i, A_{i+1} \cup \{v\}, B_{i+1}), LOB(i, A_{i+1}, B_{i+1} \cup \{v\})\}$は$G_{k+1}$の有向全域木の最大葉数と等しい．したがって定義\ref{def_lob}が成立．
     \end{itemize}
     以上より，$i = k+1$でも定義\ref{def_lob}が成立．数学的帰納法によりLemma\ref{lob}が証明された．
@@ -1942,8 +1949,8 @@ Theorem\ref{NP困難}を証明するため以下のLemmaを示す．
     \begin{itemize}
         \item $V = \{v_i | i = 1, 2, \dots, n\}$としたとき，$V' = \{v_i, v'_{i} | i = 1, 2, \dots, n\} \cup \{s\}$とする．
         \item $(v_i, v_j)$ $(v_i, v_u \in V', 1 \leq i < j \leq n)$の全ての組合せに対し，$(v_i, v_j) \in E'$とする．
-        \item 各$i$ $(i = 1, 2, \dots, n)$に対し，$(v_i, v'_i), (v'_i, s) \in E'$とする．
-        \item $v_p, v_q \in V$ について$(v_p, v_q) \in E$であるならば，$(v_p, v'_q), (v_q, v'_p), (v'_p, v'_q) \in E'$とする．
+        \item 各$i$ $(i = 1, 2, \dots, n)$に対し，$(v_i, v'_i),\ (v'_i, s) \in E'$とする．
+        \item $v_p, v_q \in V$ について$(v_p, v_q) \in E$であるならば，$(v_p, v'_q),\ (v_q, v'_p),\ (v'_p, v'_q) \in E'$とする．
     \end{itemize}
     
     以上の操作によってできる有向グラフを$G'$とする．$G'$の構成例をFigure\ref{fig:4}に示す．$G'$は$G$のサイズの多項式時間で構成できる．また$G'$の頂点集合$A, B$を，$A = \{v_i | i =1, 2, \dots, n\}, B = \{v'_i | i =1, 2, \dots, n\}$と定める．このとき$V' = A \cup B \cup \{s\}$とできる．
@@ -1961,7 +1968,7 @@ Theorem\ref{NP困難}を証明するため以下のLemmaを示す．
     \begin{figure}[t]
         \centering
         \includegraphics[width=10.0cm]{pic5.jpg}
-        \caption{Figure\ref{fig:4}の$G, G'$に対するDAG-PD $(P, \beta), (P', \gamma)$ (それぞれ上，下)の構成例．$G$の頂点数を$n$とすると，$(P, \beta)$のwidthが$pw(G)$のとき，$(P', \gamma)$のwidthは$pw(G) + n$となる．}
+        \caption{Figure\ref{fig:4}の$G, G'$に対するDAG-PD $(P, \beta),\ (P', \gamma)$ (それぞれ上，下)の構成例．$G$の頂点数を$n$とすると，$(P, \beta)$のwidthが$pw(G)$のとき，$(P', \gamma)$のwidthは$pw(G) + n$となる．}
         \label{fig:5}
     \end{figure}
 }
@@ -1981,7 +1988,7 @@ Theorem\ref{NP困難}を証明するため以下のLemmaを示す．
         \item $\gamma(p_{r+1}) = B \cup \{s\}$
     \end{itemize}
 
-    以上の操作によってできる$(P', \gamma)$ $(P' = p_1, p_2, \dots, p_{r+1})$が，$G'$のDAG-PDになっていることを示す．Figure\ref{fig:4}の$G, G'$に対するDAG-PD $(P, \beta), (P', \gamma)$の構成例をFigure\ref{fig:5}で示す．$\gamma$の構成法に注意すると，$\gamma(p_1)$は$A$の頂点をすべて含む．また$\gamma(p_{r+1})$は$B \cup \{s\}$を含む．よって$\sum_{m=1}^{r+1} \gamma(p_m) = V'$が成り立つため，$(P', \gamma)$はDAG-PDのルール1を満たす．また$\gamma$の構成法に注意すると，任意の$v \in V'$に対して，$v$を含む全てのバッグが$(p_1, P_2, \dots, p_r)$上で非連結になることはなく，また$\gamma(p_r)$は$B$の頂点をすべて含み，$s$は$\gamma(p_{r+1})$にのみ含まれるため，任意の$v \in V'$に対して，$v$を含む全てのバッグが$(p_1, P_2, \dots, p_r+1)$上で非連結になることはない．よって$(P', \gamma)$はDAG-PDのルール3を満たす．さらに，$(P', \gamma)$が$G'$の全ての枝に対してDAG-PDのルール2を満たすことを示す．$G'$上の各枝$e \in E'$を次の5つに場合分けして考える．なお，$v, v'$はそれぞれ$A, B$に含まれることに注意する．
+    以上の操作によってできる$(P', \gamma)$ $(P' = p_1, p_2, \dots, p_{r+1})$が，$G'$のDAG-PDになっていることを示す．Figure\ref{fig:4}の$G, G'$に対するDAG-PD $(P, \beta),\ (P', \gamma)$の構成例をFigure\ref{fig:5}で示す．$\gamma$の構成法に注意すると，$\gamma(p_1)$は$A$の頂点をすべて含む．また$\gamma(p_{r+1})$は$B \cup \{s\}$を含む．よって$\sum_{m=1}^{r+1} \gamma(p_m) = V'$が成り立つため，$(P', \gamma)$はDAG-PDのルール1を満たす．また$\gamma$の構成法に注意すると，任意の$v \in V'$に対して，$v$を含む全てのバッグが$(p_1, P_2, \dots, p_r)$上で非連結になることはなく，また$\gamma(p_r)$は$B$の頂点をすべて含み，$s$は$\gamma(p_{r+1})$にのみ含まれるため，任意の$v \in V'$に対して，$v$を含む全てのバッグが$(p_1, P_2, \dots, p_r+1)$上で非連結になることはない．よって$(P', \gamma)$はDAG-PDのルール3を満たす．さらに，$(P', \gamma)$が$G'$の全ての枝に対してDAG-PDのルール2を満たすことを示す．$G'$上の各枝$e \in E'$を次の5つに場合分けして考える．なお，$v, v'$はそれぞれ$A, B$に含まれることに注意する．
 
     \begin{itemize}
         \item $e = (v_i, v_j)$ $(1 \leq i < j \leq n)$の場合：
@@ -1993,10 +2000,10 @@ Theorem\ref{NP困難}を証明するため以下のLemmaを示す．
         \item $e = (v_i, v'_i)$ $(1 \leq i \leq n)$の場合：
         
         $\gamma$の構成より，$v_i \in \beta(p_1)$ならば$v_i, v'_i \in \gamma(p_1)$．$v_i \notin \beta(p_1)$ならば，$(P, \beta)$で$v$が初めて現れたバッグを$\beta(p_m)$とすると，$v_i, v'_i \in \gamma(p_m)$であり，$v'_i$は$\gamma(p_1)$で初めて現れている．よって$v_i, v'_i \in \gamma(p_m), v'_i \notin \gamma(p_{m-1})$
-        \item $e = (v_i, v'_j)$ $((v_i, v_j) \in E in G)$の場合：
+        \item $e = (v_i, v'_j)$ $((v_i, v_j) \in E \in G)$の場合：
         
         $\gamma$の構成より，$v_i, v_j \in \beta(p_1)$ならば$v_i, v'_j \in \gamma(p_1)$．$v_i, v_j \notin \beta(p_1)$ならば，$(P, \beta)$において，ある$m$があり，$v_i, v_j \in \beta(p_m), v_j \neq \beta(p_{m-1})$とできる．このとき，$\gamma$の構成より$v_i, v'_j \in \gamma(p_m), v'_j \notin \gamma(p_{m-1})$
-        \item $e = (v_j, v'_i)$ $((v_i, v_j) \in E in G)$の場合：
+        \item $e = (v_j, v'_i)$ $((v_i, v_j) \in E \in G)$の場合：
         
         $(P, \beta)$において，$v_i$が初めて現れたバッグを$\beta(p_m)$とする．このとき$\gamma$の構成より，$v'_i$は$\gamma(p_m)$で初めて現れている．また$(P, \beta)$は$G$のDAG-PDであるから，ある$m'$があり，$v_i, v_j \in \beta(p_m'), v_j \neq \beta(p_{m'-1})$とできる．$\gamma$の構成より，$v_j \in \gamma(p_l)$ $(p_l = 1, 2, \dots, m')$がいえ，さらに$m \leq m'$に注意すると$v_j \in \gamma(p_m)$がいえる．したがって$v_j, v'_i \in \gamma(p_m), v_j \notin \gamma(p_{m-1})$
     \end{itemize}
@@ -2046,7 +2053,7 @@ Theorem\ref{NP困難}を証明するため以下のLemmaを示す．
 Theorem\ref{r-NP困難}を証明するため，次で定義されるco-DAG-pathwidthの計算がNP困難であることを示す．
 
 \begin{definition*}
-     $G=(V, E)$とする．$G$のco-DAG Path Decomposition(co-DAG-PD)とは，以下の3つの条件をみたすようなVの各部分集合$ X_i (i = 1, 2,  \ldots, s)$の列 $X=(X_1, X_2,  \ldots, X_s)$ である．
+     $G=(V, E)$とする．$G$のco-DAG Path Decomposition (co-DAG-PD)とは，以下の3つの条件をみたすようなVの各部分集合$ X_i (i = 1, 2,  \ldots, s)$の列 $X=(X_1, X_2,  \ldots, X_s)$ である．
 
     \begin{enumerate}
         \item $ X_1 \cup X_2 \cup \dots \cup X_s = V $ 
@@ -2055,7 +2062,7 @@ Theorem\ref{r-NP困難}を証明するため，次で定義されるco-DAG-pathw
             \item $u, v \in X_1$
         \item ある $i$ $(i \geq 2)$ があり，$u, v \in X_i$, $u \notin X_{i-1}$が成り立つ．
         \end{itemize}
-        \item 任意の$ i, j, k (1 \leq i \leq j \leq k \leq s)$ について， $X_i \cap X_k \subseteq X_j$ が成り立つ．すなわち，各頂点$v$について，$v$は$X$上で非空な部分道を誘導する．
+        \item 任意の$ i, j, k\ (1 \leq i \leq j \leq k \leq s)$ について， $X_i \cap X_k \subseteq X_j$ が成り立つ．すなわち，各頂点$v$について，$v$は$X$上で非空な部分道を誘導する．
     \end{enumerate}
     あるco-DAG-PD $P = (X_1, X_2,   \ldots, X_s)$のwidthを$\max_{1 \leq i \leq s} {X_i}$と定義する．このとき，有向グラフ$G$のco-DAG-pathwidthとは，$G$に対する全てのco-DAG-PDのうち，widthが最小であるco-DAG-PDのwidthである．
     
@@ -2109,7 +2116,7 @@ Theorem\ref{r-NP困難}を証明するため，次で定義されるco-DAG-pathw
     さらに$\gamma(p_0) = \gamma(p_1) \cup \{s\}$ $((p_0, p_1) \in E[T])$と定める．
 
     以上の操作によってできる$(P', \gamma)$ $(P' = (p_0, p_1, p_2, \dots, p_r))$が$G'$のco-DAG-PDになっていることを示す．
-    % Figure★★\ref{fig:4_2}の$G, G'$に対するco-DAG-PD $(P, \beta), (P', \gamma)$の構成例をFigure★★\ref{fig:5_2}で示す．
+    % Figure★★\ref{fig:4_2}の$G, G'$に対するco-DAG-PD $(P, \beta),\ (P', \gamma)$の構成例をFigure★★\ref{fig:5_2}で示す．
     $\gamma$の構成法に注意すると，$A \subseteq \gamma(p_r), B \subseteq \gamma(p_1)$がいえ，さらに$r \in \gamma(p_0)$であることから，$\sum_{m=0}^{r} \gamma(p_m) = V'$が成り立つ．よって$(P', \gamma)$はco-DAG-PDのルール1を満たす．また$\gamma$の構成法に注意すると，任意の$v \in V' \backslash \{r\}$に対して，$v$を含む全てのバッグが$(p_1, p_2, \dots, p_r)$上で非連結になることはなく，また$B \cup \{r\} \subseteq \gamma(p_0)$より，任意の$v \in V'$に対して，$v$を含む全てのバッグが$(p_0, p_1, p_2, \dots, p_r)$上で非連結になることはない．よって$(P', \gamma)$はco-DAG-PDのルール3を満たす．さらに定義\ref{NP困難}の証明と同様の議論により，$(P', \gamma)$がco-DAG-PDのルール2を満たすことがいえる．以上より$(P', \gamma)$は$G'$のco-DAG-PDである．このとき$(P', \gamma)$の幅は$cpw(G)+n$である．
 
     さらに\ref{NP困難}の証明と全く同様の議論により，$(P', \gamma)$が$G'$に対してwidthが最小のco-DAG-PDであることがいえる．ここで$G'$はsinkを一つしか持たないことに注意すると，Lemma\ref{r-sink}より$ctw(G') = cpw(G')$がいえ，$ctw(G) = cpw(G) + n$が成り立つ．以上より定義\ref{r-NP困難}が示される．
