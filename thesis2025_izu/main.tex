@@ -28,7 +28,9 @@
 \usepackage{algorithm}
 \usepackage{ifthen}
 \newboolean{Draft}
-\setboolean{Draft}{true} %図を挿入するならtrue
+\newboolean{Draft2}
+\setboolean{Draft}{false} %図を挿入するならtrue
+\setboolean{Draft2}{false} %付録を挿入するならtrue
 
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}
@@ -160,7 +162,7 @@ NP困難な問題に対して高速に解を求める方法の一つとして木
 有向パス幅は有向グラフがどれだけDAGに近い構造をしているかを表すパラメータである．そのためDAGに対しては有向パス幅は常に０になり，DAG上の問題に対してパラメータ化アルゴリズムの構築が難しい場合があった．これに対し，2023年にKasaharaら[12]によって，新たにDAGパス幅が提案されている．DAGパス幅は有向有向グラフがどれだけ有向パスに近い構造をしているかを表すパラメータであり，有向パス分解の条件に加え，任意の枝に対してその端点を同時に含むバッグが存在することをルールに加えている．これにより有向グラフ上の強連結成分は同時に1つのバッグに含まれていなければならない．この条件によって特にDAGについて非自明な幅が得られ，DAGに対して有効なFPTアルゴリズムの構築が可能となっている．[12]ではDAGパス幅を用いた$k$-独立集合問題のパラメータ化アルゴリズムの構築やDAGパス幅を求めることがNP困難であることの証明などが行われている．一方で$k$-独立集合問題以外でのDAG上でもNP困難な問題に対するパラメータ化アルゴリズムの構築やDAGパス分解自体を求めるアルゴリズムは著者が知る限りこれまでわかっていなかった．
 
 
-そこで今回は次の3つの研究を行った．1つ目はDAGパス分解を用いてDAG上での様々なNP困難問題に対するパラメータ化アルゴリズムの構築である．2つ目はDAGパス分解を求める近似アルゴリズム，及び制限された幅をもつDAGパス分解の構築を行うパラメータ化アルゴリズムの提案である．3つ目はDAGパス幅の拡張となるDAG木幅の提案である．まず第3章では，DAG上でもNP困難な問題であるDirected Dominating Set Problem, Max Leaf Outbranching Problemの2つの問題に対して，頂点数が$n$のDAG，幅が$w$のDAGパス分解を入力したとき，それぞれ$O(2^wwn), O(2^wwn+n^2)$時間のFPTアルゴリズムを提案する．Directed Steiner Tree Problemに対しては，ターミナル集合のサイズを$k$としたときに$O(2^w(k+w)n+n^2)$時間のFPTアルゴリズムを提案する．また$k$-Disjoint Path Problemに対しては$O((k+1)^w(w^2+k)n+n^2)$時間のパラメータ化アルゴリズムを提案する．本論文ではDAG上であることを前提としているが，一般の有向グラフに対しても強連結成分分解を行うことで本アルゴリズムを提供することができる．次に第4章ではDAGパス幅に対し，$O(\log^2 n)$-近似アルゴリズムを提案する．またより近似比の小さい$O(\log^{3/2} n)$-近似アルゴリズムの存在を示す．これはone-shot Black Pebbling ProblemがDAGパス分解を求める問題と等価であることから示される．さらに第5章では，DAGパス幅とグラフの最大出次数，根数をそれぞれ$w, d, l$と表したとき，$O(l\cdot d^w)$の幅を与えるアルゴリズムを提案する．このアルゴリズムは無向パス分解に対するアルゴリズム[8]を参考にして構築しており，完全有向$d$分木のembeddingを行うことでアルゴリズムを構築している．最後に第6章, 第7章ではDAGパス幅の一般化となる概念であるDAG木幅の提案を行っている．DAG木幅は有向グラフが有向木からどれだけ近いかを表すパラメータであり，DAG木幅の値が小さいほどグラフが有向木に近い構造をしていることを表す．第6章でDAG木幅を与える最適なDAG木分解の構成がNP困難であることを示し，第7章でDAG木幅をパラメータとしてDirected Dominating Set Problemを解く$O(2^wwn)$時間のFPTアルゴリズムを提案している．
+そこで今回は次の3つの研究を行った．1つ目はDAGパス分解を用いてDAG上での様々なNP困難問題に対するパラメータ化アルゴリズムの構築である．2つ目はDAGパス分解を求める近似アルゴリズム，及び制限された幅をもつDAGパス分解の構築を行うパラメータ化アルゴリズムの提案である．3つ目はDAGパス幅の拡張となるDAG木幅の提案である．まず第3章では，DAG上でもNP困難な問題であるDirected Dominating Set Problem, Max Leaf Outbranching Problemの2つの問題に対して，頂点数が$n$のDAG，幅が$w$のDAGパス分解を入力したとき，それぞれ$O(2^wwn), O(2^wwn+n^2)$時間のFPTアルゴリズムを提案する．Directed Steiner Tree Problemに対しては，ターミナル集合のサイズを$k$としたときに$O(2^w(k+w)n+n^2)$時間のFPTアルゴリズムを提案する．また$k$-Disjoint Path Problemに対しては$O((k+1)^w(w^2+k)n+n^2)$時間のパラメータ化アルゴリズムを提案する．第3章の最後ではDirected Edge Dominating Set Problemを用いて木分解と比較したときのDAGパス分解の利点を述べる．提案するアルゴリズムはDAGを入力としているが，一般の有向グラフに対しても強連結成分分解を行うことで本アルゴリズムを提供することができる．次に第4章ではDAGパス幅に対し，$O(\log^2 n)$-近似アルゴリズムを提案する．またより近似比の小さい$O(\log^{3/2} n)$-近似アルゴリズムの存在を示す．これはone-shot Black Pebbling ProblemがDAGパス分解を求める問題と等価であることから示される．さらに第5章では，DAGパス幅とグラフの最大出次数，根数をそれぞれ$w, d, l$と表したとき，$O(l\cdot d^w)$の幅を与えるアルゴリズムを提案する．このアルゴリズムは無向パス分解に対するアルゴリズム[8]を参考にして構築しており，完全有向$d$分木のembeddingを行うことでアルゴリズムを構築している．最後に第6章, 第7章ではDAGパス幅の一般化となる概念であるDAG木幅の提案を行っている．DAG木幅は有向グラフが有向木からどれだけ近いかを表すパラメータであり，DAG木幅の値が小さいほどグラフが有向木に近い構造をしていることを表す．第6章でDAG木幅を与える最適なDAG木分解の構成がNP困難であることを示し，第7章でDAG木幅をパラメータとしてDirected Dominating Set Problemを解く$O(2^wwn)$時間のFPTアルゴリズムを提案している．
 
 
 
@@ -291,12 +293,18 @@ DAGパス幅は有向グラフがどれだけ有向パスに近い構造をし�
 \begin{lemma}\label{catapillar}
     頂点数$n\ (>2)$の連結な有向グラフ$G$のDAGパス幅が1であることの必要十分条件は，$G$がキャタピラ型であることである．
 \end{lemma}
+
+\ref{catapillar}の証明は付録で示す．
+
+\begin{comment}
     
 
 \begin{proof}
     $G$に入次数2以上の頂点$v$が存在する場合，DAGパス分解のルール2より，$G$の任意のDAGパス分解には$v$とその先行頂点をすべて含むバッグが必ず存在するため，$G$のDAGパス幅は少なくとも2以上となる．したがって以下では$G$に入次数2以上の頂点が存在しない，すなわち有向木である場合のみを考える．まず$G$がキャタピラ型でないとき，$G$のパス幅が2以上となることを示す．そのために$G$の頂点数で場合分けをして考える．$|V[G]|=2$の場合，$G$は明らかにキャタピラ型である．$|V[G]|=3, 4$の場合もまた$G$はキャタピラ型である．以下に理由を示す．$G$が有向木ならば，$G$に含まれる最長のパスを1つ選択し，その頂点列を$P$とする．$|P|=3$の場合，$G$の枝分かれの数は高々1つであり，その枝分かれの長さも高々1である．したがって$G$はキャタピラ型である．$|P|=4$の場合，$|V[G]|=4$に注意すると$G$は長さ4のパスであるため，明らかにキャタピラ型である．以上より$|V[G]|=3, 4$の場合，$G$はキャタピラ型である．
     次に$G$の頂点数が5以上の場合を考える．ここで$G$がキャタピラ型でないとき，定義より$G$から出次数0の頂点を除いても枝分かれをもつ有向木を内部に含む．すなわちある頂点$v\in V[G]$が存在し，$v$を始点とする長さ2以上の点素なパスが少なくとも2つ存在する．このパスを$P_1 = v, v_1, v_2, \dots$, $P_2 = v, u_1, u_2, \dots$とする．DAGパス分解のルールに注意すると，$G$の任意のDAGパス分解には次の3つの頂点集合$\{v, v_1, v_2\}, \{v, u_1, u_2\}, \{v, v_1, u_1\}$のうち，少なくとも1つを含むバッグが必ず存在するため，DAGパス幅は2以上となる．したがって$G$のDAGパス幅が1であるためには$G$がキャタピラ型であることが必要．逆に$G$がキャタピラ型であるとき，$G$の各頂点$v$は出次数が0の葉である子$v_1, v_2, \dots, v_s$をもち，出次数が1以上の葉でない子を高々1つもつ．$v$が葉でない子をもたないとき，順にバッグ$\{v, v_1\}, \{v, v_2\}, \dots , \{v, v_s\}$を生成することで$v$と$\mathsf{suc}(v)$に対するDAGパス分解を構築できる．$v$が葉でない子$u$をもつとき，順にバッグ$\{v, v_1\}, \{v, v_2\}, \dots , \{v, v_s\}, \{v, u\}, \{u\}$を生成することで，$v$と$\mathsf{suc}(v)$に対するDAGパス分解を構築できる．これを全ての頂点に対して考えることにより，幅が1である$G$のDAGパス分解が得られる．したがって$G$がキャタピラ型であれば$G$のDAGパス幅は1である．
 \end{proof}
+
+\end{comment}
 
 
 
@@ -747,8 +755,9 @@ $\mathsf{Compute}(P)$
     $\mathsf{Compute}$は$G$のDisjoint Path Problemの解を出力する．
 \end{lemma}
 
+\ref{dpp}の証明は付録で示す．
 
-
+\begin{comment}
 
 \begin{proof}
     入力グラフ$G$が単一頂点$s_1=t_1$からなる場合，$\mathsf{Compute}$のPreprocessingの処理により0を出力する．これは明らかに$G$のDisjoint Pathになっている．以下では$G$が単一頂点から成らない場合を考える．あるバッグ$X_i$が$v \in V$をintroduceするとき，$v$は$A^1_i, A^2_i,  \dots, A^k_i, B_i$のいずれかにのみ含まれるため，これを1から$i$まで考えることにより各パス$P^m_i$は互いに共通の頂点を持たない点素なパスであることが示される．また，ある始点$s_m \in S$がintroduceされたバッグを$X_{i_s}$とすると，$X_{i'}$ $(i' < i_s)$でintroduceされた頂点はパス$P^m_{i_s}$に含まれることはない．なぜならば，$X_{i'}$で頂点$u$がintroduceされ，かつ$A^m_{i'} = \{u\}$であるとすると，$\mathsf{pred}(u) \cap A^m_{i'} = \varnothing$であり，式\ref{cal2}の条件より$\mathsf{Cal}$の値は$\infty$となるからである．さらに，ある終点$t_m \in S$がintroduceされたバッグを$X_{i_t}$とすると，$X_{i'}$ $(i_t < i')$でintroduceされる頂点はパス$P^m_{i'}$に含まれることはない．なぜならば，$X_j$ $(i_t < j)$で頂点$w$がintroduceされ，かつ$\mathsf{Compute}$のPreprocessingを行う前の入力グラフにおいて$w \in \mathsf{suc}(t_m)$であるとする．ここで$w \in A^m_j$であるとすると，DAG-PDのルール2より$t_m \in A^m_j$がいえるが，もし$\mathsf{pred}(w) \cap (A^m_j \backslash \{t_m\}) = \varnothing$ならば，Preprocessingの処理により$\mathsf{pred}(w) \cap A^m_j = \varnothing$であるため，式\ref{cal2}の条件より$\mathsf{Cal}$の値は$\infty$となる．一方，$\mathsf{pred}(w) \cap (A^m_j \backslash \{t_m\}) \neq \varnothing$ならば，ある頂点$p \in \mathsf{pred}(w) \cap A^m_j$ $(p \neq t_m)$が存在し，式\ref{cal2}の条件より，$p$のある後続頂点$q \in A^m_j$ $(p \in \mathsf{pred}(q) \cap (A^m_j \backslash \{w\}) \text{かつ} \mathsf{suc}(p) \cap (A^m_j \backslash \{w\}) = \{q\})$が存在する．Preprocessingの処理によって枝$(t_m, w)$が除かれることに注意すると$\{q, w\} \subseteq \mathsf{suc}(p) \cap A^m_j$が成り立つため，$w$のintroduceにおいて式\ref{cal2}の条件より$\mathsf{Cal}$の値は$\infty$となる．これ以降のバッグ$X_l$ $(j < l)$でintroduceされた頂点$w'$が$A^m_l$に含まれた場合，枝$(w, w')$が存在すれば式\ref{cal2}の条件より$\mathsf{Cal}$の値は$\infty$となり，枝$(w, w')$が存在しなければ上記と同様の議論により$\mathsf{Cal}$の値は$\infty$となる．以上より$X_{i_t}$以降でintroduceされた頂点はパス$P^m_{i_t}$に追加されることはない．\\
@@ -765,6 +774,8 @@ $\mathsf{Compute}(P)$
     \end{itemize}
     以上より，$i = i+1$でも定義\ref{def_cal}が成立．数学的帰納法によりLemma~\ref{dpp}が証明された．
 \end{proof}
+
+\end{comment}
 
 最後に$\mathsf{Compute}$の計算量を示す．
 
@@ -867,6 +878,10 @@ $\mathsf{Compute}(P, r, R)$
     $\mathsf{Compute}$は$r$を根とし，$R$をすべて含むような$G$のminimum-DSTの総重みを出力する
 \end{lemma}
 
+\ref{dst}の証明は付録で示す．
+
+\begin{comment}
+
 
 \begin{proof}
     まず，Preprocessingを行っても解が変わらないことを示す．Preprocessingにおける$V_r$は根$r$から到達可能な頂点の集合であるため，任意の$v \in V \backslash V_r$は目的のminimum-DSTに含まれない．したがって考えるグラフを$G' = G[V \backslash V_r]$としても解は変わらず，また$P'$は$G'$のnice DAG-PDとなっていることに注意すると，$\mathsf{ST}$に入力するnice DAG-PDを$P'$としても解は変わらない．また$P'$の幅は$P$の幅より大きくならないことに注意する．
@@ -891,6 +906,8 @@ $\mathsf{Compute}(P, r, R)$
     \end{itemize}
     以上より，$i = k+1$でも式(\ref{ST_intro})(\ref{ST_forget})が式(\ref{ST_def})を表している．数学的帰納法によりLemma~\ref{dst}が証明された．
 \end{proof}
+
+\end{comment}
 
 
 
@@ -925,7 +942,7 @@ $\mathsf{Compute}(P, r, R)$
 
 
 
-\subsection{木分解と比較したときの利点}
+\subsection{木分解と比較したときのDAGパス分解の利点}
 
 DAG上のNP困難な問題に対し，基礎グラフの木幅を用いてパラメータ化アルゴリズムを構築できる場合がある．しかし木分解は枝の向きの情報をもたないため，アルゴリズムの構築が複雑になることがある．一方，DAGパス分解は枝の向きの情報をもつため，一般に木分解を利用するよりもアルゴリズムの構築が容易になる場合が多い．本節ではDirected Edge Dominating Set Problem(DEDS problem)に対する木分解を用いたアルゴリズム[22]と，DAGパス分解を用いたアルゴリズムとの比較を行い，DAGパス分解の特長を示す．まずDEDSに関する定義と定理を与える．
 
@@ -933,7 +950,7 @@ DAG上のNP困難な問題に対し，基礎グラフの木幅を用いてパラ
     有向グラフ$G=(V, E)$に対し，$S \subseteq E$が$G$のDirected Edge Dominating Set\ (DEDS)であるとは，任意の$(v, w) \in E$に対し，$(v, w) \in S$であるか，もしくはある$(u, v) \in S$が存在することの少なくとも一方が成り立つことである．minimum DEDS\ (mDEDS)とは，全てのDEDS $S$のうち$|S|$が最小のものである．
 \end{definition*}
 
-DEDS problemとは，$G$のmDEDSのサイズを求める問題である．Hakanaら[23]は以下を示した．
+DEDS problemとは，$G$のmDEDSのサイズを求める問題である．Hanakaら[23]は以下を示した．
 
 \begin{proposition}[計算量クラス]
     DEDS problemは出次数が制限された平面的DAGの場合でもNP困難である．
@@ -945,7 +962,8 @@ DEDS problemとは，$G$のmDEDSのサイズを求める問題である．Hakana
     有向グラフ$G$の基礎グラフの木幅が高々$tw$であるとき，$G$のDEDS problemを$4^{2tw^2}4^{2tw}n^{O(1)}$の時間で解くFPTアルゴリズムが存在する．
 \end{proposition}
 
-上記のアルゴリズムは幅が$tw$の木分解を利用したアルゴリズムであり，DPを行う上での必要な情報として，木分解上の各バッグ$B_t$に対して部分解となる枝集合$A\subseteq E(B_t)$，各頂点$v \in B_t$に対して前方の向きを支配できるかを表す関数$f$，$f$の支配関係の根拠を示す関数$s_f$を保持する必要がある．このアルゴリズムは一般の有向グラフ上で利用でき，より一般化した問題である$(p, q)$-DEDS problemに対しても動作するといった利点がある．一方で木分解は入力グラフの枝の向きの情報をもたないため，向きの情報を表す$f, s_f$を計算する必要があり，計算量が$O(4^{2tw})$だけ大きくなっている．これに対し，一般のDAGに対して幅を$w$とするnice DAGパス分解が与えられたとき，$O(2^{w^2}w^2n^2)$の時間でDEDS problemを解くアルゴリズムを構築する．このアルゴリズムで利用するDAGパス分解は入力グラフの向きの情報を内部に含んでいるため，$f, s_f$といったパラメータが不要になる．木幅が抑えられたDAGでもDAGパス幅は任意に大きくなることがあるため，計算量の単純な比較はできないが，木分解を用いた場合よりもアルゴリズムの構築が容易になる利点がある．
+上記のアルゴリズムは幅が$tw$の木分解を利用したアルゴリズムであり，DPを行う上での必要な情報として，木分解上の各バッグ$B_t$に対して部分解となる枝集合$A\subseteq E(B_t)$，各頂点$v \in B_t$に対して前方の向きを支配できるかを表す関数$f$，$f$の支配関係の根拠を示す関数$s_f$を保持する必要がある．このアルゴリズムは一般の有向グラフ上で利用でき，より一般化した問題に対しても動作するといった利点がある．一方で木分解は入力グラフの枝の向きの情報をもたないため，向きの情報を表す$f, s_f$を計算する必要があり，計算量が$O(4^{2tw})$だけ大きくなっている．これに対し，一般のDAGに対して幅を$w$とするnice DAGパス分解が与えられたとき，$O(2^{w^2}w^2n^2)$の時間でDEDS problemを解くアルゴリズムを構築する．このアルゴリズムで利用するDAGパス分解は入力グラフの向きの情報を内部に含んでいるため，$f, s_f$といったパラメータが不要になる．木幅が抑えられたDAGでもDAGパス幅は任意に大きくなることがあるため，計算量の単純な比較はできないが，木分解を用いた場合よりもアルゴリズムの構築が容易になる利点がある．
+★より詳しく読む
 
 \begin{theorem}\label{DEDS_FPT}
     DAG $G$に対し，幅が$w$である$G$のnice DAG-PDが与えられたとき，$G$のDEDS problemを$O(2^{w^2}w^2n^2)$で解くアルゴリズムが存在する．
@@ -1007,15 +1025,15 @@ DEDS problemとは，$G$のmDEDSのサイズを求める問題である．Hakana
 
 
 \section{DAGパス分解を求める$O(\log ^2 n)$-近似アルゴリズム} %\label{sec_FPTforPathwidth}
-本節では頂点数$n$，最大出次数$k$，パス幅$pw$であるDAG $G$に対し，幅が高々$O(k \cdot pw \log ^2 n)$であるDAGパス分解を与えるアルゴリズムを設計する．
+一般のDAGに対するDAGパス幅を求める問題はNP困難であるが，近似的な幅であれば多項式時間で求めることができる．本章では頂点数$n$，最大出次数$k$であるDAG $G$が与えられたとき，$G$のDAGパス幅に対して近似率が高々$O(k\log ^2 n)$であるDAGパス分解を与える多項式時間アルゴリズムを設計する．
 
 \subsection{定義と補題}
 まず最小化問題に対する近似率の定義を示す．
 
 \begin{definition*}[近似率]
-    問題の入力$I$に対し，アルゴリズムが出力する解を$S_{alg}$，最適解を$S_{opt}$，目的関数の値を$f(S)$とする．このとき近似率$r$は以下のように定義される．
+    問題の入力$I$に対し，アルゴリズムが出力する解を$S_{\mathrm{alg}, I}$，最適解を$S_{\mathrm{opt}, I}$，目的関数の値を$f(S)$とする．このとき近似率$r$は以下のように定義される．
     \begin{align*}
-        r = \underset{I}{sup}\frac{f(S_{alg})}{f(S_{opt})}
+        r = \sup_{I}\frac{f(S_{\mathrm{alg}, I})}{f(S_{\mathrm{opt}, I})}
     \end{align*}
     
 \end{definition*}
@@ -1367,9 +1385,9 @@ Theorem~\ref{approximation3}を示す前に，以下の補題を示す．
 
 \subsection{DAG-treewidthの定義}
 
-本節では，DAG-PDをさらに一般化した概念であるDAG Tree Decomposition(DAG-TD)を導入する．
+本節ではDAG-PDを一般化した概念のDAG Tree Decompositionを導入する．
 
-\begin{definition*}
+\begin{definition*}[DAG Tree Decomposition]
  有向グラフ$G=(V, E)$のDAG Tree Decomposition (DAG-TD)とは，有向木$T$と，$T$の各ノード$t$について$\beta(t) \subseteq V$であるような$\beta$とのペア$(T, \beta)$である．$(T, \beta)$は以下の3つを満たす．
  
 \begin{enumerate}
@@ -1399,65 +1417,9 @@ DAG-TDの例をFigure\ref{fig:6}で示す．以下でDAG-treewidthを定義す�
     あるDAG-TD $(T, \beta)$のwidthを$\max_{t \in T}|\beta(t)|$と定義する．このとき，有向グラフ$G$のDAG-treewidthとは，$G$に対する全てのDAG-TDのうち，widthが最小であるDAG-TDのwidthである．
 \end{definition*}
 
-以降では，$G$のDAG-pathwidth, DAG-treewidthをそれぞれ$\mathsf{pw}(G), \mathsf{tw}(G)$と表す．
+以降では，$G$のDAG-pathwidth, DAG-treewidthをそれぞれ$\mathsf{pw}(G), \mathsf{tw}(G)$と表す．DAG-treewidthを求める問題の計算量クラスについて，以下を示す．
 
-
-\subsection{nice DAG-TD}
-
-本節では，nice DAG-PDと類似の概念であるnice DAG-TDを説明する．
-
-\begin{definition*}
- $G=(V, E)$を有向グラフとし，$(T, \beta)$を$G$のDAG-TDとする．$(T, \beta)$が以下の２つを満たすとき，$(T, \beta)$は$G$のnice DAG-TDであるという．
- 
-\begin{enumerate}
-    \item $r$を$T$の根としたとき，$\beta(r) = \varnothing$ 
-    \item 各$i \in T$に対し，$\beta(i)$は以下のいずれかである．
-    \begin{description}
-          \item[introduce] $i$がただ1つの子$j$をもち，ある強連結成分$S$があり，$S \cap \beta(j) \neq \varnothing$かつ$\beta(i) = \beta(j) \cup S$
-          \item[forget] $i$がただ1つの子$j$をもち，ある$v \in V$があり，$\beta(i) = \beta(j) \backslash \{v\}$
-          \item[union] $i$がちょうど2つの子$j, k$をもち，$\beta(i) = \beta(j) = \beta(k)$
-    \end{description}
-    \end{enumerate}
-\end{definition*}
-
-\ifthenelse{\boolean{Draft}}{
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=15.0cm]{pic7.png}
-    \caption{Figure\ref{fig:6}の$G$に対するnice DAG-TDの構成例．1つの根と複数のsinkをもち，それぞれ空集合からなる．それ以外のバッグは，親のバッグに対して強連結成分が1つ加えられたintroduceか，頂点が1つ除かれたforget，もしくは自身と同じ兄弟をもつunionのいずれかとなる．任意のDAG-TDから，同じwidthをもったnice DAG-TDを効率よく構築できる．}
-    \label{fig:7}
-\end{figure}
-}
-
-nice DAG-TDの例をFigure\ref{fig:7}で示す．あるDAG-TDが与えられたとき，widthが同じである$G$のnice DAG-TDを効率よく構築することができる．
-
-\begin{theorem}
-    $(T, \beta)$が有向グラフ$G=(V, E)$のDAG-TDであるとする．また$(T, \beta)$のwidthを$w$とする．このとき，widthが$w$であるような$G$のnice DAG-TDを多項式時間で構築できる．
-\end{theorem}
-
-\begin{proof}
-    $(T, \beta)$に対し，以下の手順を行いnice DAG-PDを得る．
-
-    \begin{enumerate}
-        \item $T$に根$r$ $(\beta(r) = \varnothing)$を追加する．
-        \item ある$i \in T$がただ1つの子$j \in T$をもち，かつ$\beta(i) = \beta(j)$ならば，$T$から$j$を除き，$i$から$j$のそれぞれの子への枝を加える．このような$i, j$がなくなるまでこの操作を繰り返す．
-        \item 以下の5つの状態がなくなるまで操作を繰り返す．
-        \begin{enumerate}
-            \item ある$i \in T$と，その子$j \in T$について，$\beta(i) \nsubseteq \beta(j)$かつ$\beta(j) \nsubseteq \beta(i)$ならば，$i$と$j$の間に$i'$ $(\beta(i') = \beta(i) \cap \beta(j))$を加え，$(i, i', j)$の順につなぐ．
-            \item ある$i \in T$と，その子$j \in T$について，$\beta(j) \subseteq \beta(i)$かつ$|\beta(i)| - |\beta(j)| \geq 2$ならば，$i$と$j$の間に$i''$ $(\beta(i'') = \beta(i) \backslash \{v\}, v \in \beta(i) \backslash \beta(j))$を加え，$(i, i'', j)$の順につなぐ．
-            \item ある$i \in T$と，その子$j \in T$について，$\beta(i) \subseteq \beta(j)$かつ$\beta(j) \backslash \beta(i)$が強連結成分でないとき，$i$と$j$の間に$i'''$ $(\beta(i''') = \beta(j) \backslash A$，$A$は$\beta(j) \backslash \beta(i)$の強連結成分)を加え，$(i, i''', j)$の順につなぐ．
-            \item ある$i$が$k$ $(k \geq 3)$個以上の子を持つとき，$i$の直後に，高さが$\lfloor \log_{2} k \rfloor$の完全二分有向木$T'$ $(^{\forall}t' \in T'$について$\beta(t') = \beta(i))$を追加し，$T'$の各葉に対して2つずつ$i$の子を接続し，枝の向きは葉から子への向きとする．ただし，$\lfloor x \rfloor$は$x$を超えない最大の整数値とする．
-            \item ある$i$が2つの子$j, k$を持つとき，$i$と$j$，$i$と$k$の間にそれぞれ$j', k'$ $(\beta(j') = \beta(k') = \beta(i))$を追加し，それぞれ$(i, j', j),\ (i, k', k)$の順につなぐ．
-        \end{enumerate}
-    \end{enumerate}
-
-    以上の操作によってできるDAG-TDは，widthが高々$w$であり，また$G$のnice DAG-TDである．この構築は$G$の頂点数の多項式時間で行える．
-\end{proof}
-
-
-\subsection{計算量クラス}
-
-\begin{theorem}\label{NP困難}
+\begin{theorem}[計算量クラス]\label{NP困難}
     有向グラフ$G$が与えられたとき，$G$のDAG-treewidthを計算する問題はNP困難である．
 \end{theorem}
 
@@ -1578,6 +1540,56 @@ Theorem~\ref{NP困難}を証明するために，まず以下のLemmaを示す�
 
 \end{comment}
 
+最後にnice DAG-PDと同様にnice DAG-TDについても定義する．
+
+\begin{definition*}[nice DAG-TD]
+ $G=(V, E)$を有向グラフとし，$(T, \beta)$を$G$のDAG-TDとする．$(T, \beta)$が以下の２つを満たすとき，$(T, \beta)$は$G$のnice DAG-TDであるという．
+ 
+\begin{enumerate}
+    \item $r$を$T$の根としたとき，$\beta(r) = \varnothing$ 
+    \item 各$i \in T$に対し，$\beta(i)$は以下のいずれかである．
+    \begin{description}
+          \item[introduce] $i$がただ1つの子$j$をもち，ある強連結成分$S$があり，$S \cap \beta(j) \neq \varnothing$かつ$\beta(i) = \beta(j) \cup S$
+          \item[forget] $i$がただ1つの子$j$をもち，ある$v \in V$があり，$\beta(i) = \beta(j) \backslash \{v\}$
+          \item[union] $i$がちょうど2つの子$j, k$をもち，$\beta(i) = \beta(j) = \beta(k)$
+    \end{description}
+    \end{enumerate}
+\end{definition*}
+
+\ifthenelse{\boolean{Draft}}{
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=15.0cm]{pic7.png}
+    \caption{Figure\ref{fig:6}の$G$に対するnice DAG-TDの構成例．1つの根と複数のsinkをもち，それぞれ空集合からなる．それ以外のバッグは，親のバッグに対して強連結成分が1つ加えられたintroduceか，頂点が1つ除かれたforget，もしくは自身と同じ兄弟をもつunionのいずれかとなる．任意のDAG-TDから，同じwidthをもったnice DAG-TDを効率よく構築できる．}
+    \label{fig:7}
+\end{figure}
+}
+
+nice DAG-TDの例をFigure\ref{fig:7}で示す．あるDAG-TDが与えられたとき，widthが同じである$G$のnice DAG-TDを効率よく構築することができる．
+
+\begin{theorem}[nice DAG-TDの効率的な構築]
+    $(T, \beta)$が有向グラフ$G=(V, E)$のDAG-TDであるとする．また$(T, \beta)$のwidthを$w$とする．このとき，widthが$w$であるような$G$のnice DAG-TDを多項式時間で構築できる．
+\end{theorem}
+
+\begin{proof}
+    $(T, \beta)$に対し，以下の手順を行いnice DAG-PDを得る．
+
+    \begin{enumerate}
+        \item $T$に根$r$ $(\beta(r) = \varnothing)$を追加する．
+        \item ある$i \in T$がただ1つの子$j \in T$をもち，かつ$\beta(i) = \beta(j)$ならば，$T$から$j$を除き，$i$から$j$のそれぞれの子への枝を加える．このような$i, j$がなくなるまでこの操作を繰り返す．
+        \item 以下の5つの状態がなくなるまで操作を繰り返す．
+        \begin{enumerate}
+            \item ある$i \in T$とその子$j \in T$について，$\beta(i) \nsubseteq \beta(j)$かつ$\beta(j) \nsubseteq \beta(i)$ならば，$i$と$j$の間に$i'$ $(\beta(i') = \beta(i) \cap \beta(j))$を加え，$(i, i', j)$の順につなぐ．
+            \item ある$i \in T$と，その子$j \in T$について，$\beta(j) \subseteq \beta(i)$かつ$|\beta(i)| - |\beta(j)| \geq 2$ならば，$i$と$j$の間に$i''$ $(\beta(i'') = \beta(i) \backslash \{v\}, v \in \beta(i) \backslash \beta(j))$を加え，$(i, i'', j)$の順につなぐ．
+            \item ある$i \in T$と，その子$j \in T$について，$\beta(i) \subseteq \beta(j)$かつ$\beta(j) \backslash \beta(i)$が強連結成分でないとき，$i$と$j$の間に$i'''$ $(\beta(i''') = \beta(j) \backslash A$，$A$は$\beta(j) \backslash \beta(i)$の強連結成分)を加え，$(i, i''', j)$の順につなぐ．
+            \item ある$i$が$k$ $(k \geq 3)$個以上の子を持つとき，$i$の直後に，高さが$\lfloor \log_{2} k \rfloor$の完全二分有向木$T'$ $(^{\forall}t' \in T'$について$\beta(t') = \beta(i))$を追加し，$T'$の各葉に対して2つずつ$i$の子を接続し，枝の向きは葉から子への向きとする．ただし，$\lfloor x \rfloor$は$x$を超えない最大の整数値とする．
+            \item ある$i$が2つの子$j, k$を持つとき，$i$と$j$，$i$と$k$の間にそれぞれ$j', k'$ $(\beta(j') = \beta(k') = \beta(i))$を追加し，それぞれ$(i, j', j),\ (i, k', k)$の順につなぐ．
+        \end{enumerate}
+    \end{enumerate}
+
+    以上の操作によってできるDAG-TDは，widthが高々$w$であり，また$G$のnice DAG-TDである．この構築は$G$の頂点数の多項式時間で行える．
+\end{proof}
+
 
 
 
@@ -1586,7 +1598,7 @@ Theorem~\ref{NP困難}を証明するために，まず以下のLemmaを示す�
 DAG-TD $T$をFPTアルゴリズムに利用する場合，$T$の葉から動的計画法を開始するとFPTを構築しやすい．本節では，よりFPTアルゴリズムの構築に適したDAG-TDであるco-DAG Tree Decompositionを定義する．
 
 
-\begin{definition*}
+\begin{definition*}[co-DAG-TD]
  有向グラフ$G=(V, E)$のco-DAG Tree Decomposition (co-DAG-TD)とは，反有向木$T$と，$T$の各ノード$t$について$\beta(t) \subseteq V$であるような$\beta$とのペア$(T, \beta)$である．$(T, \beta)$は以下の3つを満たす．なお，$T$の根の数を$n_l$とする．
  
 \begin{enumerate}
@@ -1613,70 +1625,13 @@ DAG-TD $T$をFPTアルゴリズムに利用する場合，$T$の葉から動的�
 以下でco-DAG-treewidthを定義する．
 
 \begin{definition*}[co-DAG-treewidth]
-    あるco-DAG-TD $(T, \beta)$のwidthを$\max_{t \in T}|\beta(t)|$と定義する．このとき，有向グラフ$G$のco-DAG-treewidth (co-DAG-treewidth)とは，$G$に対する全てのco-DAG-TDのうち，widthが最小であるco-DAG-TDのwidthである．
+    あるco-DAG-TD $(T, \beta)$のwidthを$\max_{t \in T}|\beta(t)|$と定義する．このとき，有向グラフ$G$のco-DAG-treewidthとは，$G$に対する全てのco-DAG-TDのうち，widthが最小であるco-DAG-TDのwidthである．
 \end{definition*}
 
-以降では，$G$のco-DAG-treewidthを$\mathsf{rtw}(G)$と表す．
+以降では，$G$のco-DAG-treewidthを$\mathsf{rtw}(G)$と表す．co-DAG-treewidthを求める問題の計算量クラスについて，以下を示す．
 
 
-\subsection{nice co-DAG-TD}
-
-本節では，nice DAG-TDと同様にnice co-DAG-TD (nice co-DAG-TD)を説明する．
-
-\begin{definition*}
- $G=(V, E)$を有向グラフとし，$(T, \beta)$を$G$のco-DAG-TDとする．$(T, \beta)$が以下の２つを満たすとき，$(T, \beta)$は$G$のnice co-DAG-TD (nice co-DAG-TD)であるという．
- 
-\begin{enumerate}
-    \item $r_m$ $(m = 1, 2, \dots, n_r)$を$T$の各葉としたとき，全ての$m$に対して$\beta(r_m) = \varnothing$ 
-    \item $R = \{r_m | m = 1, 2, \dots, n_r\}$としたとき，各$i \in T \backslash R$に対し，$\beta(i)$は以下のいずれかである．
-    \begin{description}
-          \item[introduce] $i$がただ1つの親$j$をもち，ある強連結成分$S$があり，$S \cap \beta(j) \neq \varnothing$かつ$\beta(i) = \beta(j) \cup S$
-          \item[forget] $i$がただ1つの親$j$をもち，ある$v \in V$があり，$\beta(i) = \beta(j) \backslash \{v\}$
-          \item[union] $i$がちょうど2つの親$j, k$をもち，$\beta(i) = \beta(j) = \beta(k)$
-    \end{description}
-    \end{enumerate}
-\end{definition*}
-
-\begin{comment}
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=15.0cm]{pic7.png}
-    \caption{Figure★★\ref{fig:6}の$G$に対するnice DAG-TDの構成例．1つの根と複数のsinkをもち，それぞれ空集合からなる．それ以外のバッグは，親のバッグに対して強連結成分が1つ加えられたintroduceか，頂点が1つ除かれたforget，もしくは自身と同じ兄弟をもつunionのいずれかとなる．任意のDAG-TDから，同じwidthをもったnice DAG-TDを効率よく構築できる．}
-    \label{fig:7}
-\end{figure}
-\end{comment}
-
-% nice co-DAG-TDの例をFigure★★\ref{fig:7_2}で示す．
-あるco-DAG-TDが与えられたとき，widthが同じである$G$のnice co-DAG-TDを効率よく構築することができる．
-
-\begin{theorem}
-    $(T, \beta)$が有向グラフ$G=(V, E)$のco-DAG-TDであるとする．また$(T, \beta)$のwidthを$w$とする．このとき，widthが$w$であるような$G$のnice co-DAG-TDを多項式時間で構築できる．
-\end{theorem}
-
-\begin{proof}
-    $(T, \beta)$に対し，以下の手順を行いnice co-DAG-PDを得る．
-
-    \begin{enumerate}
-        \item $T$の各葉$r_m$に対し，親$r'_m$ $(\beta(r) = \varnothing)$を追加する．
-        \item ある$i \in T$がただ1つの親$j \in T$をもち，かつ$\beta(i) = \beta(j)$ならば，$T$から$j$を除き，$j$のそれぞれの親から$i$への枝を加える．このような$i, j$がなくなるまでこの操作を繰り返す．
-        \item 以下の5つの状態がなくなるまで操作を繰り返す．
-        \begin{enumerate}
-            \item ある$i \in T$と，その親$j \in T$について，$\beta(i) \nsubseteq \beta(j)$かつ$\beta(j) \nsubseteq \beta(i)$ならば，$i$と$j$の間に$i'$ $(\beta(i') = \beta(i) \cap \beta(j))$を加え，$(j, i', i)$の順につなぐ．
-            \item ある$i \in T$と，その親$j \in T$について，$\beta(j) \subseteq \beta(i)$かつ$|\beta(i)| - |\beta(j)| \geq 2$ならば，$i$と$j$の間に$i''$ $(\beta(i'') = \beta(i) \backslash \{v\}, v \in \beta(i) \backslash \beta(j))$を加え，$(j, i'', i)$の順につなぐ．
-            \item ある$i \in T$と，その親$j \in T$について，$\beta(i) \subseteq \beta(j)$かつ$\beta(j) \backslash \beta(i)$が強連結成分でないとき，$i$と$j$の間に$i'''$ $(\beta(i''') = \beta(j) \backslash A, A$は$\beta(j) \backslash \beta(i)$の強連結成分)を加え，$(j, i''', i)$の順につなぐ．
-            \item ある$i$が$k$ $(k \geq 3)$個以上の親を持つとき，$i$の直前に，高さが$\lfloor \log_{2} k \rfloor$の完全二分反有向木$T'$ $(^{\forall}t' \in T'$について$\beta(t') = \beta(i))$を追加し，$T'$の各葉に対して2つずつ$i$の親を接続し，枝の向きは親から根への向きとする．ただし，$\lfloor x \rfloor$は$x$を超えない最大の整数値とする．
-            \item ある$i$が2つの親$j, k$を持つとき，$i$と$j$，$i$と$k$の間にそれぞれ$j', k'$ $(\beta(j') = \beta(k') = \beta(i))$を追加し，それぞれ$(j, j', i),\ (k, k', i)$の順につなぐ．
-        \end{enumerate}
-    \end{enumerate}
-
-    以上の操作によってできるco-DAG-TDは，widthが高々$w$であり，また$G$のnice co-DAG-TDである．この構築は$G$の頂点数の多項式時間で行える．
-\end{proof}
-
-
-
-\subsection{計算量クラス}
-
-\begin{theorem}\label{r-NP困難}
+\begin{theorem}[計算量クラス]\label{r-NP困難}
     有向グラフ$G$が与えられたとき，$G$のco-DAG-treewidthを計算する問題はNP困難である．
 \end{theorem}
 
@@ -1756,6 +1711,70 @@ Theorem~\ref{r-NP困難}を証明するため，次で定義されるco-DAG-path
 \end{proof}
 
 \end{comment}
+
+
+
+
+
+
+
+
+
+
+最後にnice co-DAG-TDについても定義する．
+
+\begin{definition*}[nice co-DAG-TD]
+ $G=(V, E)$を有向グラフとし，$(T, \beta)$を$G$のco-DAG-TDとする．$(T, \beta)$が以下の２つを満たすとき，$(T, \beta)$は$G$のnice co-DAG-TD (nice co-DAG-TD)であるという．
+ 
+\begin{enumerate}
+    \item $r_m$ $(m = 1, 2, \dots, n_r)$を$T$の各葉としたとき，全ての$m$に対して$\beta(r_m) = \varnothing$ 
+    \item $R = \{r_m | m = 1, 2, \dots, n_r\}$としたとき，各$i \in T \backslash R$に対し，$\beta(i)$は以下のいずれかである．
+    \begin{description}
+          \item[introduce] $i$がただ1つの親$j$をもち，ある強連結成分$S$があり，$S \cap \beta(j) \neq \varnothing$かつ$\beta(i) = \beta(j) \cup S$
+          \item[forget] $i$がただ1つの親$j$をもち，ある$v \in V$があり，$\beta(i) = \beta(j) \backslash \{v\}$
+          \item[union] $i$がちょうど2つの親$j, k$をもち，$\beta(i) = \beta(j) = \beta(k)$
+    \end{description}
+    \end{enumerate}
+\end{definition*}
+
+\begin{comment}
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=15.0cm]{pic7.png}
+    \caption{Figure★★\ref{fig:6}の$G$に対するnice DAG-TDの構成例．1つの根と複数のsinkをもち，それぞれ空集合からなる．それ以外のバッグは，親のバッグに対して強連結成分が1つ加えられたintroduceか，頂点が1つ除かれたforget，もしくは自身と同じ兄弟をもつunionのいずれかとなる．任意のDAG-TDから，同じwidthをもったnice DAG-TDを効率よく構築できる．}
+    \label{fig:7}
+\end{figure}
+\end{comment}
+
+% nice co-DAG-TDの例をFigure★★\ref{fig:7_2}で示す．
+あるco-DAG-TDが与えられたとき，widthが同じである$G$のnice co-DAG-TDを効率よく構築することができる．
+
+\begin{theorem}[nice co-DAG-TDの効率的な構築]
+    $(T, \beta)$が有向グラフ$G=(V, E)$のco-DAG-TDであるとする．また$(T, \beta)$のwidthを$w$とする．このとき，widthが$w$であるような$G$のnice co-DAG-TDを多項式時間で構築できる．
+\end{theorem}
+
+\begin{proof}
+    $(T, \beta)$に対し，以下の手順を行いnice co-DAG-PDを得る．
+
+    \begin{enumerate}
+        \item $T$の各葉$r_m$に対し，親$r'_m$ $(\beta(r) = \varnothing)$を追加する．
+        \item ある$i \in T$がただ1つの親$j \in T$をもち，かつ$\beta(i) = \beta(j)$ならば，$T$から$j$を除き，$j$のそれぞれの親から$i$への枝を加える．このような$i, j$がなくなるまでこの操作を繰り返す．
+        \item 以下の5つの状態がなくなるまで操作を繰り返す．
+        \begin{enumerate}
+            \item ある$i \in T$とその親$j \in T$について，$\beta(i) \nsubseteq \beta(j)$かつ$\beta(j) \nsubseteq \beta(i)$ならば，$i$と$j$の間に$i'$ $(\beta(i') = \beta(i) \cap \beta(j))$を加え，$(j, i', i)$の順につなぐ．
+            \item ある$i \in T$と，その親$j \in T$について，$\beta(j) \subseteq \beta(i)$かつ$|\beta(i)| - |\beta(j)| \geq 2$ならば，$i$と$j$の間に$i''$ $(\beta(i'') = \beta(i) \backslash \{v\}, v \in \beta(i) \backslash \beta(j))$を加え，$(j, i'', i)$の順につなぐ．
+            \item ある$i \in T$と，その親$j \in T$について，$\beta(i) \subseteq \beta(j)$かつ$\beta(j) \backslash \beta(i)$が強連結成分でないとき，$i$と$j$の間に$i'''$ $(\beta(i''') = \beta(j) \backslash A, A$は$\beta(j) \backslash \beta(i)$の強連結成分)を加え，$(j, i''', i)$の順につなぐ．
+            \item ある$i$が$k$ $(k \geq 3)$個以上の親を持つとき，$i$の直前に，高さが$\lfloor \log_{2} k \rfloor$の完全二分反有向木$T'$ $(^{\forall}t' \in T'$について$\beta(t') = \beta(i))$を追加し，$T'$の各葉に対して2つずつ$i$の親を接続し，枝の向きは親から根への向きとする．ただし，$\lfloor x \rfloor$は$x$を超えない最大の整数値とする．
+            \item ある$i$が2つの親$j, k$を持つとき，$i$と$j, k$の間にそれぞれ$j', k'$ $(\beta(j') = \beta(k') = \beta(i))$を追加し，それぞれ$(j, j', i),\ (k, k', i)$の順につなぐ．
+        \end{enumerate}
+    \end{enumerate}
+
+    以上の操作によってできるco-DAG-TDは，widthが高々$w$であり，また$G$のnice co-DAG-TDである．この構築は$G$の頂点数の多項式時間で行える．
+\end{proof}
+
+
+
+
 
 
 
@@ -1952,9 +1971,18 @@ $\mathsf{Compute}(T, \beta)$
 
 
 
-
+\ifthenelse{\boolean{Draft2}}{
 						% 付録の開始
 \Appendix[付録]
+
+
+\section{\ref{catapillar}の証明}
+
+\begin{proof}
+    $G$に入次数2以上の頂点$v$が存在する場合，DAGパス分解のルール2より，$G$の任意のDAGパス分解には$v$とその先行頂点をすべて含むバッグが必ず存在するため，$G$のDAGパス幅は少なくとも2以上となる．したがって以下では$G$に入次数2以上の頂点が存在しない，すなわち有向木である場合のみを考える．まず$G$がキャタピラ型でないとき，$G$のパス幅が2以上となることを示す．そのために$G$の頂点数で場合分けをして考える．$|V[G]|=2$の場合，$G$は明らかにキャタピラ型である．$|V[G]|=3, 4$の場合もまた$G$はキャタピラ型である．以下に理由を示す．$G$が有向木ならば，$G$に含まれる最長のパスを1つ選択し，その頂点列を$P$とする．$|P|=3$の場合，$G$の枝分かれの数は高々1つであり，その枝分かれの長さも高々1である．したがって$G$はキャタピラ型である．$|P|=4$の場合，$|V[G]|=4$に注意すると$G$は長さ4のパスであるため，明らかにキャタピラ型である．以上より$|V[G]|=3, 4$の場合，$G$はキャタピラ型である．
+    次に$G$の頂点数が5以上の場合を考える．ここで$G$がキャタピラ型でないとき，定義より$G$から出次数0の頂点を除いても枝分かれをもつ有向木を内部に含む．すなわちある頂点$v\in V[G]$が存在し，$v$を始点とする長さ2以上の点素なパスが少なくとも2つ存在する．このパスを$P_1 = v, v_1, v_2, \dots$, $P_2 = v, u_1, u_2, \dots$とする．DAGパス分解のルールに注意すると，$G$の任意のDAGパス分解には次の3つの頂点集合$\{v, v_1, v_2\}, \{v, u_1, u_2\}, \{v, v_1, u_1\}$のうち，少なくとも1つを含むバッグが必ず存在するため，DAGパス幅は2以上となる．したがって$G$のDAGパス幅が1であるためには$G$がキャタピラ型であることが必要．逆に$G$がキャタピラ型であるとき，$G$の各頂点$v$は出次数が0の葉である子$v_1, v_2, \dots, v_s$をもち，出次数が1以上の葉でない子を高々1つもつ．$v$が葉でない子をもたないとき，順にバッグ$\{v, v_1\}, \{v, v_2\}, \dots , \{v, v_s\}$を生成することで$v$と$\mathsf{suc}(v)$に対するDAGパス分解を構築できる．$v$が葉でない子$u$をもつとき，順にバッグ$\{v, v_1\}, \{v, v_2\}, \dots , \{v, v_s\}, \{v, u\}, \{u\}$を生成することで，$v$と$\mathsf{suc}(v)$に対するDAGパス分解を構築できる．これを全ての頂点に対して考えることにより，幅が1である$G$のDAGパス分解が得られる．したがって$G$がキャタピラ型であれば$G$のDAGパス幅は1である．
+\end{proof}
+
 
 
 
@@ -1980,6 +2008,55 @@ $\mathsf{Compute}(T, \beta)$
 
 
 
+\section{\ref{dpp}の証明}
+
+\begin{proof}
+    入力グラフ$G$が単一頂点$s_1=t_1$からなる場合，$\mathsf{Compute}$のPreprocessingの処理により0を出力する．これは明らかに$G$のDisjoint Pathになっている．以下では$G$が単一頂点から成らない場合を考える．あるバッグ$X_i$が$v \in V$をintroduceするとき，$v$は$A^1_i, A^2_i,  \dots, A^k_i, B_i$のいずれかにのみ含まれるため，これを1から$i$まで考えることにより各パス$P^m_i$は互いに共通の頂点を持たない点素なパスであることが示される．また，ある始点$s_m \in S$がintroduceされたバッグを$X_{i_s}$とすると，$X_{i'}$ $(i' < i_s)$でintroduceされた頂点はパス$P^m_{i_s}$に含まれることはない．なぜならば，$X_{i'}$で頂点$u$がintroduceされ，かつ$A^m_{i'} = \{u\}$であるとすると，$\mathsf{pred}(u) \cap A^m_{i'} = \varnothing$であり，式\ref{cal2}の条件より$\mathsf{Cal}$の値は$\infty$となるからである．さらに，ある終点$t_m \in S$がintroduceされたバッグを$X_{i_t}$とすると，$X_{i'}$ $(i_t < i')$でintroduceされる頂点はパス$P^m_{i'}$に含まれることはない．なぜならば，$X_j$ $(i_t < j)$で頂点$w$がintroduceされ，かつ$\mathsf{Compute}$のPreprocessingを行う前の入力グラフにおいて$w \in \mathsf{suc}(t_m)$であるとする．ここで$w \in A^m_j$であるとすると，DAG-PDのルール2より$t_m \in A^m_j$がいえるが，もし$\mathsf{pred}(w) \cap (A^m_j \backslash \{t_m\}) = \varnothing$ならば，Preprocessingの処理により$\mathsf{pred}(w) \cap A^m_j = \varnothing$であるため，式\ref{cal2}の条件より$\mathsf{Cal}$の値は$\infty$となる．一方，$\mathsf{pred}(w) \cap (A^m_j \backslash \{t_m\}) \neq \varnothing$ならば，ある頂点$p \in \mathsf{pred}(w) \cap A^m_j$ $(p \neq t_m)$が存在し，式\ref{cal2}の条件より，$p$のある後続頂点$q \in A^m_j$ $(p \in \mathsf{pred}(q) \cap (A^m_j \backslash \{w\}) \text{かつ} \mathsf{suc}(p) \cap (A^m_j \backslash \{w\}) = \{q\})$が存在する．Preprocessingの処理によって枝$(t_m, w)$が除かれることに注意すると$\{q, w\} \subseteq \mathsf{suc}(p) \cap A^m_j$が成り立つため，$w$のintroduceにおいて式\ref{cal2}の条件より$\mathsf{Cal}$の値は$\infty$となる．これ以降のバッグ$X_l$ $(j < l)$でintroduceされた頂点$w'$が$A^m_l$に含まれた場合，枝$(w, w')$が存在すれば式\ref{cal2}の条件より$\mathsf{Cal}$の値は$\infty$となり，枝$(w, w')$が存在しなければ上記と同様の議論により$\mathsf{Cal}$の値は$\infty$となる．以上より$X_{i_t}$以降でintroduceされた頂点はパス$P^m_{i_t}$に追加されることはない．\\
+    以上の議論に注意すると，Lemma~\ref{dpp}の証明では，各$i$ $(i_s \leq i \leq i_t)$に対し，ある$m$ $(1 \leq m \leq k)$について$\mathsf{Cal}(i, \mathscr{A}_i, B_i)$が$\mathsf{Cal}$の定義\ref{def_cal}を満たすことを示せば十分．これを$i$に関する数学的帰納法で示す．\\
+    $i=i_s$のとき，式\ref{cal0}より$A^m_{i_s} = \{s_m\}$の場合は0であり,これは$s_m$のみからなるパス$P^m_{i_s}$の長さが0であることを表す．これは明らかに定義\ref{def_cal}を満たす．$A^m_{i_s} \neq \{s_m\}$の場合は$\infty$であるが，これは$s_m$を始点とするパスが構成されないことを表すため，同様に定義\ref{def_cal}を満たす．\\
+    ある$i$ $(i_s \leq i < i_t)$において，$\mathsf{Cal}(i, \mathscr{A}_i, B_i)$が定義\ref{def_cal}を満たすと仮定する．以下で$X_{i+1}$が$v \in V$をintroduceするかforgetするかで場合分けを行う．
+    \begin{itemize}
+        \item $X_{i+1}$が$v \in V$をintroduceする場合 \\
+        まず$v \in A^m_{i+1}$の場合を考える．$A^m_{i+1}$に含まれ，かつ$v$の直前にintroduceされた頂点を$u$とする．DAG-PDのルール2より，$u, v$の間には枝$(u, v)$が存在するか，$(u, v)$は存在せず$u$以外の頂点$u'$ $(u' \in A^m_{i+1})$との間の枝$(u', v)$が存在するか，$A^m_{i+1}$に含まれるどの頂点との間にも枝が存在しないかのいずれかである．枝$(u, v)$が存在する場合，式\ref{cal2}より$\mathsf{Cal}(i+1, \mathscr{A}_{i+1}, B_{i+1}) = \mathsf{Cal}(i, \mathscr{A}^m_{i+1}, B_{i+1})+1$となる．DAG-PDのルール2より$u$はパスの端点であることに注意すると，仮定より$\mathsf{Cal}(i, \mathscr{A}^m_{i+1}, B_{i+1})$は$m$番目のパスが$s_m$から$u$までのパスであるときの全パスの合計長の最小値を表している．したがって$m$番目のパスの端点$u$に$v$を加えることで合計長を1だけ大きくしており，$\mathsf{Cal}(i+1, \mathscr{A}_{i+1}, B_{i+1})$は明らかに全パスの合計長の最小値を表す．よって定義\ref{def_cal}を満たす．枝$(u, v)$が存在せず$u$以外の頂点$u'$ $(u' \in A^m_{i+1})$との間の枝$(u', v)$が存在する場合，上記の$t_m$と同様の議論により，ある頂点$v' \in A^m_{i+1}$ $(v' \neq v)$が存在し，$\{v, v'\} \subseteq \mathsf{suc}(u') \cap A^m_{i+1}$が成り立つ．したがって式\ref{cal2}の条件より$\mathsf{Cal}$の値は$\infty$となる．これは$A^m_{i+1}$において枝分かれ$\{(u', v),\ (u', v')\}$が存在し，これらを含むようなパスが存在しないことを表す．したがって定義\ref{def_cal}を満たす．$v$と$A^m_{i+1}$に含まれるどの頂点との間にも枝が存在しない場合，式\ref{cal2}の条件より$\mathsf{Cal}$の値は$\infty$となる．これは$A^m_{i+1}$に含まれる頂点を使って$s_m$と$v$をつなぐパスを構成することができないことを表す．したがって定義\ref{def_cal}を満たす．\\
+        $v \in B_{i+1}$の場合，$v \notin A^m_{i+1}$より，$P^m_{i+1}$は$s_m$から$u$までのパスであり，仮定よりこのときのパスの合計長の最小値は$\mathsf{Cal}(i, \mathscr{A}^m_{i+1}, B_{i+1} \backslash \{v\})$で表される．したがって式\ref{cal2}より$\mathsf{Cal}(i+1, \mathscr{A}^m_{i+1}, B_{i+1})$は$v$がどのパスにも含まれないときのパスの合計長の最小値を表すため，定義\ref{def_cal}を満たす．\\
+        %
+        \item $X_{i+1}$が$v \in V$をforgetする場合 \\
+        $G_{i+1} = G_i$より，$G_{i+1}$と$G_i$でのパスの合計長の最小値は等しい．したがって$v$が$P^1_i, \dots , P^k_i$のいずれかのパスに含まれていた場合と，いずれにも含まれていない，すなわち$B_i$に含まれている場合とを考え，より値の小さいものを$i+1$における$\mathsf{Cal}$の値とすることができる．仮定よりそれぞれ$\mathsf{Cal}(i, \mathscr{\overline{A}}^m_{i+1}, B_{i+1}),\mathsf{Cal}(i, \mathscr{A}^m_{i+1}, B_{i+1} \cup \{v\})$と表すことができるため，式\ref{cal3}は定義\ref{def_cal}を表すようなパスの合計長の最小値を出力する．
+    \end{itemize}
+    以上より，$i = i+1$でも定義\ref{def_cal}が成立．数学的帰納法によりLemma~\ref{dpp}が証明された．
+\end{proof}
+
+
+
+
+
+
+
+\section{\ref{dst}の証明}
+
+\begin{proof}
+    まず，Preprocessingを行っても解が変わらないことを示す．Preprocessingにおける$V_r$は根$r$から到達可能な頂点の集合であるため，任意の$v \in V \backslash V_r$は目的のminimum-DSTに含まれない．したがって考えるグラフを$G' = G[V \backslash V_r]$としても解は変わらず，また$P'$は$G'$のnice DAG-PDとなっていることに注意すると，$\mathsf{ST}$に入力するnice DAG-PDを$P'$としても解は変わらない．また$P'$の幅は$P$の幅より大きくならないことに注意する．
+
+    次に，Preprocessing後の処理で$\mathsf{Compute}$が$R$をすべて含むような$G$のminimum-DSTを出力することを示す．これは各$i$について，式(\ref{ST_intro})(\ref{ST_forget})が式(\ref{ST_def})を表していることを示せば十分．これを$i \geq 1$に関する数学的帰納法で示す．    
+ 
+    
+    $i=1$のとき，$\mathsf{ST}(1; \{r\}, \varnothing) = 0$は明らかに式(\ref{ST_def})を表す．
+    
+    $i=k$ $(1 \leq k < s')$のとき，式(\ref{ST_intro})(\ref{ST_forget})が式(\ref{ST_def})を表していると仮定する．以下で$i = k+1$についても式(\ref{ST_intro})(\ref{ST_forget})が式(\ref{ST_def})を表すことを示す．これを$X_{k+1}$が，ある$v \in V$をintroduceするかforgetするかで場合分けして考える．
+
+    
+    \begin{itemize}
+        \item $X_{k+1}$が$v \in V$をintroduceする場合 \\
+        $v \in A_{k+1}, v \in B_{k+1}$に場合分けして考える．
+        $v \in A_{k+1}$の場合，$\mathsf{pred}(v) \cap A_{k+1} = \varnothing$ならば，$A_i$において$v$の先行頂点は1つも存在しない．このとき，DAG-PDのルール2より$v$の先行頂点は$X_{k+1}$以降でintroduceされないため，$v$を含む有向木は$v$が根の一つになっている．これは$r$をただ一つの根とする有向木になり得ないため，$\mathsf{ST}(k+1; A_{k+1}, B_{k+1}) = \infty$とすることで式(\ref{ST_def})で表される有向木$G^{opt}_{T(k, A_{k+1}, B_{k+1})}$が存在しないことを示している．一方，$\mathsf{pred}(v) \cap A_{k+1} \neq \varnothing$ならば，$v$の先行頂点$w \in A_{k+1} \backslash \{v\}$が少なくとも1つ存在する．$i=k$において式(\ref{ST_def})のような有向木 $G^{opt}_{T(k, A_{k+1} \backslash \{v\}, B_{k+1})}$が存在する場合，$w \in G^{opt}_{T(k,A_{k+1} \backslash \{v\}, B_{k+1})}$であるが，Preprocessingの操作より$w$は$r$から到達可能である．したがって$v$もまた$r$から$w$を通過して到達可能であり，$G^{opt}_{T(k, A_{k+1} \backslash \{v\}, B_{k+1}) \cup \{v\}}$は$r$を根とする有向木である．またそのときの最小の総重みは$ \sum_{(u, v) \in E[G^{opt}_{T(k, A_{k+1} \backslash \{v\}, B_{k+1})}]} d(u, v) + \displaystyle \min_{w \in \mathsf{pred}(v) \cap A_i} d(w, v)$と等しい．仮定より$\mathsf{ST}(k; A_k, B_k) =  \sum_{(u, v) \in E[G^{opt}_{T(k, A_k, B_k)}]} d(u, v)$であり，また$A_{k+1} \backslash \{v\} = A_k, B_{k+1} = B_k$に注意すると，$\mathsf{ST}(k+1; A_{k+1}, B_{k+1})$は式(\ref{ST_def})を表す．
+
+        次に$v \in B_{k+1}$の場合を考える．$v \in R \cup \{r\}$のとき$\mathsf{ST}(k+1; A_{k+1}, B_{k+1}) = \infty$であるが，これは式(\ref{ST_def})を表すような有向木$G^{opt}_{T(k, A_{k+1}, B_{k+1})}$が存在しないことを示している．$v \notin R \cup \{r\}$ならば．式(\ref{ST_def})より$v$は解となる有向木に含まれない．このとき$G^{opt}_{T(k+1, A_{k+1}, B_{k+1} \backslash \{v\})} = G^{opt}_{T(k, A_k, B_k)}$が成り立つ．仮定より$\mathsf{ST}(k; A_k, B_k) = \sum_{(u, v) \in E[G^{opt}_{T(k, A_k, B_k)}]} d(u, v)$であり，また$A_{k+1} = A_k, B_{k+1} \backslash \{v\} = B_k$に注意すると，$\mathsf{ST}(k+1; A_{k+1}, B_{k+1})$は式(\ref{ST_def})を表す．
+        
+        \item $X_{k+1}$が$v \in V$をforgetする場合 \\
+        $G_{k+1} = G_k$より，$G^{opt}_{T(k+1, A_{k+1}, B_{k+1})}$は$G_{T_A} = G^{opt}_{T(k, A_k, B_k)}$ $(v \in A_k)$，$G_{T_B} = G^{opt}_{T(k, A_k, B_k)}$ $(v \in B)$のうち，総重みの小さい方と等しい．仮定より$v \in A_k$ならば$\mathsf{ST}(k; A_k, B_k) = \sum_{(u, v) \in E[G^{opt}_{T_A}}$であり，また$v \in B_k$ならば$\mathsf{ST}(k; A_k, B_k) = \sum_{(u, v) \in E[G^{opt}_{T_B}}$である．さらに$v \in A_k$ならば$A_{k+1} \cup \{v\} = A_k, B_{k+1} = B_k$，$v \in B_k$ならば$A_{k+1} = A_k, B_{k+1} \cup \{v\} = B_k$であることに注意すると，$\mathsf{ST}(k+1; A_{k+1}, B_{k+1})$は式(\ref{ST_def})を表す．
+    \end{itemize}
+    以上より，$i = k+1$でも式(\ref{ST_intro})(\ref{ST_forget})が式(\ref{ST_def})を表している．数学的帰納法によりLemma~\ref{dst}が証明された．
+\end{proof}
 
 
 
@@ -2226,6 +2303,7 @@ Theorem~\ref{r-NP困難}を証明するため，次で定義されるco-DAG-path
     以上より，$i'$でも定義\ref{def_ds2}が成立．数学的帰納法によりLemma~\ref{dids2}が証明された．
 \end{proof}
 
+}
 
 
 
