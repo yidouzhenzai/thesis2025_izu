@@ -1,7 +1,6 @@
 % Copyright (C) 1996 by Dept. Information Science, Kyoto University
 % Copyright (C) 1999 by Computer Science Course,
 %	Scool of Informatics and Mathematical Science
-% kuisthesis.sty 26-Jan-00 by Hiroyuki Tarumi   (ver 2.11)
 % kuisthesis.sty 14-Dec-99 by Hiroyuki Tarumi   (ver 2.10)
 %
 % kuisthesis.sty 30-Jan-97 by Hiroshi Nakashima (ver 2.02)
@@ -16,9 +15,6 @@
 % j-article.sty 10-Feb-89 from report.sty 16-Mar-88
 %
 % REVISION
-% ver 2.11 26-Jan-00 by Hiroyuki Tarumi
-%     Bug Fix: Contents was causing \clearpage, but it was a bug.
-%	\sectionNC is introduced to fix it.
 % ver 2.10 14-Dec-99 by Hiroyuki Tarumi
 % (1) Font sizes for \section and \subsection are enlarged, and \section
 %     causes \clearpage.
@@ -28,7 +24,7 @@
 %
 % ver 2.02 30-Jan-97 by Hiroshi Nakashima
 % (1) Modify \mkt@department for Japanese as;
-%     ``京都大学大学院工学研究科\\修士課程情報工学専攻''.
+%     ``$B5~ETBg3XBg3X1!9)3X8&5f2J(B\\$B=$;N2]Dx>pJs9)3X@l96(B''.
 %
 % ver 2.01  9-Jan-97 by Hiroshi Nakashima
 % (1) ``Division'' is replaced with ``Department'' in \mkt@department
@@ -75,7 +71,7 @@
 \ifx\xpt\undefined \@LaTeX@eNtrue \fi\fi
 % 2.00 (1)<<
 
-
+
 %%%%%% Document Styles %%%%%%
 
 % style options :
@@ -123,14 +119,14 @@
 \@options
 \fi								% 2.00(2)<<
 
-
+
 %%%%%% Basics %%%%%%
 
 \lineskip1pt \normallineskip1pt
 \lineskiplimit\z@ \normallineskiplimit\z@
 
 \def\baselinestretch{1}
-
+
 %%%%%% Fonts %%%%%%
 
 \ifASCII
@@ -196,7 +192,7 @@
 \DeclareRobustCommand*{\cal}{\@fontswitch{\relax}{\mathcal}}
 \DeclareRobustCommand*{\mit}{\@fontswitch{\relax}{\mathnormal}}
 \fi								% 2.00(3)<<
-
+
 %%%%%% Font Size Macros %%%%%%
 
 % \baselineskip's are almost 1.25 times those defined in NTT jart12.
@@ -240,6 +236,7 @@
 \def\bf{\protect\pdg\protect\pbf}
 \fi\fi								% 2.00(5)<<
 
+
 %%%%%% Page Layout Parameters %%%%%%
 
 \newdimen\@Kwidth \@Kwidth\jspaceskip
@@ -291,7 +288,7 @@
 
 \ifDS@english \parindent1.5em \else \parindent\@Kwidth \fi
 
-
+
 %%%%%% Page Header and Footer %%%%%% 
 
 \mark{{}{}} 
@@ -310,10 +307,10 @@
 \pagenumbering{arabic}
 
 \ifDS@english\else
-\def\today{\the\year 年 \the\month 月 \the\day 日}
+\def\today{\the\year $BG/(B \the\month $B7n(B \the\day $BF|(B}
 \fi
 
-
+
 %%%%%% Title, Author, Abstract %%%%%%
 
 \long\def\jtitle{\@dblarg{\@xjtitle}}
@@ -326,7 +323,6 @@
 \def\supervisor#1{\gdef\@supervisor{#1}}
 \def\date#1{\gdef\@date{#1}}
 \def\department#1{\gdef\@department{#1}}		% 2.10 (3)
-\def\course#1{\gdef\@department{#1}}		% 2.10 (3)
 
 \def\@jtitle{\mkt@warning\jtitle}
 \def\@etitle{\mkt@warning\etitle}
@@ -338,17 +334,17 @@
 \ifDS@english
 \def\@title{\@etitle} \def\@titleforabst{\@etitleforabst}
 \def\@author{\@eauthor}
-\def\mkt@masterthesis{Master's Thesis}
+\def\mkt@masterthesis{Master Thesis}
 \def\mkt@supervisor{Supervisor}
-\def\mkt@department{Course of \@department \\ Department of Informatics \\		% 2.10 (3)
+\def\mkt@department{Department of \@department \\		% 2.10 (3)
 	Graduate School of Informatics\\
 	Kyoto University}
 \else
 \def\@title{\@jtitle} \def\@titleforabst{\@jtitleforabst}
 \def\@author{\@jauthor}
-\def\mkt@masterthesis{修士論文}
-\def\mkt@supervisor{指導教員}
-\def\mkt@department{京都大学大学院情報学研究科\\修士課程 情報学専攻 \@department コース}
+\def\mkt@masterthesis{$B=$;NO@J8(B}
+\def\mkt@supervisor{$B;XF36541(B}
+\def\mkt@department{$B5~ETBg3XBg3X1!>pJs3X8&5f2J(B\\$B=$;N2]Dx(B\@department $B@l96(B}
 								% 2.10 (3)
 \fi
 
@@ -367,7 +363,7 @@
 
 \def\maketitle{\newpage\thispagestyle{empty}\global\c@page\@m
 	\begin{center}\large
-	{\Large\bf \ifDS@master \mkt@masterthesis \else 特別研究報告書\fi}\par
+	{\Large\bf \ifDS@master \mkt@masterthesis \else $BFCJL8&5fJs9p=q(B\fi}\par
 	\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip
 	{\LARGE\bf \leavevmode\@title\par}
 	\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip
@@ -375,15 +371,15 @@
 	\vfill
 	\ifDS@master \mkt@department\else
 		\ifnum\c@entranceyear<1995\relax
-			京都大学工学部情報工学科\else
-			京都大学工学部情報学科\fi\fi\par
+			$B5~ETBg3X9)3XIt>pJs9)3X2J(B\else
+			$B5~ETBg3X9)3XIt>pJs3X2J(B\fi\fi\par
 	\bigskip\bigskip
 	{\Large \@author}\par
 	\bigskip\bigskip\bigskip\bigskip
 	\@date
 	\end{center}\newpage}
 
-\def\jabstract{\@abstract\@jtitleforabst\@jauthor{内容梗概}
+\def\jabstract{\@abstract\@jtitleforabst\@jauthor{$BFbMF9<35(B}
 	\ifASCII\else\tolerance2000\hbadness2000\fi
 	\parindent\@Kwidth\indent\ignorespaces}
 \def\eabstract{\@abstract\@etitleforabst\@eauthor{Abstract}\parindent1.5em
@@ -400,7 +396,7 @@
 	\rightline{#2}
 	\noindent{\bf#3}\par}
 
-
+
 %%%%%% Table of Contents %%%%%%
 
 \setcounter{tocdepth}{3}	% \subsubsection will appear in TOC
@@ -412,12 +408,10 @@
 \def\@dotsep{3}
 
 % \@mkboth will have no effect.
-							% 2.11 >>
 \def\tableofcontents{\newpage\pagestyle{empty}
 	\begin{center}\large\bf\leavevmode\@titleforabst\end{center}
-	\sectionNC*{\name@toc\@mkboth{\name@toc}{\name@toc}}
+	\section*{\name@toc\@mkboth{\name@toc}{\name@toc}}
 	\@starttoc{toc}\newpage\pagestyle{plain}\global\c@page\@ne}
-							% 2.11 <<
 
 \ifDS@english						% 2.10(1) >>
 \def\l@section#1#2{\addpenalty\@secpenalty \addvspace\medskipamount
@@ -429,7 +423,7 @@
 \else
 \def\l@section#1#2{\addpenalty\@secpenalty \addvspace\medskipamount
 	\begingroup \parindent\z@ \rightskip\@pnumwidth\relax
-	\parfillskip-\rightskip \settowidth\@tempdima{\bf 第1章\quad}
+	\parfillskip-\rightskip \settowidth\@tempdima{\bf $BBh(B1$B>O(B\quad}
 	\leftskip\@tempdima
 	\bf \leavevmode \hskip-\leftskip#1\nobreak\hfil\nobreak
 	\hbox to\rightskip{\hss#2}\par \endgroup}
@@ -461,14 +455,12 @@
 	\latex@dottedtocline{#1}{#2}{#3}{#4}{#5}}}
 
 % LOF/LOT will not appear, but are defined.
-						% 2.11 <<
 \def\listoffigures{\pagestyle{empty}
-	\sectionNC*{\name@lof\@mkboth{\name@lof}{\name@lof}}
+	\section*{\name@lof\@mkboth{\name@lof}{\name@lof}}
 	\@starttoc{lof}\newpage\pagestyle{plain}\global\c@page\@ne}
 \def\listoffigures{\pagestyle{empty}
-	\sectionNC*{\name@lot\@mkboth{\name@lot}{\name@lot}}
+	\section*{\name@lot\@mkboth{\name@lot}{\name@lot}}
 	\@starttoc{lot}\newpage\pagestyle{plain}\global\c@page\@ne}
-						% 2.11 >>
 \settowidth\@tempdima{0.0\quad}
 \edef\l@figure{\noexpand\@dottedtocline{1}{\z@}{\the\@tempdima}}
 \let\l@table\l@figure
@@ -477,7 +469,7 @@
 % unusural cases.
 \def\beginbody{\clearpage\pagestyle{plain}\global\c@page\@ne}
 
-
+
 %%%%%% Sectioning Commands %%%%%%
 
 \ifDS@english
@@ -496,13 +488,8 @@
 \ifDS@master							% 2.10 (1)
 \def\section{\clearpage \@startsection				% 2.10 (1)
 	{section}{1}{\z@}{\sec@aboveskip}{\sec@belowskip}{\fs@sec\bf}}
-% \sectionNC is \section without \clearpage
-\def\sectionNC{\@startsection				% 2.11
-	{section}{1}{\z@}{\sec@aboveskip}{\sec@belowskip}{\fs@sec\bf}}
 \else
 \def\section{\@startsection
-	{section}{1}{\z@}{\sec@aboveskip}{\sec@belowskip}{\fs@sec\bf}}
-\def\sectionNC{\@startsection				% 2.11
 	{section}{1}{\z@}{\sec@aboveskip}{\sec@belowskip}{\fs@sec\bf}}
 \fi
 \def\subsection{\@startsection
@@ -523,7 +510,7 @@
 \ifDS@english						% 2.10 (1) >>
 \def\thesection{Chapter~\arabic{section}}
 \else	
-\def\thesection{第\arabic{section}章}
+\def\thesection{$BBh(B\arabic{section}$B>O(B}
 \fi							% 2.10 (1) <<
 \def\thesubsection{\arabic{section}.\arabic{subsection}}	% 2.10 (1)
 \def\thesubsubsection{\thesubsection.\arabic{subsubsection}}
@@ -576,7 +563,7 @@
 \def\sec@emptysection#1{\sec@sec*{#1\@mkboth{#1}{#1}}
 	\addcontentsline{toc}{section}{\numberline{}#1}}
 
-
+
 %%%%%% List-like Environments %%%%%%
 %
 %		LM	RM	LW	LS	LPI	II
@@ -714,7 +701,7 @@
 \let\theo@it\relax \let\theo@sp\relax
 \fi
 
-
+
 %%%%%% Floats %%%%%%
 
 % You may need to change following parameters
@@ -776,7 +763,7 @@
 	\let\cap@beforeskip\relax \def\@captype{table}\minipage}
 \def\endsubtable{\endminipage\global\@ignoretrue}
 
-
+
 %%%%%% Footnote %%%%%%
 
 %% The following codes are from pfnote.sty, by H. Nakashima of Kyoto Univ.,
@@ -808,6 +795,7 @@
 \let\fn@rpar)
 \def\@makefnmark{\hbox{$^{\@thefnmark\fn@rpar}$}}
 \long\def\@makefntext#1{\leftskip1.5em\noindent\llap{\@makefnmark\ }#1}
+
 
 %%%%%% Name Definition %%%%%%
 
@@ -821,17 +809,17 @@
 \def\name@fig{Figure~}				% 2.10 (2)
 \def\name@tab{Table~}				% 2.10 (2)
 \else
-\def\name@toc{目次}
-\def\name@lof{図一覧}
-\def\name@lot{表一覧}
-\def\name@app{付録}
-\def\name@ack{謝辞}
-\def\name@bib{参考文献}
-\def\name@fig{図}
-\def\name@tab{表}
+\def\name@toc{$BL\<!(B}
+\def\name@lof{$B?^0lMw(B}
+\def\name@lot{$BI=0lMw(B}
+\def\name@app{$BIUO?(B}
+\def\name@ack{$B<U<-(B}
+\def\name@bib{$B;29MJ88%(B}
+\def\name@fig{$B?^(B}
+\def\name@tab{$BI=(B}
 \fi
 
-
+
 %%%%%% Miscellaneous %%%%%%
 
 \raggedbottom
@@ -861,7 +849,7 @@
 \def\endtitlepage{\if@restonecol\twocolumn \else \newpage \fi}
 
 \ifDS@english\else
-\def\today{\number\year 年 \number\month 月 \number\day 日}
+\def\today{\number\year $BG/(B \number\month $B7n(B \number\day $BF|(B}
 \fi
 
 \ifASCII\else
@@ -877,7 +865,5 @@
 \fi
 
 \marginparsep 10pt 
-
-\renewcommand{\appendix}{\Appendix}
 
 \endinput
