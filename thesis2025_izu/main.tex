@@ -45,9 +45,15 @@
 
 %DAGパス幅に基づくアルゴリズム及びDAG木幅の提案
 %DAGパス幅及びDAG木幅に基づくアルゴリズムの設計
-\jtitle[DAGパス幅及びDAG木幅に基づくアルゴリズムの設計]%	% 和文題目（内容梗概／目次用）
-	{DAGパス幅及びDAG木幅に基づく\\アルゴリズムの設計}	% 和文題目
-\etitle{algorithms based on DAG-pathwidth and DAG-treewidth}	% 英文題目
+%DAGパス幅に基づくアルゴリズムの設計及びDAG木幅への拡張
+%Designing graph algorithms based on DAG-pathwidth and DAG-treewidth
+%DAGパス幅に基づく種々のグラフアルゴリズムの設計及びDAG木幅への拡張
+%Designing various graph algorithms based on DAG-pathwidth and its extention to DAG-treewidth
+%Designing various algorithms based on DAG-pathwidth and proposal of DAG-treewidth from DAG-pathwidth 
+
+\jtitle[DAGパス幅に基づく種々のアルゴリズムの設計\\及びDAG木幅への拡張]%	% 和文題目（内容梗概／目次用）
+	{DAGパス幅に基づく種々のアルゴリズムの設計及びDAG木幅への拡張}	% 和文題目
+\etitle{Designing various algorithms based on DAG-pathwidth and extension to DAG-treewidth}	% 英文題目
 \jauthor{伊豆 真哉}				% 和文著者名
 \eauthor{Shinya Izu}			% 英文著者名
 \supervisor{川原 純 准教授}			% 指導教員名
@@ -89,7 +95,7 @@
 \end{comment}
 
 
-有向有向グラフがどれだけ有向パスに近い構造をしているかを表すパラメータとしてDAGパス幅が存在する．DAGパス幅は有向パス幅のルールに対し，任意の枝について両端点を同時に含むバッグが存在するというルールを追加している．DAGパス幅は，有向パス幅が常に0になってしまうDAGに対しても非自明な幅を与えることができ，DAG上でNP困難な問題に対するパラメータ化アルゴリズムの構築に役立っている．またDAGパス幅に対する近似アルゴリズムは現在まで知られていなかった．
+有向有向グラフがどれだけ有向パスに近い構造をしているかを表すパラメータとしてDAGパス幅が存在する．DAGパス幅は有向パス幅のルールに対し，任意の枝について両端点を同時に含むバッグが存在するというルールを追加している．DAGパス幅は，有向パス幅が常に0になってしまうDAGに対しても非自明な幅を与えることができ，DAG上でNP困難な問題に対するパラメータ化アルゴリズムの構築に役立っている．またDAGパス幅に対する近似アルゴリズムは我々の知る限り知られていなかった．
 
 
 今回の研究では，まず最初にDAG上でもNP困難である様々な問題に対し，DAGパス幅を使ったパラメータ化アルゴリズムを提案する．具体的にはDirected Dominating Set Problem, Max Leaf Outbranching Problem, Directed Steiner Tree Problemの3つの問題に対しては，幅が$w$であるDAGパス分解が与えられたときに$f(w)\cdot g(n)$で厳密解を与えるFPTアルゴリズムを提案する．$k$-Disjoint Path Problemに対しては$O(k^w\cdot f(w)\cdot g(n))$で厳密解を与えるパラメータ化アルゴリズムを提案する．
@@ -311,7 +317,7 @@ DAGパス幅は有向グラフがどれだけ有向パスに近い構造をし�
     頂点数$n\ (>2)$の連結な有向グラフ$G$のDAGパス幅が1であることの必要十分条件は，$G$がキャタピラ型であることである．
 \end{lemma}
 
-\ref{catapillar}の証明は付録で示す．
+補題\ref{catapillar}の証明は付録で示す．
 
 \begin{comment}
     
@@ -640,7 +646,7 @@ $\mathsf{Compute}(P)$
     $\mathsf{Compute}$は$G$のMaxLOBの解を出力する．
 \end{lemma}
 
-\ref{lob}の証明は付録で示す．
+補題\ref{lob}の証明は付録で示す．
 
 \begin{comment}
     
@@ -779,7 +785,7 @@ $\mathsf{Compute}(P)$
     $\mathsf{Compute}$は$G$のDisjoint Path Problemの解を出力する．
 \end{lemma}
 
-\ref{dpp}の証明は付録で示す．
+補題\ref{dpp}の証明は付録で示す．
 
 \begin{comment}
 
@@ -902,7 +908,7 @@ $\mathsf{Compute}(P, r, R)$
     $\mathsf{Compute}$は$r$を根とし，$R$をすべて含むような$G$のminimum-DSTの総重みを出力する
 \end{lemma}
 
-\ref{dst}の証明は付録で示す．
+補題\ref{dst}の証明は付録で示す．
 
 \begin{comment}
 
@@ -986,7 +992,7 @@ DEDS problemとは，$G$のmDEDSのサイズを求める問題である．Hanaka
     有向グラフ$G$の基礎グラフの木幅が高々$tw$であるとき，$G$のDEDS problemを$4^{2tw^2}4^{2tw}n^{O(1)}$の時間で解くFPTアルゴリズムが存在する．
 \end{proposition}
 
-上記のアルゴリズムは幅が$tw$の木分解を利用したアルゴリズムであり，DPを行う上での必要な情報として，木分解上の各バッグ$B_t$に対して部分解となる枝集合$A\subseteq E(B_t)$，各頂点$v \in B_t$に対して前方の向きを支配できるかを表す関数$f$，$f$の支配関係の根拠を示す関数$s_f$を保持する必要がある．このアルゴリズムは一般の有向グラフ上で利用でき，より一般化した問題に対しても動作するといった利点がある．一方で木分解は入力グラフの枝の向きの情報をもたないため，向きの情報を表す$f, s_f$を計算する必要があり，計算量が$O(4^{2tw})$だけ大きくなっている．これに対し，一般のDAGに対して幅を$w$とするnice DAGパス分解が与えられたとき，$O(2^{w^2}w^2n^2)$の時間でDEDS problemを解くアルゴリズムを構築する．このアルゴリズムで利用するDAGパス分解は入力グラフの向きの情報を内部に含んでいるため，$f, s_f$といったパラメータが不要になる．木幅が抑えられたDAGでもDAGパス幅は任意に大きくなることがあるため，計算量の単純な比較はできないが，木分解を用いた場合よりもアルゴリズムの構築が容易になる利点がある．
+上記のアルゴリズムは幅が高々$tw$の木分解を利用したアルゴリズムであり，DPを行う上での必要な情報として，木分解上の各バッグ$B_t$に対して部分解となる枝集合$A\subseteq E(B_t)$，各頂点$v \in B_t$に対して前方の向きを支配できるかを表す関数$f$，$f$の支配関係の根拠を示す関数$s_f$を保持する必要がある．このアルゴリズムは一般の有向グラフ上で利用でき，より一般化した問題に対しても動作するといった利点がある．一方で木分解は入力グラフの枝の向きの情報をもたないため，向きの情報を表す$f, s_f$を計算する必要があり，計算量が$O(4^{2tw})$だけ大きくなっている．これに対し，一般のDAGに対して幅を$w$とするnice DAGパス分解が与えられたとき，$O(2^{w^2}w^2n^2)$の時間でDEDS problemを解くアルゴリズムを構築する．このアルゴリズムで利用するDAGパス分解は入力グラフの向きの情報を内部に含んでいるため，$f, s_f$といったパラメータが不要になる．木幅が抑えられたDAGでもDAGパス幅は任意に大きくなることがあるため，計算量の単純な比較はできないが，木分解を用いた場合よりもアルゴリズムの構築が容易になる利点がある．
 ★より詳しく読む
 
 \begin{theorem}\label{DEDS_FPT}
@@ -1004,31 +1010,36 @@ DEDS problemとは，$G$のmDEDSのサイズを求める問題である．Hanaka
     \end{align*}
 \end{definition*}
 
-すなわち，有向グラフのLine graphとは元のグラフに対して枝の向きを保ちながら頂点と枝を入れ替えたようなグラフである．以下ではDAGのLine graphに対するDAGパス分解についての補題を示す．またDAG $G$のLine graphを$L(G)$と表す．
+すなわち，有向グラフのLine graphとは元のグラフに対して枝の向きを保ちながら頂点と枝を入れ替えたようなグラフである．以下ではDAGのLine graphに対するDAGパス分解についての補題を示す．またDAG $G$のLine graphを$L(G)$と表す．以下の2つの補題により定理\ref{DEDS_FPT}が示される．
 
 \begin{lemma}\label{DAGパス分解(L(G))}
     DAG $G$に対し，幅が$w$である$G$のnice DAGパス分解が与えられたとき，幅が高々$O(w^2)$である$L(G)$のnice DAGパス分解を$G$の頂点数の多項式時間で構築できる．
 \end{lemma}
 
+\begin{comment}
 \begin{proof}
     DAG $G$に対し，幅が$w$である$G$のnice DAGパス分解$X=(X_1, X_2, \dots, X_s)$が与えられたとする．ここで各$i=1, 2, \dots, s$に対し，$X_i$によって誘導される$G$の部分グラフを$G_i$とし，$X^L_i = V[L(G_i)]$とする．このとき$X_L=(X^L_1, X^L_2, \dots, X^L_s)$は$L(G)$のDAGパス分解である．まず$X_L$はDAGパス分解のルール1を満たす．これはDAGパス分解のルール2より，$G$の任意の枝$(u, v)$に対して$u, v$を同時に含むバッグ$X_k$が$X$に存在する．これより$(u, v)\in X^L_k$がいえ，これをすべての枝に対して考えることにより$X_L$の各バッグの和集合が$V[L(G)]$と一致することが示される．したがって$X_L$はDAGパス分解のルール1を満たす．また$X_L$はDAGパス分解のルール3も満たす．なぜならば，もしルール3を満たさないと仮定すると，ある頂点$e\in V[L(G)]$と整数$k, l, m\ (1 \leq k < l < m \leq s)$が存在し，$e\in X^L_k, e\notin X^L_l, e\in X^L_m$がいえる．このとき$e=(u, v)\ (u, v \in V[G])$とすると，$u\in X_k, u\notin X_l, u\in X_m$もしくは$v\in X_k, v\notin X_l, v\in X_m$の少なくとも一方が成り立つ．これは$X$がDAGパス分解のルール3を満たすことと矛盾する．したがって$X_L$はDAGパス分解のルール3を満たす．さらに$X_L$はDAGパス分解のルール2も満たす．$X$において$X_i$が頂点$v$をintroduceする場合，DAGパス分解のルール2より$\mathsf{pred}(v)\subseteq X_{i-1}, \mathsf{suc}(v)\cap X_{i-1} = \varnothing$が成り立つ．ここで$\mathsf{pred}(v)=\{u_1, u_2, \dots, u_k\}$とすると，$X^L_i$は$X^L_{i-1}$に対して$L(G)$の$k$個の頂点$(u_1, v), (u_2, v), \dots, (u_k, v)$が新たに追加されている．各$u_l\ (1\leq l \leq k)$に対し，$u_l$の先行頂点$u'_l \in X_i$が存在する場合，$(u'_l, u_l), (u_l, v) \in X^L_i$かつ$(u_l, v) \notin X^L_{i-1}$が成り立つ．これを全ての$u_l, u'_l$について考えることにより，任意の枝$((u'_l, u_l), (u_l, v)) \in E[L(G)]$に対して$X_L$はDAGパス分解のルール2を満たすことがいえる．$X_i$が頂点$v$をforgetする場合，$X^L_i$では$v$を端点にもつ枝に対応するL(G)上の頂点が削除されるだけであるため，DAGパス分解のルール2に反しない．以上より$X_L$は$L(G)$のDAGパス分解であることが示される．このとき$X^L$の幅は高々$O(w^2)$である．最後に$X_L$のnice DAGパス分解$X'_L$を計算することにより目的のDAGパス分解を得る．計算量については，各バッグ$X^L_i$で新たに追加される頂点数は高々$w$個であり，それぞれに対して先行頂点が存在するかの判定に高々$O(w)$かかる．バッグ数はProposition~\ref{number_of_bag}より，$n=|V[G]|$とすると$O(|V[L(G)]|)=O(n^2)$である．nice DAGパス分解の計算も$n$の多項式時間で行えることに注意すると，$X$から$X'_L$の構築は$n$の多項式時間で行えることが示される．
 \end{proof}
-
-一方，DAG $G$のmDEDSと$L(G)$のmDiDSとの関係について，以下の補題を示す．
+\end{comment}
 
 \begin{lemma}\label{mDEDS_mDiDS}
     DAG $G$に対し，$G$のmDEDSと$L(G)$のmDiDSは等しい．
 \end{lemma}
 
+\begin{comment}
 \begin{proof}
     $S\in E[G]$が$G$のDEDSであるとき，任意の枝$(v, w) \in E[G]$について$(v, w)\in S$であるか，ある枝$(u, v)\in S$が存在するかのいずれかが成り立つ．このとき$L(G)$上では任意の頂点$(v, w) \in V[L(G)]$について$(v, w)\in S$であるか，ある頂点$(u, v)\in S$が存在するかのいずれかが成り立つ．したがって$S$は$L(G)$のDiDSである．同様の議論により$S\in V[L(G)]$が$L(G)$のDiDSならば$S$は$G$のDEDSである．したがって$G$のDEDSと$L(G)$のDiDSは一対一で対応する．よって$G$のmDEDSと$L(G)$のmDiDSは等しいことが示される．
 \end{proof}
+\end{comment}
 
-上記の2つの補題を使うことで定理\ref{DEDS_FPT}を示す．
 
+上記の2つの補題及び定理\ref{DEDS_FPT}の証明は付録で示す．
+
+\begin{comment}
 \begin{proof}
     補題\ref{mDEDS_mDiDS}より，$L(G)$のmDiDSを求めればよい．また 補題\ref{DAGパス分解(L(G))}より，幅が$w$である$G$のnice DAGパス分解$X$が与えられたとき，幅が高々$O(w^2)$である$L(G)$のnice DAGパス分解$X'_L$を多項式時間で構築できる．よって\ref{3.1}節のアルゴリズム$\mathsf{Compute}(X'_L)$を計算することで$L(G)$のmDiDSを求めることができる．このとき$X'_L$の幅が$O(w^2)$，バッグ数が$O(n^2)$となっていることに注意すると，計算量は$O(2^{w^2}w^2n^2)$である．
 \end{proof}
+\end{comment}
 
 
 
@@ -1105,15 +1116,20 @@ Raviらは[19]で以下を示している．
     こうしてできた$P'_L=(X'_1, X'_2, \dots , X'_{s_l}), P'_R=(Y'_1, Y'_2, \dots , Y'_{s_r})$に対し，$P=(X'_1, X'_2, \dots , X'_{s_l}, Y'_1, Y'_2, \dots , Y'_{s_r})$を出力する．
 \end{subroutine}
 
-\begin{lemma}
+$\mathsf{Merge}$に関して以下の補題が得られる．証明は付録で示す．
+
+\begin{lemma}\label{lemma_Merge}
     $P=\mathsf{Merge}(P_L, P_R)$は$G$のnice DAGパス分解である．
 \end{lemma}
 
+\begin{comment}
 \begin{proof} 
 $P$について，$X'_1 \cup X'_2 \cup \dots \cup X'_{s_l} \cup Y'_1 \cup Y'_2 \cup \dots \cup Y'_{s_r} = V[G]$であるため，DAGパス分解のルール1を満たす．
 またルール3について，任意の$v \in V'$がルール3を満たしていることを示せば十分．$v$が$P_L$でintroduceされたバッグを$X_m$とすると，$\mathsf{Merge}$の操作により，$v$は$P$において$X'_m, X'_{m+1}, \dots , Y'_{s_r}$のバッグにのみ含まれ，それ以外のバッグには含まれない．よってルール3を満たす．
 ルール2について，各$v \in V'$とそれに接続する各頂点$u \in G_R$に対して，$(v, u)$がルール2を満たすことを示せば十分．$v, u$がそれぞれ$P_L, P_R$でintroduceされたバッグを$X_m, Y_n$とすると，$v$は$P$において$X'_m, X'_{m+1}, \dots , Y'_{s_r}$のバッグにのみ含まれ，$u$は$Y'_n, Y'_{n+1}, \dots , Y'_{s_r}$のバッグにのみ含まれる．したがって$v, u \in Y'_n$かつ$u \notin Y'_{n-1}$が成り立ち，ルール2を満たす．
 \end{proof} 
+\end{comment}
+
 
 \ifthenelse{\boolean{Draft}}{
 \begin{figure}[t]
@@ -1137,12 +1153,13 @@ $\mathsf{Make}(G[V])$
 \end{enumerate}
 
 
-ここでTheorem~\ref{approximation}の証明のため，次の補題を示す．
+ここで定義\ref{approximation}の証明のため，次の補題を示す．証明は付録で示す．
 
 \begin{lemma}\label{sepa_pw_relation}
     頂点数$n$，最大出次数$k$，DAGパス幅$pw$であるDAG $G$に対し，コストが高々$k(pw+1)$のminimum $\frac{1}{3}$-balanced DAG edge-separatorが存在する．
 \end{lemma}
 
+\begin{comment}
 \begin{proof} 
 $G=(V, E)$の最適なnice DAGパス分解を$P=(X_1, X_2, \dots , X_s)$とする．$P$のDAGパス幅は$pw$である．$G$の各頂点を$P$でintroduceされた順に$v_1, v_2, \dots , v_n$とする．$v=v_{\lceil n/2 \rceil}$とし，$v$が初めてintroduceされたバッグを$X_i$とする．$A= X_1 \cup X_2 \cup \dots \cup X_i, B= X_{i+1} \cup X_{i+2} \cup \dots \cup X_s$とする．例としてFiture\ref{fig:3}を示す．このとき$X_i$から出て$B$に入る枝の集合を$S$とすると，DAGパス分解のルール3より$G'=(V, E \backslash S)$には$A$と$B$の間に枝はなく，$v$の選び方により$|A| \geq \frac{1}{3}|V|, |B| \geq \frac{1}{3}|V|$を満たす．またDAGパス分解のルール2より$A$と$B$の間の枝は$A$から出て$B$に入る向きである．よって$S$は$G$の$\frac{1}{3}$-balanced DAG edge-separatorである．$G$の最大出次数が$k$であることに注意すると，$S$のコスト$C(S)$について以下の不等式が成り立つ．
 \begin{align*}
@@ -1151,6 +1168,8 @@ $G=(V, E)$の最適なnice DAGパス分解を$P=(X_1, X_2, \dots , X_s)$とす�
     &C(S_{opt}) \leq k(pw+1).
 \end{align*}
 \end{proof}
+\end{comment}
+
 
 \ifthenelse{\boolean{Draft}}{
 \begin{figure}[t]
@@ -1161,7 +1180,7 @@ $G=(V, E)$の最適なnice DAGパス分解を$P=(X_1, X_2, \dots , X_s)$とす�
 \end{figure}
 }
 
-最後に次の補題を示すことで，Theorem~\ref{approximation}が成り立つことを示す．
+最後に次の補題を示すことで，定義\ref{approximation}が成り立つことを示す．
 
 \begin{lemma}
     頂点数$n$，最大出次数$k$，DAGパス幅が$pw$のDAG $G[V]$が与えられたとき，$P = \mathsf{Make}(G[V])$とする．このとき，ある定数$\alpha$が存在し，$P$の幅は高々$\alpha k(pw+1)\log ^2 n$である．
@@ -1200,21 +1219,28 @@ DAG $G_L, G_R$があり，$G_L, G_R$の間の枝は，$G_L$から出て$G_R$に�
 
 Perら[20]はone-shot BPの近似アルゴリズムの存在を示している．
 
-\begin{lemma}
+\begin{proposition}
     頂点数$n$のDAG $G$に対し，one-shot BPのペブリング数が最小値の高々$O(\log ^{3/2} n)$倍である戦略を出力するアルゴリズムが存在する．
-\end{lemma}
+\end{proposition}
 
-したがって，Theorem~\ref{approximation2}を示すためには以下の補題を示せば十分である．
+したがって，定義\ref{approximation2}を示すためには以下の補題を示せば十分である．
 
 \begin{lemma}\label{lemma_approximation2}
     one-shot BPとnice DAGパス分解は等価な問題である．
 \end{lemma}
+
+補題\ref{lemma_approximation2}の証明は付録で示す．
+
+\begin{comment}
 
 \begin{proof}
     まずDAG $G$に対し，$X$が$G$のnice DAGパス分解であれば$X$は$G$のone-shot BPであることを示す．$G$に対するあるnice DAGパス分解を$X=(X_1, X_2, \dots, X_s)$とする．one-shot BPのルール4より$X_1 = \varnothing$であるためone-shot BPの初期条件を満たす．DAGパス分解のルール1とルール3より，すべての頂点は$X$でちょうど1回introduceされるため，one-shot BPですべての頂点がちょうど1回pebbleされるという条件を満たす．操作1とDAGパス分解のルール2より，$v \in V$が$X_i$でintroduceされるとき，任意の$(u, v)\in E$に対して$u \in X_{i-1}$．これはone-shot BPのpebbleのルールを満たす．また各頂点に対し，forgetがちょうど1度だけ行われることに注意すると，操作2とunpebbleの操作は明らかに等価である．よって$X$のintroduceとforgetが各々pebbleとunpebbleに対応する．以上より$X$は$G$のone-shot BPである．
     
     次に$P$が$G$のone-shot BPであれば$P$は$G$のnice DAGパス分解であることを示す．$G$に対するあるone-shot BPを$P=(P_1, P_2, \dots, P_t)$とする．$P_1 = \varnothing$よりnice DAGパス分解のルール4を満たす．また各頂点$v \in V$に対し，$v$は$P$でちょうど1回ずつpebble，unpebbleされるため，nice DAGパス分解のルール1を満たす．また，$v$のpebble，unpebbleがそれぞれ$P_i, P_{k+1}$ $(1 \leq i \leq k \leq t-1)$で行われるとすると，任意の頂点に対して2回以上pebbleされることはないため，任意の$P_j$ $(i \leq j \leq k)$において$v \in P_j$を満たす．これを$V$の全ての頂点に対して考えることで，nice DAGパス分解のルール3を満たす．さらにpebbleのルールより，$v \notin P_{i-1}$かつ任意の$(u, v) \in E$に対し$u \in P_{i-1}$ならば$P_i = P_{i-1} \cup \{v\}$であるが，これは$u, v \in P_i$かつ$v \notin P_{i-1}$を満たす．したがってpebbleの操作はnice DAGパス分解のルール2を満たしたintroduceの操作とみなすことができる．またunpebbleの操作は明らかにnice DAGパス分解のforgetの条件を満たす．以上より$P$は$G$のnice DAGパス分解である．
 \end{proof}
+
+\end{comment}
+
 
 
 
@@ -1273,7 +1299,7 @@ Kevinら[8]は以下の補題を示している．
 
 
 
-まず，Theorem~\ref{approximation3}を示す際に必要となる完全有向木を定義する．
+まず，定義\ref{approximation3}を示す際に必要となる完全有向木を定義する．
 
 \begin{definition*}
     ある正整数$d$に対し，有向木$T=(V, E)$が以下をすべて満たすとき，$T$は完全有向$d$分木である．
@@ -1295,9 +1321,9 @@ $T$が完全有向$d$分木であるとき，根から葉までのパスの長�
 
 
 
-以下では，実際にアルゴリズムを構築することでTheorem~\ref{approximation3}を示す．
+以下では，実際にアルゴリズムを構築することで定義\ref{approximation3}を示す．
 
-\begin{proof}(Theorem~\ref{approximation3})\\
+\begin{proof}(定義\ref{approximation3})\\
 入力グラフ$H = (V, E)$に対し，根が1つとなるように$H$に頂点と枝を加える．具体的には高さが$\lceil \log_d l \rceil$である完全有向$d$分技を用意し，完全有向$d$分木の葉から$H$の各根に向かう枝を加えて結合する．こうしてできるグラフを$H'$とする．$H'$は出次数が高々$d$であり，根の数が1である．また$M_{t, d, l}$を高さ$\lceil \log_d l \rceil +t+2$の完全有向$d$分木とする．
 
 以下のアルゴリズムでは$M_{t, d, l}$の$H'$への埋め込みを見つける．もし埋め込みを見つけることができれば$H'$のDAGパス幅は$M_{t, d, l}$のDAGパス幅以上であることがわかる．アルゴリズムではグラフの部分的な埋め込みを行っていき，グラフ全体の埋め込みが可能化を探索していく．ここで$M_{t, d, l}$の頂点をトークンと呼ぶ．token $T$が$H'$のある頂点に置かれたとき$T$はtokenedであると表し，頂点に置かれていないときuntokenedであると表す．アルゴリズムを通して$H'$の1つの頂点に置くことができるトークンは1つのみである．
@@ -1399,7 +1425,7 @@ $\mathsf{FindEmbedding}$では，最初に$H'$のただ一つの根にトーク�
 \end{cor}
 
 \begin{proof}
-    Theorem~\ref{approximation3}より，$\mathsf{FindEmbedding}$は$H$のDAGパス幅が$t$より大きい証拠として完全$d$分木の$H$への埋め込みを出力するか，幅が高々$O(ld^t)$のDAGパス分解を出力する．以下では$\mathsf{FindEmbedding}$が多項式時間で終了することを示す．$\mathsf{GrowTokenTree}$では列1のwhileの条件の判定は高々$O(dn)$かかり，これを高々$|V[M_{t, d, l}]| = O(d^t)$回繰り返す．また$\mathsf{FindEmbedding}$の列6の$T$の削除によって，$T$が置かれていた頂点はredのままであるため，この操作は高々$O(n)$回行われることに注意すると，列4のwhileもまた高々$O(n)$回行われる．さらに列10のwhileは明らかに高々$d^2$回繰り返す．他のステップは$O(1)$の計算時間で処理される．以上よりアルゴリズムは$d, l$がある定数以下であるとすると$O(n^2)$で停止する．
+    定義\ref{approximation3}より，$\mathsf{FindEmbedding}$は$H$のDAGパス幅が$t$より大きい証拠として完全$d$分木の$H$への埋め込みを出力するか，幅が高々$O(ld^t)$のDAGパス分解を出力する．以下では$\mathsf{FindEmbedding}$が多項式時間で終了することを示す．$\mathsf{GrowTokenTree}$では列1のwhileの条件の判定は高々$O(dn)$かかり，これを高々$|V[M_{t, d, l}]| = O(d^t)$回繰り返す．また$\mathsf{FindEmbedding}$の列6の$T$の削除によって，$T$が置かれていた頂点はredのままであるため，この操作は高々$O(n)$回行われることに注意すると，列4のwhileもまた高々$O(n)$回行われる．さらに列10のwhileは明らかに高々$d^2$回繰り返す．他のステップは$O(1)$の計算時間で処理される．以上よりアルゴリズムは$d, l$がある定数以下であるとすると$O(n^2)$で停止する．
 \end{proof}
 
 
@@ -1424,18 +1450,14 @@ $\mathsf{FindEmbedding}$では，最初に$H'$のただ一つの根にトーク�
 
 \subsection{DAG木幅とDAG木分解の定義}
 
-本節ではDAGパス幅を一般化した概念のDAG木幅を導入する．そのためにまずDAG木分解の定義を行う．
+本節ではDAGパス幅の拡張としてDAG木幅・DAG木分解を導入する．
 
 \begin{definition*}[DAG木分解]
  有向グラフ$G=(V, E)$のDAG木分解とは，有向木$T$と，$T$の各ノード$t$について$\beta(t) \subseteq V$であるような$\beta$とのペア$(T, \beta)$である．$(T, \beta)$は以下の3つを満たす．
  
 \begin{enumerate}
     \item $\sum_{t\in T} \beta(t) = V$ 
-    \item $T$の根を$r$としたとき，任意の枝 $ (u, v) \in E $ について以下のいずれかが成り立つ．
-    \begin{itemize}
-          \item $u, v \in \beta(r)$
-          \item ある $i$ $(i \in T, i \neq r)$があり，$i$の親を$j$としたとき，$u, v \in \beta(i)$, $v \notin \beta(j)$
-    \end{itemize}
+    \item $T$の根$r$に対し，任意の枝 $ (u, v) \in E $ について$u, v \in \beta(r)$か，もしくはある $i$ $(i \in T, i \neq r)$とその親$j$があり，$u, v \in \beta(i)$, $v \notin \beta(j)$が成り立つ．
     \item 任意の$ i, j, k \in T$に対し，$j$が$i$から$k$までのパス上に存在するならば，$\beta(i) \cap \beta(k) \subseteq \beta(j)$．すなわち各$v \in V$について，$v$を含むバッグは$T$上で非空な部分有向木を誘導する．
     \end{enumerate}
 \end{definition*}
@@ -1462,11 +1484,11 @@ DAG木分解の例を図\ref{fig:6}で示す．以下でDAG木幅を定義する
     有向グラフ$G$が与えられたとき，$G$のDAG木幅を計算する問題はNP困難である．
 \end{theorem}
 
-Theorem~\ref{NP困難}の証明は付録で示す．
+定理\ref{NP困難}の証明は付録で示す．
 
 \begin{comment}
 
-Theorem~\ref{NP困難}を証明するために，まず以下のLemmaを示す．
+定理\ref{NP困難}を証明するために，まず以下のLemmaを示す．
 
 \begin{lemma}\label{sink}
     有向グラフ$G=(V, E)$の強連結成分$A$があり，$A$から$V \backslash A$への枝が存在しないとき，$A$を$G$の$sink$と呼ぶ．このとき，$G$が$sink$をただ1つしか持たないならば，$\mathsf{tw}(G) = \mathsf{pw}(G)$が成り立つ．
@@ -1478,9 +1500,9 @@ Theorem~\ref{NP困難}を証明するために，まず以下のLemmaを示す�
 \end{proof}
 
 
-上のLemmaを用い，[3]の手法を参考にしてTheorem~\ref{NP困難}を示す．
+上のLemmaを用い，[3]の手法を参考にして定理\ref{NP困難}を示す．
 
-\begin{proof}[proof of Theorem~\ref{NP困難}]
+\begin{proof}[proof of 定理\ref{NP困難}]
     ある有向グラフ$G = (V, E)$が与えられたとき，以下の手順で有向グラフ$G' = (V', E')$ $(|V'| = 2|V| + 1, |E'| = \frac{1}{2}(|V|^2 + 3|V|) + 2|E|)$を構成する．
 
     \vskip\baselineskip
@@ -1622,7 +1644,7 @@ nice DAG木分解の例を図\ref{fig:7}で示す．あるDAG木分解が与え�
             \item ある$i \in T$と，その子$j \in T$について，$\beta(j) \subseteq \beta(i)$かつ$|\beta(i)| - |\beta(j)| \geq 2$ならば，$i$と$j$の間に$i''$ $(\beta(i'') = \beta(i) \backslash \{v\}, v \in \beta(i) \backslash \beta(j))$を加え，$(i, i'', j)$の順につなぐ．
             \item ある$i \in T$と，その子$j \in T$について，$\beta(i) \subseteq \beta(j)$かつ$\beta(j) \backslash \beta(i)$が強連結成分でないとき，$i$と$j$の間に$i'''$ $(\beta(i''') = \beta(j) \backslash A$，$A$は$\beta(j) \backslash \beta(i)$の強連結成分)を加え，$(i, i''', j)$の順につなぐ．
             \item ある$i$が$k$ $(k \geq 3)$個以上の子を持つとき，$i$の直後に，高さが$\lfloor \log_{2} k \rfloor$の完全二分有向木$T'$ $(^{\forall}t' \in T'$について$\beta(t') = \beta(i))$を追加し，$T'$の各葉に対して2つずつ$i$の子を接続し，枝の向きは葉から子への向きとする．ただし，$\lfloor x \rfloor$は$x$を超えない最大の整数値とする．
-            \item ある$i$が2つの子$j, k$を持つとき，$i$と$j$，$i$と$k$の間にそれぞれ$j', k'$ $(\beta(j') = \beta(k') = \beta(i))$を追加し，それぞれ$(i, j', j),\ (i, k', k)$の順につなぐ．
+            \item ある$i$が2つの子$j, k$をもつとき，$i$と$j$，$i$と$k$の間にそれぞれ$j', k'$ $(\beta(j') = \beta(k') = \beta(i))$を追加し，それぞれ$(i, j', j),\ (i, k', k)$とつなぐ．
         \end{enumerate}
     \end{enumerate}
 
@@ -1661,25 +1683,25 @@ DAG木分解 $T$をFPTアルゴリズムに利用する場合，$T$の葉から�
 \end{comment}
 
 % co-DAG木分解の例を図☆☆\ref{fig:6_2}で示す．
-DAG木分解はDAGパス分解と同じく枝の向きと同方向に向かってバッグを構成していたが，co-DAG木分解は枝の向きと逆方向に向かってバッグを構成している．これによってco-DAG木分解をFPTアルゴリズムに利用する際，葉側のバッグから動的計画法を実行することができる．以下ではco-DAG木幅を定義する．
+DAG木分解は枝の向きと同方向に向かってバッグを構成していたが，co-DAG木分解は枝の向きと逆方向に向かってバッグを構成している．これによってco-DAG木分解をFPTアルゴリズムに利用する際，葉側のバッグから動的計画法を実行することができる．以下ではco-DAG木幅を定義する．
 
 \begin{definition*}[co-DAG木幅]
     あるco-DAG木分解 $(T, \beta)$の幅を$\max_{t \in T}|\beta(t)|$と定義する．このとき，有向グラフ$G$のco-DAG木幅とは，$G$に対する全てのco-DAG木分解のうち，幅が最小であるco-DAG木分解の幅である．
 \end{definition*}
 
 
-以降では，$G$のco-DAG木幅を$\mathsf{rtw}(G)$と表す．co-DAG木幅を求める問題の計算量クラスについて，以下を示す．
+以降では，$G$のco-DAG木幅を$\mathsf{ctw}(G)$と表す．co-DAG木幅を求める問題の計算量クラスについて，以下を示す．
 
 
 \begin{theorem}[計算量クラス]\label{r-NP困難}
     有向グラフ$G$が与えられたとき，$G$のco-DAG木幅を計算する問題はNP困難である．
 \end{theorem}
 
-Theorem~\ref{r-NP困難}の証明は付録で示す．
+定理\ref{r-NP困難}の証明は付録で示す．最後にnice co-DAG木分解についても定義する．
 
 \begin{comment}
     
-Theorem~\ref{r-NP困難}を証明するため，次で定義されるco-DAGパス幅の計算がNP困難であることを示す．
+定理\ref{r-NP困難}を証明するため，次で定義されるco-DAGパス幅の計算がNP困難であることを示す．
 
 
 \begin{definition*}
@@ -1730,10 +1752,10 @@ Theorem~\ref{r-NP困難}を証明するため，次で定義されるco-DAGパ�
 
 
 
-最後にTheorem~\ref{r-NP困難}を示す．
+最後に定理\ref{r-NP困難}を示す．
 
 \begin{proof}
-    ある有向グラフ$G = (V, E)$が与えられたとき，定義\ref{NP困難}の証明と同様の手順で$|V'| = 2|V| + 1, |E'| = \frac{1}{2}(|V|^2 + 3|V|) + 2|E|$である有向グラフ$G' = (V', E')$ を構成する．また$G'$の頂点集合$A, B$を同様に$A = \{v_i | i =1, 2, \dots, n\}, B = \{v'_i | i =1, 2, \dots, n\}$と定める．このとき$V' = A \cup B \cup \{s\}$とできる．$G'$は$G$のサイズの多項式時間で構成できる．
+    ある有向グラフ$G = (V, E)$が与えられたとき，定理\ref{NP困難}の証明と同様の手順で$|V'| = 2|V| + 1, |E'| = \frac{1}{2}(|V|^2 + 3|V|) + 2|E|$である有向グラフ$G' = (V', E')$ を構成する．また$G'$の頂点集合$A, B$を同様に$A = \{v_i | i =1, 2, \dots, n\}, B = \{v'_i | i =1, 2, \dots, n\}$と定める．このとき$V' = A \cup B \cup \{s\}$とできる．$G'$は$G$のサイズの多項式時間で構成できる．
     
     次に，幅が$\mathsf{rpw}(G)$である$G$のco-DAGパス分解を$(P, \beta)$ $(P = p_1, p_2, \dots, p_r)$とする．各$m$に対し，$G'$の頂点集合$\gamma(p_m)$を以下のように構成する．
 
@@ -1745,9 +1767,9 @@ Theorem~\ref{r-NP困難}を証明するため，次で定義されるco-DAGパ�
 
     さらに$\gamma(p_0) = \gamma(p_1) \cup \{s\}$ $((p_0, p_1) \in E[T])$と定める．
 
-    以上の操作によってできる$(P', \gamma)$ $(P' = (p_0, p_1, p_2, \dots, p_r))$が$G'$のco-DAGパス分解になっていることを示す．図☆☆\ref{fig:4}の$G, G'$に対するco-DAGパス分解$(P, \beta),\ (P', \gamma)$の構成例を図☆☆\ref{fig:5}で示す．$\gamma$の構成法に注意すると，$A \subseteq \gamma(p_r), B \subseteq \gamma(p_1)$がいえ，さらに$r \in \gamma(p_0)$であることから，$\sum_{m=0}^{r} \gamma(p_m) = V'$が成り立つ．よって$(P', \gamma)$はco-DAGパス分解のルール1を満たす．また$\gamma$の構成法に注意すると，任意の$v \in V' \backslash \{r\}$に対して，$v$を含む全てのバッグが$(p_1, p_2, \dots, p_r)$上で非連結になることはなく，また$B \cup \{r\} \subseteq \gamma(p_0)$より，任意の$v \in V'$に対して，$v$を含む全てのバッグが$(p_0, p_1, p_2, \dots, p_r)$上で非連結になることはない．よって$(P', \gamma)$はco-DAGパス分解のルール3を満たす．さらに定義\ref{NP困難}の証明と同様の議論により，$(P', \gamma)$がco-DAGパス分解のルール2を満たすことがいえる．以上より$(P', \gamma)$は$G'$のco-DAGパス分解である．このとき$(P', \gamma)$の幅は$\mathsf{rpw}(G)+n$である．
+    以上の操作によってできる$(P', \gamma)$ $(P' = (p_0, p_1, p_2, \dots, p_r))$が$G'$のco-DAGパス分解になっていることを示す．図☆☆\ref{fig:4}の$G, G'$に対するco-DAGパス分解$(P, \beta),\ (P', \gamma)$の構成例を図☆☆\ref{fig:5}で示す．$\gamma$の構成法に注意すると，$A \subseteq \gamma(p_r), B \subseteq \gamma(p_1)$がいえ，さらに$r \in \gamma(p_0)$であることから，$\sum_{m=0}^{r} \gamma(p_m) = V'$が成り立つ．よって$(P', \gamma)$はco-DAGパス分解のルール1を満たす．また$\gamma$の構成法に注意すると，任意の$v \in V' \backslash \{r\}$に対して，$v$を含む全てのバッグが$(p_1, p_2, \dots, p_r)$上で非連結になることはなく，また$B \cup \{r\} \subseteq \gamma(p_0)$より，任意の$v \in V'$に対して，$v$を含む全てのバッグが$(p_0, p_1, p_2, \dots, p_r)$上で非連結になることはない．よって$(P', \gamma)$はco-DAGパス分解のルール3を満たす．さらに定理\ref{NP困難}の証明と同様の議論により，$(P', \gamma)$がco-DAGパス分解のルール2を満たすことがいえる．以上より$(P', \gamma)$は$G'$のco-DAGパス分解である．このとき$(P', \gamma)$の幅は$\mathsf{rpw}(G)+n$である．
 
-    さらに\ref{NP困難}の証明と全く同様の議論により，$(P', \gamma)$が$G'$に対して幅が最小のco-DAGパス分解であることがいえる．ここで$G'$はsinkを一つしか持たないことに注意すると，補題\ref{r-sink}より$\mathsf{rtw}(G') = \mathsf{rpw}(G')$がいえ，$\mathsf{rtw}(G) = \mathsf{rpw}(G) + n$が成り立つ．以上より定義\ref{r-NP困難}が示される．
+    さらに定理\ref{NP困難}の証明と全く同様の議論により，$(P', \gamma)$が$G'$に対して幅が最小のco-DAGパス分解であることがいえる．ここで$G'$はsinkを一つしか持たないことに注意すると，補題\ref{r-sink}より$\mathsf{rtw}(G') = \mathsf{rpw}(G')$がいえ，$\mathsf{rtw}(G) = \mathsf{rpw}(G) + n$が成り立つ．以上より定理\ref{r-NP困難}が示される．
 \end{proof}
 
 \end{comment}
@@ -1761,7 +1783,7 @@ Theorem~\ref{r-NP困難}を証明するため，次で定義されるco-DAGパ�
 
 
 
-最後にnice co-DAG木分解についても定義する．
+%最後にnice co-DAG木分解についても定義する．
 
 \begin{definition*}[nice co-DAG木分解]
  $G=(V, E)$を有向グラフとし，$(T, \beta)$を$G$のco-DAG木分解とする．$(T, \beta)$が以下の２つを満たすとき，$(T, \beta)$は$G$のnice co-DAG木分解であるという．
@@ -1808,7 +1830,6 @@ Theorem~\ref{r-NP困難}を証明するため，次で定義されるco-DAGパ�
             \item ある$i$が2つの親$j, k$を持つとき，$i$と$j, k$の間にそれぞれ$j', k'$ $(\beta(j') = \beta(k') = \beta(i))$を追加し，それぞれ$(j, j', i),\ (k, k', i)$の順につなぐ．
         \end{enumerate}
     \end{enumerate}
-
     以上の操作によってできるco-DAG木分解は，幅が高々$w$であり，また$G$のnice co-DAG木分解である．この構築は$G$の頂点数の多項式時間で行える．
 \end{proof}
 
@@ -2011,12 +2032,15 @@ $\mathsf{Compute}(T, \beta)$
 
 
 
+
+
+
 \ifthenelse{\boolean{Draft2}}{
 						% 付録の開始
 \Appendix[付録]
 
 
-\section{\ref{catapillar}の証明}
+\section{補題\ref{catapillar}の証明}
 
 \begin{proof}
     $G$に入次数2以上の頂点$v$が存在する場合，DAGパス分解のルール2より，$G$の任意のDAGパス分解には$v$とその先行頂点をすべて含むバッグが必ず存在するため，$G$のDAGパス幅は少なくとも2以上となる．したがって以下では$G$に入次数2以上の頂点が存在しない，すなわち有向木である場合のみを考える．まず$G$がキャタピラ型でないとき，$G$のDAGパス幅が2以上となることを示す．そのために$G$の頂点数で場合分けをして考える．$|V[G]|=2$の場合，$G$は明らかにキャタピラ型である．$|V[G]|=3, 4$の場合もまた$G$はキャタピラ型である．以下に理由を示す．$G$が有向木ならば，$G$に含まれる最長のパスを1つ選択し，その頂点列を$P$とする．$|P|=3$の場合，$G$の枝分かれの数は高々1つであり，その枝分かれの長さも高々1である．したがって$G$はキャタピラ型である．$|P|=4$の場合，$|V[G]|=4$に注意すると$G$は長さ4のパスであるため，明らかにキャタピラ型である．以上より$|V[G]|=3, 4$の場合，$G$はキャタピラ型である．
@@ -2026,9 +2050,7 @@ $\mathsf{Compute}(T, \beta)$
 
 
 
-\section{\ref{lob}の証明}
-
-本節では定理\ref{lob}の証明を示す．
+\section{補題\ref{lob}の証明}
    
 \begin{proof}
     $\mathsf{Compute}$のFirst Stepより，$G$が根$r$のみからなる場合は1を出力するためMaxLOBの解となっている．以下では$G$に根$r$以外の頂点も含まれる場合を考える．補題\ref{lob}の証明は，各$i$に対し$\mathsf{LOB}(i, A_i, B_i)$が$\mathsf{LOB}$の定義\ref{def_lob}を満たすことを示せば十分．これを$i$に関する数学的帰納法で示す．以下では便宜上，木を成す頂点のうち葉以外の頂点を茎と呼ぶ．\\
@@ -2050,7 +2072,7 @@ $\mathsf{Compute}(T, \beta)$
 
 
 
-\section{\ref{dpp}の証明}
+\section{補題\ref{dpp}の証明}
 
 \begin{proof}
     入力グラフ$G$が単一頂点$s_1=t_1$からなる場合，$\mathsf{Compute}$のPreprocessingの処理により0を出力する．これは明らかに$G$のDisjoint Pathになっている．以下では$G$が単一頂点から成らない場合を考える．あるバッグ$X_i$が$v \in V$をintroduceするとき，$v$は$A^1_i, A^2_i,  \dots, A^k_i, B_i$のいずれかにのみ含まれるため，これを1から$i$まで考えることにより各パス$P^m_i$は互いに共通の頂点を持たない点素なパスであることが示される．また，ある始点$s_m \in S$がintroduceされたバッグを$X_{i_s}$とすると，$X_{i'}$ $(i' < i_s)$でintroduceされた頂点はパス$P^m_{i_s}$に含まれることはない．なぜならば，$X_{i'}$で頂点$u$がintroduceされ，かつ$A^m_{i'} = \{u\}$であるとすると，$\mathsf{pred}(u) \cap A^m_{i'} = \varnothing$であり，式\ref{cal2}の条件より$\mathsf{Cal}$の値は$\infty$となるからである．さらに，ある終点$t_m \in S$がintroduceされたバッグを$X_{i_t}$とすると，$X_{i'}$ $(i_t < i')$でintroduceされる頂点はパス$P^m_{i'}$に含まれることはない．なぜならば，$X_j$ $(i_t < j)$で頂点$w$がintroduceされ，かつ$\mathsf{Compute}$のPreprocessingを行う前の入力グラフにおいて$w \in \mathsf{suc}(t_m)$であるとする．ここで$w \in A^m_j$であるとすると，DAGパス分解のルール2より$t_m \in A^m_j$がいえるが，もし$\mathsf{pred}(w) \cap (A^m_j \backslash \{t_m\}) = \varnothing$ならば，Preprocessingの処理により$\mathsf{pred}(w) \cap A^m_j = \varnothing$であるため，式\ref{cal2}の条件より$\mathsf{Cal}$の値は$\infty$となる．一方，$\mathsf{pred}(w) \cap (A^m_j \backslash \{t_m\}) \neq \varnothing$ならば，ある頂点$p \in \mathsf{pred}(w) \cap A^m_j$ $(p \neq t_m)$が存在し，式\ref{cal2}の条件より，$p$のある後続頂点$q \in A^m_j$ $(p \in \mathsf{pred}(q) \cap (A^m_j \backslash \{w\}) \text{かつ} \mathsf{suc}(p) \cap (A^m_j \backslash \{w\}) = \{q\})$が存在する．Preprocessingの処理によって枝$(t_m, w)$が除かれることに注意すると$\{q, w\} \subseteq \mathsf{suc}(p) \cap A^m_j$が成り立つため，$w$のintroduceにおいて式\ref{cal2}の条件より$\mathsf{Cal}$の値は$\infty$となる．これ以降のバッグ$X_l$ $(j < l)$でintroduceされた頂点$w'$が$A^m_l$に含まれた場合，枝$(w, w')$が存在すれば式\ref{cal2}の条件より$\mathsf{Cal}$の値は$\infty$となり，枝$(w, w')$が存在しなければ上記と同様の議論により$\mathsf{Cal}$の値は$\infty$となる．以上より$X_{i_t}$以降でintroduceされた頂点はパス$P^m_{i_t}$に追加されることはない．\\
@@ -2074,7 +2096,7 @@ $\mathsf{Compute}(T, \beta)$
 
 
 
-\section{\ref{dst}の証明}
+\section{補題\ref{dst}の証明}
 
 \begin{proof}
     まず，Preprocessingを行っても解が変わらないことを示す．Preprocessingにおける$V_r$は根$r$から到達可能な頂点の集合であるため，任意の$v \in V \backslash V_r$は目的のminimum-DSTに含まれない．したがって考えるグラフを$G' = G[V \backslash V_r]$としても解は変わらず，また$P'$は$G'$のnice DAGパス分解となっていることに注意すると，$\mathsf{ST}$に入力するnice DAGパス分解を$P'$としても解は変わらない．また$P'$の幅は$P$の幅より大きくならないことに注意する．
@@ -2113,8 +2135,89 @@ $\mathsf{Compute}(T, \beta)$
 
 
 
-\section{Theorem~\ref{NP困難}の証明}
-Theorem~\ref{NP困難}を証明するため以下のLemmaを示す．
+
+\section{補題\ref{DAGパス分解(L(G))}, \ref{mDEDS_mDiDS}及び定理\ref{DEDS_FPT}の証明}
+
+
+\begin{proof}(補題\ref{DAGパス分解(L(G))})
+    DAG $G$に対し，幅が$w$である$G$のnice DAGパス分解$X=(X_1, X_2, \dots, X_s)$が与えられたとする．ここで各$i=1, 2, \dots, s$に対し，$X_i$によって誘導される$G$の部分グラフを$G_i$とし，$X^L_i = V[L(G_i)]$とする．このとき$X_L=(X^L_1, X^L_2, \dots, X^L_s)$は$L(G)$のDAGパス分解である．まず$X_L$はDAGパス分解のルール1を満たす．これはDAGパス分解のルール2より，$G$の任意の枝$(u, v)$に対して$u, v$を同時に含むバッグ$X_k$が$X$に存在する．これより$(u, v)\in X^L_k$がいえ，これをすべての枝に対して考えることにより$X_L$の各バッグの和集合が$V[L(G)]$と一致することが示される．したがって$X_L$はDAGパス分解のルール1を満たす．また$X_L$はDAGパス分解のルール3も満たす．なぜならば，もしルール3を満たさないと仮定すると，ある頂点$e\in V[L(G)]$と整数$k, l, m\ (1 \leq k < l < m \leq s)$が存在し，$e\in X^L_k, e\notin X^L_l, e\in X^L_m$がいえる．このとき$e=(u, v)\ (u, v \in V[G])$とすると，$u\in X_k, u\notin X_l, u\in X_m$もしくは$v\in X_k, v\notin X_l, v\in X_m$の少なくとも一方が成り立つ．これは$X$がDAGパス分解のルール3を満たすことと矛盾する．したがって$X_L$はDAGパス分解のルール3を満たす．さらに$X_L$はDAGパス分解のルール2も満たす．$X$において$X_i$が頂点$v$をintroduceする場合，DAGパス分解のルール2より$\mathsf{pred}(v)\subseteq X_{i-1}, \mathsf{suc}(v)\cap X_{i-1} = \varnothing$が成り立つ．ここで$\mathsf{pred}(v)=\{u_1, u_2, \dots, u_k\}$とすると，$X^L_i$は$X^L_{i-1}$に対して$L(G)$の$k$個の頂点$(u_1, v), (u_2, v), \dots, (u_k, v)$が新たに追加されている．各$u_l\ (1\leq l \leq k)$に対し，$u_l$の先行頂点$u'_l \in X_i$が存在する場合，$(u'_l, u_l), (u_l, v) \in X^L_i$かつ$(u_l, v) \notin X^L_{i-1}$が成り立つ．これを全ての$u_l, u'_l$について考えることにより，任意の枝$((u'_l, u_l), (u_l, v)) \in E[L(G)]$に対して$X_L$はDAGパス分解のルール2を満たすことがいえる．$X_i$が頂点$v$をforgetする場合，$X^L_i$では$v$を端点にもつ枝に対応するL(G)上の頂点が削除されるだけであるため，DAGパス分解のルール2に反しない．以上より$X_L$は$L(G)$のDAGパス分解であることが示される．このとき$X^L$の幅は高々$O(w^2)$である．最後に$X_L$のnice DAGパス分解$X'_L$を計算することにより目的のDAGパス分解を得る．計算量については，各バッグ$X^L_i$で新たに追加される頂点数は高々$w$個であり，それぞれに対して先行頂点が存在するかの判定に高々$O(w)$かかる．バッグ数はProposition~\ref{number_of_bag}より，$n=|V[G]|$とすると$O(|V[L(G)]|)=O(n^2)$である．nice DAGパス分解の計算も$n$の多項式時間で行えることに注意すると，$X$から$X'_L$の構築は$n$の多項式時間で行えることが示される．
+\end{proof}
+
+
+
+\begin{proof}(補題\ref{mDEDS_mDiDS})
+    $S\in E[G]$が$G$のDEDSであるとき，任意の枝$(v, w) \in E[G]$について$(v, w)\in S$であるか，ある枝$(u, v)\in S$が存在するかのいずれかが成り立つ．このとき$L(G)$上では任意の頂点$(v, w) \in V[L(G)]$について$(v, w)\in S$であるか，ある頂点$(u, v)\in S$が存在するかのいずれかが成り立つ．したがって$S$は$L(G)$のDiDSである．同様の議論により$S\in V[L(G)]$が$L(G)$のDiDSならば$S$は$G$のDEDSである．したがって$G$のDEDSと$L(G)$のDiDSは一対一で対応する．よって$G$のmDEDSと$L(G)$のmDiDSは等しいことが示される．
+\end{proof}
+
+
+
+\begin{proof}(定理\ref{DEDS_FPT})
+    補題\ref{mDEDS_mDiDS}より，$L(G)$のmDiDSを求めればよい．また 補題\ref{DAGパス分解(L(G))}より，幅が$w$である$G$のnice DAGパス分解$X$が与えられたとき，幅が高々$O(w^2)$である$L(G)$のnice DAGパス分解$X'_L$を多項式時間で構築できる．よって\ref{3.1}節のアルゴリズム$\mathsf{Compute}(X'_L)$を計算することで$L(G)$のmDiDSを求めることができる．このとき$X'_L$の幅が$O(w^2)$，バッグ数が$O(n^2)$となっていることに注意すると，計算量は$O(2^{w^2}w^2n^2)$である．
+\end{proof}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{補題\ref{lemma_Merge}, \ref{sepa_pw_relation}の証明}
+
+\begin{proof}(補題\ref{lemma_Merge})
+$P$について，$X'_1 \cup X'_2 \cup \dots \cup X'_{s_l} \cup Y'_1 \cup Y'_2 \cup \dots \cup Y'_{s_r} = V[G]$であるため，DAGパス分解のルール1を満たす．
+またルール3について，任意の$v \in V'$がルール3を満たしていることを示せば十分．$v$が$P_L$でintroduceされたバッグを$X_m$とすると，$\mathsf{Merge}$の操作により，$v$は$P$において$X'_m, X'_{m+1}, \dots , Y'_{s_r}$のバッグにのみ含まれ，それ以外のバッグには含まれない．よってルール3を満たす．
+ルール2について，各$v \in V'$とそれに接続する各頂点$u \in G_R$に対して，$(v, u)$がルール2を満たすことを示せば十分．$v, u$がそれぞれ$P_L, P_R$でintroduceされたバッグを$X_m, Y_n$とすると，$v$は$P$において$X'_m, X'_{m+1}, \dots , Y'_{s_r}$のバッグにのみ含まれ，$u$は$Y'_n, Y'_{n+1}, \dots , Y'_{s_r}$のバッグにのみ含まれる．したがって$v, u \in Y'_n$かつ$u \notin Y'_{n-1}$が成り立ち，ルール2を満たす．
+\end{proof} 
+
+\begin{proof}(補題\ref{sepa_pw_relation})
+$G=(V, E)$の最適なnice DAGパス分解を$P=(X_1, X_2, \dots , X_s)$とする．$P$のDAGパス幅は$pw$である．$G$の各頂点を$P$でintroduceされた順に$v_1, v_2, \dots , v_n$とする．$v=v_{\lceil n/2 \rceil}$とし，$v$が初めてintroduceされたバッグを$X_i$とする．$A= X_1 \cup X_2 \cup \dots \cup X_i, B= X_{i+1} \cup X_{i+2} \cup \dots \cup X_s$とする．例としてFiture\ref{fig:3}を示す．このとき$X_i$から出て$B$に入る枝の集合を$S$とすると，DAGパス分解のルール3より$G'=(V, E \backslash S)$には$A$と$B$の間に枝はなく，$v$の選び方により$|A| \geq \frac{1}{3}|V|, |B| \geq \frac{1}{3}|V|$を満たす．またDAGパス分解のルール2より$A$と$B$の間の枝は$A$から出て$B$に入る向きである．よって$S$は$G$の$\frac{1}{3}$-balanced DAG edge-separatorである．$G$の最大出次数が$k$であることに注意すると，$S$のコスト$C(S)$について以下の不等式が成り立つ．
+\begin{align*}
+    &C(S) \leq k|X_i| \leq k(pw+1).
+\intertext{一方，$G$のminimum $\frac{1}{3}$-balanced DAG edge-separator $S_{opt}$のコストは高々$C(S)$であるから，}
+    &C(S_{opt}) \leq k(pw+1).
+\end{align*}
+\end{proof}
+
+
+
+
+
+
+
+
+
+
+
+\section{補題\ref{lemma_approximation2}の証明}
+
+\begin{proof}
+    まずDAG $G$に対し，$X$が$G$のnice DAGパス分解であれば$X$は$G$のone-shot BPであることを示す．$G$に対するあるnice DAGパス分解を$X=(X_1, X_2, \dots, X_s)$とする．one-shot BPのルール4より$X_1 = \varnothing$であるためone-shot BPの初期条件を満たす．DAGパス分解のルール1とルール3より，すべての頂点は$X$でちょうど1回introduceされるため，one-shot BPですべての頂点がちょうど1回pebbleされるという条件を満たす．操作1とDAGパス分解のルール2より，$v \in V$が$X_i$でintroduceされるとき，任意の$(u, v)\in E$に対して$u \in X_{i-1}$．これはone-shot BPのpebbleのルールを満たす．また各頂点に対し，forgetがちょうど1度だけ行われることに注意すると，操作2とunpebbleの操作は明らかに等価である．よって$X$のintroduceとforgetが各々pebbleとunpebbleに対応する．以上より$X$は$G$のone-shot BPである．
+    
+    次に$P$が$G$のone-shot BPであれば$P$は$G$のnice DAGパス分解であることを示す．$G$に対するあるone-shot BPを$P=(P_1, P_2, \dots, P_t)$とする．$P_1 = \varnothing$よりnice DAGパス分解のルール4を満たす．また各頂点$v \in V$に対し，$v$は$P$でちょうど1回ずつpebble，unpebbleされるため，nice DAGパス分解のルール1を満たす．また，$v$のpebble，unpebbleがそれぞれ$P_i, P_{k+1}$ $(1 \leq i \leq k \leq t-1)$で行われるとすると，任意の頂点に対して2回以上pebbleされることはないため，任意の$P_j$ $(i \leq j \leq k)$において$v \in P_j$を満たす．これを$V$の全ての頂点に対して考えることで，nice DAGパス分解のルール3を満たす．さらにpebbleのルールより，$v \notin P_{i-1}$かつ任意の$(u, v) \in E$に対し$u \in P_{i-1}$ならば$P_i = P_{i-1} \cup \{v\}$であるが，これは$u, v \in P_i$かつ$v \notin P_{i-1}$を満たす．したがってpebbleの操作はnice DAGパス分解のルール2を満たしたintroduceの操作とみなすことができる．またunpebbleの操作は明らかにnice DAGパス分解のforgetの条件を満たす．以上より$P$は$G$のnice DAGパス分解である．
+\end{proof}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{定理\ref{NP困難}の証明}
+定理\ref{NP困難}を証明するため以下の補題を示す．
 
 \begin{lemma}\label{sink}
     有向グラフ$G=(V, E)$の強連結成分$A$があり，$A$から$V \backslash A$への枝が存在しないとき，$A$を$G$の$sink$と呼ぶ．このとき，$G$が$sink$をただ1つしか持たないならば，$\mathsf{tw}(G) = \mathsf{pw}(G)$が成り立つ．
@@ -2126,9 +2229,9 @@ Theorem~\ref{NP困難}を証明するため以下のLemmaを示す．
 \end{proof}
 
 
-上のLemmaを用い，[3]の手法を参考にしてTheorem~\ref{NP困難}を示す．
+上の補題を用い，[3]の手法を参考にして定理\ref{NP困難}を示す．
 
-\begin{proof}[proof of Theorem~\ref{NP困難}]
+\begin{proof}[proof of 定理\ref{NP困難}]
     ある有向グラフ$G = (V, E)$が与えられたとき，以下の手順で有向グラフ$G' = (V', E')$ $(|V'| = 2|V| + 1, |E'| = \frac{1}{2}(|V|^2 + 3|V|) + 2|E|)$を構成する．
 
     \vskip\baselineskip
@@ -2234,9 +2337,9 @@ Theorem~\ref{NP困難}を証明するため以下のLemmaを示す．
 
 
 
-\section{Theorem~\ref{r-NP困難}の証明}
+\section{定理\ref{r-NP困難}の証明}
 
-Theorem~\ref{r-NP困難}を証明するため，次で定義されるco-DAGパス幅の計算がNP困難であることを示す．
+定理\ref{r-NP困難}を証明するため，次で定義されるco-DAGパス幅の計算がNP困難であることを示す．
 
 \begin{definition*}
      $G=(V, E)$とする．$G$のco-DAGパス分解とは，以下の3つの条件をみたすようなVの各部分集合$ X_i (i = 1, 2,  \ldots, s)$の列 $X=(X_1, X_2,  \ldots, X_s)$ である．
@@ -2272,7 +2375,7 @@ Theorem~\ref{r-NP困難}を証明するため，次で定義されるco-DAGパ�
 
 
 
-また，次のLemmaを示す．
+また，次の補題を示す．
 
 \begin{lemma}\label{r-sink}
     $G =(V, E)$が$sink$をただ1つしか持たないならば，$\mathsf{ctw}(G) = \mathsf{cpw}(G)$が成り立つ．
@@ -2286,10 +2389,10 @@ Theorem~\ref{r-NP困難}を証明するため，次で定義されるco-DAGパ�
 
 
 
-最後にTheorem~\ref{r-NP困難}を示す．
+最後に定理\ref{r-NP困難}を示す．
 
 \begin{proof}
-    ある有向グラフ$G = (V, E)$が与えられたとき，定義\ref{NP困難}の証明と同様の手順で$|V'| = 2|V| + 1, |E'| = \frac{1}{2}(|V|^2 + 3|V|) + 2|E|$である有向グラフ$G' = (V', E')$ を構成する．また$G'$の頂点集合$A, B$を同様に$A = \{v_i | i =1, 2, \dots, n\}, B = \{v'_i | i =1, 2, \dots, n\}$と定める．このとき$V' = A \cup B \cup \{s\}$とできる．$G'$は$G$のサイズの多項式時間で構成できる．
+    ある有向グラフ$G = (V, E)$が与えられたとき，定理\ref{NP困難}の証明と同様の手順で$|V'| = 2|V| + 1, |E'| = \frac{1}{2}(|V|^2 + 3|V|) + 2|E|$である有向グラフ$G' = (V', E')$ を構成する．また$G'$の頂点集合$A, B$を同様に$A = \{v_i | i =1, 2, \dots, n\}, B = \{v'_i | i =1, 2, \dots, n\}$と定める．このとき$V' = A \cup B \cup \{s\}$とできる．$G'$は$G$のサイズの多項式時間で構成できる．
     
     次に，幅が$\mathsf{cpw}(G)$である$G$のco-DAGパス分解を$(P, \beta)$ $(P = p_1, p_2, \dots, p_r)$とする．各$m$に対し，$G'$の頂点集合$\gamma(p_m)$を以下のように構成する．
 
@@ -2303,9 +2406,9 @@ Theorem~\ref{r-NP困難}を証明するため，次で定義されるco-DAGパ�
 
     以上の操作によってできる$(P', \gamma)$ $(P' = (p_0, p_1, p_2, \dots, p_r))$が$G'$のco-DAGパス分解になっていることを示す．
     % 図☆☆\ref{fig:4_2}の$G, G'$に対するco-DAGパス分解$(P, \beta),\ (P', \gamma)$の構成例を図☆☆\ref{fig:5_2}で示す．
-    $\gamma$の構成法に注意すると，$A \subseteq \gamma(p_r), B \subseteq \gamma(p_1)$がいえ，さらに$r \in \gamma(p_0)$であることから，$\sum_{m=0}^{r} \gamma(p_m) = V'$が成り立つ．よって$(P', \gamma)$はco-DAGパス分解のルール1を満たす．また$\gamma$の構成法に注意すると，任意の$v \in V' \backslash \{r\}$に対して，$v$を含む全てのバッグが$(p_1, p_2, \dots, p_r)$上で非連結になることはなく，また$B \cup \{r\} \subseteq \gamma(p_0)$より，任意の$v \in V'$に対して，$v$を含む全てのバッグが$(p_0, p_1, p_2, \dots, p_r)$上で非連結になることはない．よって$(P', \gamma)$はco-DAGパス分解のルール3を満たす．さらに定義\ref{NP困難}の証明と同様の議論により，$(P', \gamma)$がco-DAGパス分解のルール2を満たすことがいえる．以上より$(P', \gamma)$は$G'$のco-DAGパス分解である．このとき$(P', \gamma)$の幅は$\mathsf{cpw}(G)+n$である．
+    $\gamma$の構成法に注意すると，$A \subseteq \gamma(p_r), B \subseteq \gamma(p_1)$がいえ，さらに$r \in \gamma(p_0)$であることから，$\sum_{m=0}^{r} \gamma(p_m) = V'$が成り立つ．よって$(P', \gamma)$はco-DAGパス分解のルール1を満たす．また$\gamma$の構成法に注意すると，任意の$v \in V' \backslash \{r\}$に対して，$v$を含む全てのバッグが$(p_1, p_2, \dots, p_r)$上で非連結になることはなく，また$B \cup \{r\} \subseteq \gamma(p_0)$より，任意の$v \in V'$に対して，$v$を含む全てのバッグが$(p_0, p_1, p_2, \dots, p_r)$上で非連結になることはない．よって$(P', \gamma)$はco-DAGパス分解のルール3を満たす．さらに定理\ref{NP困難}の証明と同様の議論により，$(P', \gamma)$がco-DAGパス分解のルール2を満たすことがいえる．以上より$(P', \gamma)$は$G'$のco-DAGパス分解である．このとき$(P', \gamma)$の幅は$\mathsf{cpw}(G)+n$である．
 
-    さらに\ref{NP困難}の証明と全く同様の議論により，$(P', \gamma)$が$G'$に対して幅が最小のco-DAGパス分解であることがいえる．ここで$G'$はsinkを一つしか持たないことに注意すると，補題\ref{r-sink}より$\mathsf{ctw}(G') = \mathsf{cpw}(G')$がいえ，$\mathsf{ctw}(G) = \mathsf{cpw}(G) + n$が成り立つ．以上より定義\ref{r-NP困難}が示される．
+    さらに定理\ref{NP困難}の証明と全く同様の議論により，$(P', \gamma)$が$G'$に対して幅が最小のco-DAGパス分解であることがいえる．ここで$G'$はsinkを一つしか持たないことに注意すると，補題\ref{r-sink}より$\mathsf{ctw}(G') = \mathsf{cpw}(G')$がいえ，$\mathsf{ctw}(G) = \mathsf{cpw}(G) + n$が成り立つ．以上より定理\ref{r-NP困難}が示される．
 \end{proof}
 
 
