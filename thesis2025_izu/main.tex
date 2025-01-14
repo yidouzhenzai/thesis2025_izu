@@ -125,17 +125,17 @@ DAGパス幅の計算はNP困難であることが知られており，小さな
 
 \begin{eabstract}				% 英文梗概
 
-DAG-pathwidth is a parameter that measures how similar is the structure of a directed graph to that of a directed path. This parameter provides a non-trivial width even for DAG, which is difficult to parameterize using existing width. DAG-pathwidth is useful for designing parameterized algorithms to solve NP-hard problems on DAGs.
+DAG (directed acyclic graph)-pathwidth is a parameter that measures how similar is the structure of a directed graph to that of a directed path. This parameter provides a non-trivial width even for DAG, which is difficult to parameterize using existing width. DAG-pathwidth is useful for designing parameterized algorithms to solve NP-hard problems on DAGs.
 
-In this paper, we first design parameterized algorithms with DAG-pathwidth for various NP-hard problems even on DAGs. Specifically, we design fixed-parameter tractable (FPT) algorithms for the Directed Dominating Set Problem and the Max Leaf Outbranching Problem. Given a DAG with $n$ vertices and a DAG-path-decomposition of width $w$, both problems can be solved exactly in $O(2^w w n)$ time. Similarly, we propose parameterized algorithms for the Directed Steiner Tree Problem and the $k$-Disjoint Path Problem. 
+In this thesis, we first design parameterized algorithms with DAG-pathwidth for various NP-hard problems even on DAGs. Specifically, we design fixed-parameter tractable (FPT) algorithms for the Directed Dominating Set Problem and the Max Leaf Outbranching Problem. Given a DAG with $n$ vertices and a DAG-path-decomposition of width $w$, both problems can be solved exactly in $O(2^w w n)$ time. Similarly, we propose parameterized algorithms for the Directed Steiner Tree Problem and the $k$-Disjoint Path Problem. 
 
 %For the Directed Steiner Tree Problem, where the terminal set size is $k$, we propose an FPT algorithm that computes an exact solution in $O(2^w (k + w)n + n^2)$ time. For the $k$-Disjoint Path Problem, we develop a parameterized algorithm that computes an exact solution in $O((k+1)^w (w^2 + k)n + n^2)$ time.
 
-Next, we design a polynomial-time algorithm that achieves an $O(\log^2 n)$ approximation ratio. After that, we further improve the approximation ratio to $O(\log^{3/2} n)$ by demonstrating the equivalence between constructing DAG-path-decomposition and solving one-shot Black Pebbling game. 
+Next, we design a polynomial-time approximation algorithm for DAG-pathwidth that achieves an $O(\log^2 n)$ approximation ratio. We further improve this ratio to $O(\log^{3/2} n)$ by demonstrating the equivalence between constructing DAG-path-decomposition and solving one-shot Black Pebbling game. 
 
-It is known that computing DAG-pathwidth is NP-hard, and, as far as we know, no algorithm has been known for finding small DAG-pathwidth. In this paper, we also design an algorithm that, given an integer $k$ and DAG $G$ with $l$ roots and at most $d$ outdegree, either computes a DAG-path-decomposition of $G$ with width at most $O(l d^k)$ or provides an evidence that the DAG-pathwidth of $G$ is greater than $k$.
+It is known that computing DAG-pathwidth is NP-hard, and, as far as we know, no algorithm has been known for finding small DAG-pathwidth. In this thesis, we also design an algorithm that, given an integer $k$ and DAG $G$ with $l$ roots and at most $d$ outdegree, either computes a DAG-path-decomposition of $G$ with width at most $O(l d^k)$ or provides an evidence that the DAG-pathwidth of $G$ is greater than $k$.
 
-Finally, we define a new parameter DAG-treewidth as a generalization of DAG-pathwidth. DAG-treewith is a parameter that measures how similar is the structure of a directed graph to that of a directed tree. The smaller a DAG-treewidth is, the more simillar a directed graph is to a directed tree. We show that constructing an optimal DAG-tree-decomposition that minimizes DAG-treewidth is NP-hard. After that, we design an FPT algorithm for Directed Dominating Set Problem in $O(2^w w^2 n)$ time, with the DAG-treewidth $w$ as a parameter.
+Finally, we define a new parameter DAG-treewidth as a generalization of DAG-pathwidth. DAG-treewith is a parameter that measures how similar is the structure of a directed graph to that of a directed tree. We show that constructing an optimal DAG-tree-decomposition that minimizes DAG-treewidth is NP-hard. After that, we design an FPT algorithm for the Directed Dominating Set Problem in $O(2^w w^2 n)$ time, with the DAG-treewidth $w$ as a parameter.
 
 \end{eabstract}
 
