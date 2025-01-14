@@ -27,10 +27,11 @@
 \usepackage{algorithmic}
 \usepackage{algorithm}
 \usepackage{ifthen}
+\usepackage{enumitem}
 \newboolean{Draft}
 \newboolean{Draft2}
-\setboolean{Draft}{false} %図を挿入するならtrue
-\setboolean{Draft2}{false} %付録を挿入するならtrue
+\setboolean{Draft}{true} %図を挿入するならtrue
+\setboolean{Draft2}{true} %付録を挿入するならtrue
 
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}
@@ -99,9 +100,11 @@
 %DAGパス幅は有向パス幅のルールに対し，任意の枝について両端点を同時に含むバッグが存在するというルールを追加している．
 
 
-今回の研究では，まず最初にDAG上でもNP困難である様々な問題に対し，DAGパス幅を使ったパラメータ化アルゴリズムを提案する．具体的にはDirected Dominating Set Problem, Max Leaf Outbranching Problemの2つの問題に対しては，頂点数$n$のDAGと幅が$w$であるDAGパス分解が与えられたときに共に$O(2^wwn)$時間で厳密解を与えるFPTアルゴリズムを提案する．Directed Steiner Tree Problemに対しては，ターミナル集合のサイズを$k$としたときに$O(2^w(k+w)n+n^2)$時間で厳密解を与えるFPTアルゴリズムを提案する．また$k$-Disjoint Path Problemに対しては$O((k+1)^w(w^2+k)n+n^2)$時間で厳密解を与えるパラメータ化アルゴリズムを提案する．
+今回の研究では，まず最初にDAG上でもNP困難である様々な問題に対し，DAGパス幅を使ったパラメータ化アルゴリズムを提案する．具体的にはDirected Dominating Set Problem, Max Leaf Outbranching Problemの2つの問題に対し，頂点数$n$のDAGと幅が$w$であるDAGパス分解が与えられたときに共に$O(2^wwn)$時間で厳密解を与えるFPTアルゴリズムを提案する．Directed Steiner Tree Problemや$k$-Disjoint Path Problemに対しても同様にパラメータ化アルゴリズムを提案する．
 
-次にDAGパス幅に対し，$O(\log^2 n)$の近似比をもつ多項式時間アルゴリズムを提案する．DAGパス分解を構成する問題はOne Shot Black Pebbling Problemと等価であることを示し，これによりさらに近似比を$O(\log^{3/2} n)$まで小さくできることを示す．
+%Directed Steiner Tree Problemに対しては，ターミナル集合のサイズを$k$としたときに$O(2^w(k+w)n+n^2)$時間で厳密解を与えるFPTアルゴリズムを提案する．また$k$-Disjoint Path Problemに対しては$O((k+1)^w(w^2+k)n+n^2)$時間で厳密解を与えるパラメータ化アルゴリズムを提案する．
+
+次にDAGパス幅に対し，$O(\log^2 n)$の近似比をもつ多項式時間アルゴリズムを提案する．DAGパス分解を構成する問題はone-shot Black Pebbling gameを解く問題と等価であることを示し，これによりさらに近似比を$O(\log^{3/2} n)$まで小さくできることを示す．
 
 DAGパス幅の計算はNP困難であることが知られており，小さなDAGパス幅を求めるアルゴリズムは我々の知る限り知られていなかった．本研究では最大出次数，根数がそれぞれ$d, l$のDAG $G$と整数$k$が与えられたとき，幅が高々$O(l\dot d^k)$である$G$のDAGパス分解か，もしくは$G$のDAGパス幅が$k$よりも大きい証拠であるDAGパス分解のいずれかを返すアルゴリズムを提案する．
 
@@ -121,7 +124,19 @@ DAGパス幅の計算はNP困難であることが知られており，小さな
 
 
 \begin{eabstract}				% 英文梗概
-abstruct
+
+DAG-pathwidth is a parameter that measures how similar is the structure of a directed graph to that of a directed path. This parameter provides a non-trivial width even for DAG, which is difficult to parameterize using existing width. DAG-pathwidth is useful for designing parameterized algorithms to solve NP-hard problems on DAGs.
+
+In this paper, we first design parameterized algorithms with DAG-pathwidth for various NP-hard problems even on DAGs. Specifically, we design fixed-parameter tractable (FPT) algorithms for the Directed Dominating Set Problem and the Max Leaf Outbranching Problem. Given a DAG with $n$ vertices and a DAG-path-decomposition of width $w$, both problems can be solved exactly in $O(2^w w n)$ time. Similarly, we propose parameterized algorithms for the Directed Steiner Tree Problem and the $k$-Disjoint Path Problem. 
+
+%For the Directed Steiner Tree Problem, where the terminal set size is $k$, we propose an FPT algorithm that computes an exact solution in $O(2^w (k + w)n + n^2)$ time. For the $k$-Disjoint Path Problem, we develop a parameterized algorithm that computes an exact solution in $O((k+1)^w (w^2 + k)n + n^2)$ time.
+
+Next, we design a polynomial-time algorithm that achieves an $O(\log^2 n)$ approximation ratio. After that, we further improve the approximation ratio to $O(\log^{3/2} n)$ by demonstrating the equivalence between constructing DAG-path-decomposition and solving one-shot Black Pebbling game. 
+
+It is known that computing DAG-pathwidth is NP-hard, and, as far as we know, no algorithm has been known for finding small DAG-pathwidth. In this paper, we also design an algorithm that, given an integer $k$ and DAG $G$ with $l$ roots and at most $d$ outdegree, either computes a DAG-path-decomposition of $G$ with width at most $O(l d^k)$ or provides an evidence that the DAG-pathwidth of $G$ is greater than $k$.
+
+Finally, we define a new parameter DAG-treewidth as a generalization of DAG-pathwidth. DAG-treewith is a parameter that measures how similar is the structure of a directed graph to that of a directed tree. The smaller a DAG-treewidth is, the more simillar a directed graph is to a directed tree. We show that constructing an optimal DAG-tree-decomposition that minimizes DAG-treewidth is NP-hard. After that, we design an FPT algorithm for Directed Dominating Set Problem in $O(2^w w^2 n)$ time, with the DAG-treewidth $w$ as a parameter.
+
 \end{eabstract}
 
 
@@ -213,7 +228,7 @@ NP困難な問題に対して高速に解を求める方法の一つとして木
 またDAGの根及び葉は以下のように定義される．
 
 \begin{definition*}
-    DAG $G=(V, E)$に対し，ある頂点$v\in V$が$G$の根であるとは，$v$の入次数が0であることである．同様に$u\in V$が$G$の葉であるとは，$v$の出次数が0であることである．
+    DAG $G=(V, E)$に対し，ある頂点$v\in V$が$G$の根であるとは，$v$の入次数が0であることである．同様に$u\in V$が$G$の葉であるとは，$u$の出次数が0であることである．
 \end{definition*}
 
 一般にDAGの根及び葉は複数存在する．
@@ -240,7 +255,7 @@ NP困難な問題に対して高速に解を求める方法の一つとして木
     \begin{enumerate}
         \item $ X_1 \cup X_2 \cup \dots \cup X_s = V $ 
         \item 任意の枝$(u, v) \in E $に対し，ある$i\ (\geq 1)$があり，$u, v \in X_i$
-        \item 任意の整数$ i, j, k\ (1 \leq i \leq j \leq k \leq s)$について，$X_i \cap X_k \subseteq X_j$．すなわち任意の頂点$v \in V$について，$v$は$X$上でただ一つの非空なパスを誘導する．
+        \item 任意の整数$ i, j, k\ (1 \leq i \leq j \leq k \leq s)$について，$X_i \cap X_k \subseteq X_j$．すなわち任意の頂点$v \in V$について，$v$は$X$をパスとみなしたグラフ上でただ一つの非空なパスを誘導する．
     \end{enumerate}
 \end{definition*}
 
@@ -307,7 +322,7 @@ NP困難な問題に対して高速に解を求める方法の一つとして木
 
 
 
-DAGパス幅は有向グラフがどれだけ有向パスに近い構造をしているかを表すパラメータであり，DAGパス幅の値が小さいほど有向パスに近い構造をしていることを表す．DAGパス分解のルール3より，任意の頂点$v$に対して$v$を含むバッグは連結となる．これとルール2とより，枝$(u, v)$に対して$u, v$はあるバッグ$X_i$に初めて同時に現れるか，$u$を含み$v$を含まないバッグが先に現れた後，$u, v$を同時に含むバッグが現れることを示している．すなわちDAGパス分解はグラフのトポロジカル順序でバッグに頂点を追加していく操作であることを示している．一般の有向グラフに対してDAGパス幅を求める問題はNP困難であるが，DAGパス幅が1であるグラフクラスは以下のようなキャタピラ型の有向グラフであることを以下で示す．
+DAGパス幅は有向グラフがどれだけ有向パスに近い構造をしているかを表すパラメータであり，DAGパス幅の値が小さいほど有向パスに近い構造をしていることを表す．DAGパス分解のルール3より，任意の頂点$v$に対して$v$を含むバッグは連結となる．これとルール2とより，枝$(u, v)$に対して$u, v$はあるバッグ$X_i$に初めて同時に現れるか，$u$を含み$v$を含まないバッグが先に現れた後，$u, v$を同時に含むバッグが現れることを示している．すなわちDAGパス分解はグラフのトポロジカル順序でバッグに頂点を追加していく操作であるとみなせる．一般の有向グラフに対してDAGパス幅を求める問題はNP困難である[12]が，DAGパス幅が1であるグラフクラスは以下で定義するキャタピラ型の有向グラフであることを以下で示す．
 
 \begin{definition*}[キャタピラ型]
     有向グラフ$G$がキャタピラ型であるとは，有向木であり，かつ$G$の頂点のうち入次数1，出次数0の頂点を除くと単一のパスになるようなグラフである．
@@ -355,14 +370,14 @@ introduceは，あるバッグに強連結な頂点集合を追加したもの�
     \item (introduce) ある頂点$v \in V$があり，$\{v\} \cap X_i = \emptyset$, $X_{i+1} = X_i \cup \{v\}$
 \end{enumerate}
 
-nice DAGパス分解は，各バッグが1つの頂点のintroduceかforgetかに限られるため，動的計画法の設計が容易になる利点がある．また[20]では，あるDAGパス分解$X$に対し，$X$と同じ幅をもつnice DAGパス分解を多項式時間で構築できることを示しているほか，バッグの個数について以下を示している．
+$G$がDAGであるとき，nice DAGパス分解は各バッグが1つの頂点のintroduceかforgetかに限られるため，動的計画法の設計が容易になる利点がある．また[20]では，あるDAGパス分解$X$に対し，$X$と同じ幅をもつnice DAGパス分解を多項式時間で構築できることを示しているほか，バッグの個数について以下を示している．
 
 \begin{proposition}\label{number_of_bag}
     有向グラフ$G$に対する任意のDAGパス分解を$X=(X_1, X_2, \dots, X_s)$とする．各$i$に対し$X_i \neq X_{i+1}$ならば，$s \leq 2|V[G]|+1$が成り立つ．
 \end{proposition}
 
 
-以降ではバッグ$X_{i+1}$がある強連結成分$S$をintroduceしているとき，バッグ$X_{i+1}$はintroduceである，という．同様にバッグ$X_{i+1}$がある頂点$v$をforgetしているとき，バッグ$X_{i+1}$はforgetである，という．
+以降ではバッグ$X_{i+1}$がある強連結成分$S$をintroduceしているとき，バッグ$X_{i+1}$はintroduceである，という．同様にバッグ$X_{i+1}$がある頂点$v$をforgetしているとき，バッグ$X_{i+1}$はforgetである，という．任意の頂点について，その頂点のintroduceとforgetのバッグは，ルール1と3とよりちょうど1つずつ存在する．
 
 
 
@@ -379,17 +394,17 @@ nice DAGパス分解は，各バッグが1つの頂点のintroduceかforgetか�
     Black Pebbling gameとは，DAG $G = (V, E)$が与えられたときに，以下のルールを満たす戦略$P=(P_1, P_2, \dots, P_t)$ $(P_i \subseteq V)$を構成するゲームである．
 
 
-    DAG $G$は出次数が0の頂点$z$をただ一つもつとする．グラフ小石ゲームの戦略とは，以下の4つのルールを満たすような$V$の部分集合$ P_i\ (i = 0, 1,   \dots, s)$ の列 $P = (P_0, P_1,   \dots, P_{\tau})$である．
+    Black Pebbling gameの戦略とは，以下の4つのルールを満たすような$V$の部分集合$ P_i\ (i = 0, 1,   \dots, s)$ の列 $P = (P_0, P_1,   \dots, P_{\tau})$である．
 
-    \begin{enumerate}
-        \item $P_0 = \emptyset, P_{\tau} = \{ z \}$
-        \item pebble: $v \in V$に小石が置かれておらず，かつ$v$の全ての先行頂点に小石が置かれていれば，$v$に小石を置いてもよい．すなわち$v \notin P_{i-1}$かつ，任意の$(u, v) \in E$に対し$u \in P_{i-1}$ならば，$P_i = P_{i-1} \cup \{v\}$とできる．
-        \item unpebble: $v$に置かれた小石はいつでも取り除いてもよい．すなわち$v \in P_{i-1}$ならば，$P_i = P_{i-1} \backslash \{v\}$とできる．
-        \item 一度小石を取り除いた頂点には，再び小石を置くことはできない．
-    \end{enumerate}
+    \begin{description}
+        \item[ルール1] $P_0 = \emptyset$
+        \item[ルール2] pebble: $v \in V$に小石が置かれておらず，かつ$v$の全ての先行頂点に小石が置かれていれば，$v$に小石を置いてもよい．すなわち$v \notin P_{i-1}$かつ，任意の$(u, v) \in E$に対し$u \in P_{i-1}$ならば，$P_i = P_{i-1} \cup \{v\}$とできる．
+        \item[ルール3] unpebble: $v$に置かれた小石はいつでも取り除いてもよい．すなわち$v \in P_{i-1}$ならば，$P_i = P_{i-1} \backslash \{v\}$とできる．
+        \item[ルール4] 各頂点に少なくとも一度は小石が置かれている．
+    \end{description}
 \end{definition*}
 
-pebbleは頂点に小石を置く操作を表し，forgetは頂点から小石を取り除く操作を表す．また，ペブリング数を以下のように定義する．
+pebbleは頂点に小石を置く操作を表し，unpebbleは頂点から小石を取り除く操作を表す．ただしグラフの根は先行頂点をもたないため任意の時点でpebbleできる．また，ペブリング数を以下のように定義する．
 
 \begin{definition*}[ペブリング数]
     DAG $G$の戦略$P = (P_0, P_1,   \dots, P_{\tau})$に対し，$space$と$time$を以下のように定義する．
@@ -404,12 +419,12 @@ pebbleは頂点に小石を置く操作を表し，forgetは頂点から小石�
 \end{definition*}
 
 
-一般のDAGに対してペブリング数を求める問題はPSPACE完全である[14]．以下ではDAG $G$に対するペブリング数を$Peb(G)$と表現する．グラフ小石ゲームは，Proof of Space [15]とよばれるブロックチェーン技術の中で用いられる．Proof of Spaceは空きディスク容量をいくら保持しているかを証明する手法であり，入力DAGが空きディスク容量に対応する．またペブリング数は同時に使用するメモリの量に対応する．ペブリング数が大きいほど，より多くのメモリやデータを使うため，その証明が難しいことを表す．すなわち証明の安全性が高くなることを表す．
+一般のDAGに対してペブリング数を求める問題はPSPACE完全である[14]．以下ではDAG $G$に対するペブリング数を$Peb(G)$と表現する．Black Pebbling gameは，Proof of Space [15]とよばれるブロックチェーン技術の中で用いられる．Proof of Spaceは空きディスク容量をいくら保持しているかを証明する手法であり，入力DAGが空きディスク容量に対応する．またペブリング数は同時に使用するメモリの量に対応する．ペブリング数が大きいほど，より多くのメモリやデータを使うため，その証明が難しいことを表す．すなわち証明の安全性が高くなることを表す．
 
 またone-shot Black Pebbling\ (one-shot BP)とは，Black Pebbling gameに対して以下のルールを追加したものである．
-\begin{itemize}
-    \item DAG $G$の任意の頂点はちょうど1度だけ小石が置かれる．
-\end{itemize}
+\begin{description}
+    \item[ルール5] DAG $G$の任意の頂点はちょうど1度だけ小石が置かれる．
+\end{description}
 
 one-shot BPについても同様にペブリング数を定めることができる．一般のDAGに対してone-shot BPのペブリング数を求める問題はNP困難である[16]．4.3節ではone-shot BPがDAG上のDAGパス分解を構成する問題と等価であることを示す．
 
@@ -2221,9 +2236,9 @@ $G=(V, E)$の最適なnice DAGパス分解を$P=(X_1, X_2, \dots , X_s)$とす�
 \section{Lemma~\ref{lemma_approximation2}の証明}
 
 \begin{proof}
-    まずDAG $G$に対し，$X$が$G$のnice DAGパス分解であれば$X$は$G$のone-shot BPであることを示す．$G$に対するあるnice DAGパス分解を$X=(X_1, X_2, \dots, X_s)$とする．one-shot BPのルール4より$X_1 = \varnothing$であるためone-shot BPの初期条件を満たす．DAGパス分解のルール1とルール3より，すべての頂点は$X$でちょうど1回introduceされるため，one-shot BPですべての頂点がちょうど1回pebbleされるという条件を満たす．操作1とDAGパス分解のルール2より，$v \in V$が$X_i$でintroduceされるとき，任意の$(u, v)\in E$に対して$u \in X_{i-1}$．これはone-shot BPのpebbleのルールを満たす．また各頂点に対し，forgetがちょうど1度だけ行われることに注意すると，操作2とunpebbleの操作は明らかに等価である．よって$X$のintroduceとforgetが各々pebbleとunpebbleに対応する．以上より$X$は$G$のone-shot BPである．
+    まずDAG $G$に対し，$X$が$G$のnice DAGパス分解であれば$X$は$G$のone-shot BPであることを示す．$G$に対するあるnice DAGパス分解を$X=(X_1, X_2, \dots, X_s)$とする．nice DADパス分解では$X_1 = \varnothing$であるためone-shot BPのルール1を満たす．DAGパス分解のルール1とルール3より，すべての頂点はちょうど1回ずつintroduceされるため，one-shot BPのルール4,5を満たす．introduceの条件とDAGパス分解のルール2より，$v \in V$が$X_i$でintroduceされるとき，任意の$(u, v)\in E$に対して$u \in X_{i-1}$．これはone-shot BPのルール2を満たす．また各頂点に対し，forgetがちょうど1度だけ行われることに注意すると，forgetとunpebbleの操作は明らかに等価であるためone-shot BPのルール3を満たす．これより$X$のintroduceとforgetが各々pebbleとunpebbleに対応することがいえる．以上より$X$は$G$のone-shot BPである．
     
-    次に$P$が$G$のone-shot BPであれば$P$は$G$のnice DAGパス分解であることを示す．$G$に対するあるone-shot BPを$P=(P_1, P_2, \dots, P_t)$とする．$P_1 = \varnothing$よりnice DAGパス分解のルール4を満たす．また各頂点$v \in V$に対し，$v$は$P$でちょうど1回ずつpebble，unpebbleされるため，nice DAGパス分解のルール1を満たす．また，$v$のpebble，unpebbleがそれぞれ$P_i, P_{k+1}$ $(1 \leq i \leq k \leq t-1)$で行われるとすると，任意の頂点に対して2回以上pebbleされることはないため，任意の$P_j$ $(i \leq j \leq k)$において$v \in P_j$を満たす．これを$V$の全ての頂点に対して考えることで，nice DAGパス分解のルール3を満たす．さらにpebbleのルールより，$v \notin P_{i-1}$かつ任意の$(u, v) \in E$に対し$u \in P_{i-1}$ならば$P_i = P_{i-1} \cup \{v\}$であるが，これは$u, v \in P_i$かつ$v \notin P_{i-1}$を満たす．したがってpebbleの操作はnice DAGパス分解のルール2を満たしたintroduceの操作とみなすことができる．またunpebbleの操作は明らかにnice DAGパス分解のforgetの条件を満たす．以上より$P$は$G$のnice DAGパス分解である．
+    次に$P$が$G$のone-shot BPであれば$P$は$G$のnice DAGパス分解であることを示す．$G$に対するあるone-shot BPを$P=(P_1, P_2, \dots, P_t)$とする．$P_1 = \varnothing$よりnice DAGパス分解の初期条件を満たす．また各頂点$v \in V$に対し，$v$は$P$でちょうど1回ずつpebble，unpebbleされるため，DAGパス分解のルール1を満たす．また，ある頂点$v$のpebble，unpebbleがそれぞれ$P_i, P_{k+1}$ $(1 \leq i \leq k \leq t-1)$で行われるとすると，one-shot BPのルール5より任意の頂点に対して2回以上pebbleされることはないため，任意の$P_j$ $(i \leq j \leq k)$において$v \in P_j$を満たす．これを$V$の全ての頂点に対して考えることで，nice DAGパス分解のルール3を満たす．さらにpebbleのルールより，$v \notin P_{i-1}$かつ任意の$(u, v) \in E$に対し$u \in P_{i-1}$ならば$P_i = P_{i-1} \cup \{v\}$であるが，これは$u, v \in P_i$かつ$v \notin P_{i-1}$を満たす．したがってpebbleの操作はDAGパス分解のルール2を満たしたintroduceの操作とみなすことができる．またunpebbleの操作は明らかにnice DAGパス分解のforgetの条件を満たす．以上より$P$は$G$のnice DAGパス分解である．
 \end{proof}
 
 
