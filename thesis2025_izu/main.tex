@@ -30,8 +30,8 @@
 \usepackage{enumitem}
 \newboolean{Draft}
 \newboolean{Draft2}
-\setboolean{Draft}{true} %図を挿入するならtrue
-\setboolean{Draft2}{true} %付録を挿入するならtrue
+\setboolean{Draft}{false} %図を挿入するならtrue
+\setboolean{Draft2}{false} %付録を挿入するならtrue
 
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}
@@ -131,7 +131,7 @@ In this thesis, we first design parameterized algorithms with DAG-pathwidth for 
 
 %For the Directed Steiner Tree Problem, where the terminal set size is $k$, we propose an FPT algorithm that computes an exact solution in $O(2^w (k + w)n + n^2)$ time. For the $k$-Disjoint Path Problem, we develop a parameterized algorithm that computes an exact solution in $O((k+1)^w (w^2 + k)n + n^2)$ time.
 
-Next, we design a polynomial-time approximation algorithm for DAG-pathwidth that achieves an $O(\log^2 n)$ approximation ratio. We further improve this ratio to $O(\log^{3/2} n)$ by demonstrating the equivalence between constructing DAG-path-decomposition and solving one-shot Black Pebbling game. 
+Next, we design a polynomial-time approximation algorithm for DAG-path-width that achieves an $O(\log^2 n)$ approximation ratio. We further improve this ratio to $O(\log^{3/2} n)$ by demonstrating the equivalence between constructing DAG-path-decomposition and solving one-shot Black Pebbling game. 
 
 It is known that computing DAG-pathwidth is NP-hard, and, as far as we know, no algorithm has been known for finding small DAG-pathwidth. In this thesis, we also design an algorithm that, given an integer $k$ and DAG $G$ with $l$ roots and at most $d$ outdegree, either computes a DAG-path-decomposition of $G$ with width at most $O(l d^k)$ or provides an evidence that the DAG-pathwidth of $G$ is greater than $k$.
 
@@ -1009,7 +1009,7 @@ DEDS problemとは，$G$のmDEDSのサイズを求める問題である．Hanaka
 \end{proposition}
 
 上記のアルゴリズムは幅が高々$tw$の木分解を利用したアルゴリズムであり，DPを行う上での必要な情報として，木分解上の各バッグ$B_t$に対して部分解となる枝集合$A\subseteq E(B_t)$，各頂点$v \in B_t$に対して前方の向きを支配できるかを表す関数$f$，$f$の支配関係の根拠を示す関数$s_f$を保持する必要がある．このアルゴリズムは一般の有向グラフ上で利用でき，より一般化した問題に対しても動作するといった利点がある．一方で木分解は入力グラフの枝の向きの情報をもたないため，向きの情報を表す$f, s_f$を計算する必要があり，計算量が$O(4^{2tw})$だけ大きくなっている．これに対し，一般のDAGに対して幅を$w$とするnice DAGパス分解が与えられたとき，$O(2^{w^2}w^2n^2)$の時間でDEDS problemを解くアルゴリズムを構築する．このアルゴリズムで利用するDAGパス分解は入力グラフの向きの情報を内部に含んでいるため，$f, s_f$といったパラメータが不要になる．木幅が抑えられたDAGでもDAGパス幅は任意に大きくなることがあるため，計算量の単純な比較はできないが，木分解を用いた場合よりもアルゴリズムの構築が容易になる利点がある．
-★より詳しく読む
+%★より詳しく読む
 
 \begin{theorem}\label{DEDS_FPT}
     DAG $G$に対し，幅が$w$である$G$のnice DAGパス分解が与えられたとき，$G$のDEDS problemを$O(2^{w^2}w^2n^2)$で解くアルゴリズムが存在する．
@@ -1277,19 +1277,13 @@ Lemma~\ref{lemma_approximation2}の証明は付録で示す．
 
 \section{$O(ld^t)$の幅のDAGパス分解を求めるアルゴリズム} %\label{sec_FPTforPathwidth}
 
-本章では最大出次数$d$，根の個数$l$であるDAG $H$と非負整数$t$が与えられたとき，$O(ld^t)$の幅を持つDAGパス分解を出力するか，$H$のDAGパス幅が$t$よりも大きいことを示す証拠を与えるFPTアルゴリズムを提案する．
-
-\subsection{無向グラフのパス分解を求めるアルゴリズム}
+本章では最大出次数$d$，根の個数$l$であるDAG $H$と非負整数$t$が与えられたとき，$O(ld^t)$の幅を持つDAGパス分解を出力するか，$H$のDAGパス幅が$t$よりも大きいことを示す証拠を与えるFPTアルゴリズムを提案する．これは以下の無向グラフのパス分解を求めるアルゴリズム[8]を参考に構成する．
 
 \begin{proposition}\label{pathwidth algorithm of undirected graph}
-    頂点数$n$の無向グラフ$H$，整数$t$が与えられたとき，$H$のパス幅が$t$より大きい証拠を与えるか，幅が高々$O(2^t)$のパス分解を与えるような$O(n)$の計算時間のアルゴリズムが存在する．
+    頂点数$n$の無向グラフ$H$，非負整数$t$が与えられたとき，$H$のパス幅が$t$より大きい証拠を与えるか，幅が高々$O(2^t)$のパス分解を与えるような$O(n)$の計算時間のアルゴリズムが存在する．
 \end{proposition}
 
-[8]による上記のアルゴリズムを参照し，最大出次数と根数がそれぞれ$d, l$のDAG $H$に対し，$H$のDAGパス幅が$t$より大きい証拠を与えるか，幅が高々$O(ld^t)$のDAGパス分解を与えるよFPTアルゴリズムを構成する．
-
-\subsection{アルゴリズムの構築}
-
-アルゴリズムでは以下の同相埋め込みを利用する．
+[8]による上記のアルゴリズムを参考にし，最大出次数と根数がそれぞれ$d, l$のDAG $H$に対し，$H$のDAGパス幅が$t$より大きい証拠を与えるか，幅が高々$O(ld^t)$のDAGパス分解を与えるようなFPTアルゴリズムを構成する．アルゴリズムでは以下の同相埋め込みを利用する．
 
 \begin{definition*}[同相埋め込み]
     有向グラフ$G_1 = (V_1, E_1)$の有向グラフ$G_2 = (V_2, E_2)$への同相埋め込みとは，以下の性質を満たす$V_1$から$V_2$への写像$f:V_1 \rightarrow V_2$である．
@@ -1307,7 +1301,7 @@ Lemma~\ref{lemma_approximation2}の証明は付録で示す．
     $H$を最大出次数と根数がそれぞれ$d, l$である任意のDAG，$t$を非負整数とする．このとき以下のいずれか一方が必ず成り立つ．
     \begin{enumerate}
         \item[(a)] $H$のDAGパス幅は高々$ld^{t+3}-1$である．
-        \item[(b)] $H$は2つの頂点集合$X, Y\ (X\cup Y = V[H], X\cap Y = \varnothing)$に分割できる．このとき$X, Y$によって誘導される$H$の部分グラフをそれぞれ$A, B$とすると，$H$において$A$と$B$の間には$A$から$B$への枝しか存在せず，$A$のDAGパス幅は$t$より大きく$ld^{t+3}-1$より小さい．
+        \item[(b)] $H$は2つの頂点集合$X, Y\ (X\cup Y = V[H], X\cap Y = \varnothing)$に分割できる．このとき$X, Y$によって誘導される$H$の部分グラフをそれぞれ$A, B$とすると，$H$において$A$と$B$の間には$A$から$B$への枝しか存在せず，$A$のDAGパス幅は$t$より大きい．
     \end{enumerate}
 \end{theorem}
 \vskip\baselineskip
@@ -1331,14 +1325,15 @@ $T$が完全有向$d$分木であるとき，根から葉までのパスの長�
 \end{lemma}
 
 \begin{proof}
-    $h$に関する数学的帰納法で示す．$h=2$のとき$T_{2, d}$のDAGパス幅は明らかに1であるため補題を満たす．次にある$h > 1$での補題の成立を仮定すると，$T_{h, d}$に幅が$h-1$のDAGパス分解$X_h$が存在する．ここで$T_{h+1, d}$は$d$個の$T_{h, d}$の根と単一の根$r$を夫々接続したグラフであることに注意すると，幅が$h$である$T_{h+1, d}$のDAGパス分解を以下のように構成できる．はじめに$r$のみからなるバッグを用意し，次に$d$個のDAGパス分解$X_h$に対し，$X_h$の各バッグに$r$を追加したものを順に$d$個つなげる．こうしてできる頂点集合の列はDAGパス分解の3つのルールを満たすため$T_{h+1, d}$のDAGパス分解であり，幅は$h$である．また幅が$h$より小さいDAGパス分解は存在しない．なぜならば，$T_{h+1, d}$は$T_{h, d}$を内部に含むため，$T_{h+1, d}$のDAGパス幅は$h-1$より小さくならない．ここで幅が$h-1$である$T_{h+1, d}$のDAGパス分解の存在を仮定する．このとき$d$個の$T_{h, d}$は互いに到達不可能であるため，それぞれ独立してDAGパス分解を構成でき，このとき$d$個の$T_{h, d}$のDAGパス分解を並列に行うよりも幅が大きくならないことに注意する．$d$個の$T_{h, d}$のうち最初にDAGパス分解を構成するものを$T'_{h, d}$とすると，DAGパス分解のルール2より$T_{h+1, d}$の任意のDAGパス分解は必ず最初のバッグに根$r$を含むため，$T'_{h, d}$のDAGパス分解で幅が$h-1$で最大となるバッグ($X'$とする)には$r$を含んでいない．DAGパス分解のルール3より$r$は$X'$以降で再びバッグに現れないため，$T'_{h, d}$以外で$r$と接続する$d-1$個の$T_{h+1, d}$は存在しないことが必要．すなわち$d=1$であることが必要だが，これは$d > 1$であることと矛盾する．$X'$より前に$r$に接続する頂点を全てバッグに含めていた場合でも，$X'$で必ず$T'_{h, d}$以外の頂点が含まれるため，幅が$h-1$より大きくなり矛盾する．以上，背理法により幅が$h-1$である$T_{h+1, d}$のDAGパス分解は存在せず，$T_{h+1, d}$の最適なDAGパス分解の幅は$h$である．よって$h$でも補題が成り立つため，2以上の任意の$h, d$に対して補題が成り立つ．
+    $h$に関する数学的帰納法で示す．$h=2$のとき$T_{2, d}$のDAGパス幅は明らかに1であるため補題を満たす．次にある$h > 1$での補題の成立を仮定すると，$T_{h, d}$に幅が$h-1$のDAGパス分解$X_h$が存在する．ここで$T_{h+1, d}$は$d$個の$T_{h, d}$の根と単一の根$r$を各々接続したグラフであることに注意すると，幅が$h$である$T_{h+1, d}$のDAGパス分解を以下のように構成できる．はじめに$r$のみからなるバッグを用意し，次に$d$個のDAGパス分解$X_h$に対し，$X_h$の各バッグに$r$を追加したものを順に$d$個つなげる．こうしてできる頂点集合の列はDAGパス分解の3つのルールを満たすため$T_{h+1, d}$のDAGパス分解であり，幅は$h$である．また幅が$h$より小さいDAGパス分解は存在しない．なぜならば，$T_{h+1, d}$は$T_{h, d}$を内部に含むため，$T_{h+1, d}$のDAGパス幅は$h-1$より小さくならない．ここで幅が$h-1$である$T_{h+1, d}$のDAGパス分解の存在を仮定する．このとき$d$個の$T_{h, d}$は互いに到達不可能であるため，それぞれ独立してDAGパス分解を構成でき，このとき$d$個の$T_{h, d}$のDAGパス分解を並列に行うよりも幅が大きくならないようにすることができる．$d$個の$T_{h, d}$のうち最初にDAGパス分解を構成するものを$T'_{h, d}$とすると，DAGパス分解のルール2より★★$T_{h+1, d}$の任意のDAGパス分解は必ず最初のバッグに根$r$を含むため，$T'_{h, d}$のDAGパス分解で幅が$h-1$で最大となるバッグ($X'$とする)には$r$を含んでいない．DAGパス分解のルール3より$r$は$X'$以降で再びバッグに現れないため，$T'_{h, d}$以外で$r$と接続する$d-1$個の$T_{h+1, d}$は存在しないことが必要．すなわち$d=1$であることが必要だが，これは$d > 1$であることと矛盾する．$X'$より前に$r$に接続する頂点を全てバッグに含めていた場合でも，$X'$で必ず$T'_{h, d}$以外の頂点が含まれるため，幅が$h-1$より大きくなり矛盾する．以上，背理法により幅が$h-1$である$T_{h+1, d}$のDAGパス分解は存在せず，$T_{h+1, d}$の最適なDAGパス分解の幅は$h$である．よって$h+1$でも補題が成り立つため，2以上の任意の$h, d$に対して補題が成り立つ．
 \end{proof}
 
 
 以下では，実際にアルゴリズムを構築することでTheorem~\ref{approximation3}を示す．
 
-\begin{proof}(Theorem~\ref{approximation3})\\
-入力グラフ$H = (V, E)$に対し，根が1つとなるように$H$に頂点と枝を加える．具体的には高さが$\lceil \log_d l \rceil$である完全有向$d$分技を用意し，完全有向$d$分木の葉から$H$の各根に向かう枝を加えて結合する．こうしてできるグラフを$H'$とする．$H'$は出次数が高々$d$であり，根の数が1である．また$M_{t, d, l}$を高さ$\lceil \log_d l \rceil +t+2$の完全有向$d$分木とする．
+
+
+入力グラフ$H = (V, E)$に対し，根が1つとなるように$H$に頂点と枝を加える．具体的には高さが$\lceil \log_d l \rceil$である完全有向$d$分木を用意し，完全有向$d$分木の葉から$H$の各根に向かう枝を加えて結合する．こうしてできるグラフを$H'$とする．$H'$は出次数が高々$d$であり，根の数が1である．また$M_{t, d, l}$を高さ$\lceil \log_d l \rceil +t+2$の完全有向$d$分木とする．
 
 以下のアルゴリズムでは$M_{t, d, l}$の$H'$への埋め込みを見つける．もし埋め込みを見つけることができれば$H'$のDAGパス幅は$M_{t, d, l}$のDAGパス幅以上であることがわかる．アルゴリズムでは$M_{t, d, l}$の頂点を$H'$上に貪欲に埋め込んでいく．ここで$M_{t, d, l}$の頂点をトークンと呼ぶ．可能な限り埋め込みを行ったあと，$H'$上に置かれたトークンを他の頂点上に移すことでさらに埋め込みを進める．$M_{t, d, l}$の全トークンが埋め込みに使われた場合は$M_{t, d, l}$から$H'$への埋め込みを発見したことを表す．トークン $T$が$H'$のある頂点に置かれたとき$T$はtokenedであると表し，頂点に置かれていないときuntokenedであると表す．アルゴリズムを通して$H'$の1つの頂点に置くことができるトークンは1つのみである．
 
@@ -1349,7 +1344,7 @@ $T$が完全有向$d$分木であるとき，根から葉までのパスの長�
     \item 高さ$h$の親トークン$m=\lambda b_1 b_2 \dots b_{h-1}$の子トークンを左から順に$m \cdot 1, m \cdot 2, \dots , m \cdot d$とラベル付けする．
 \end{enumerate}
 
-アルゴリズムでは$H'$の頂点に$M_{t, d, l}$のトークンを配置していく操作を繰り返す．このとき$M_{t, d, l}$から$H'$への埋め込みの条件を満たすようにトークンを配置することに注意する．アルゴリズムの初期状態では$H'$のすべての頂点がblueで塗られていると仮定し，$H'$のある頂点$v$にトークンが置かれた場合，$v$の色をredに変更し，トークンが$v$から削除されてもredのままであるとする．このときblueの頂点にのみトークンを置くことができるため，$H'$の各頂点は高々一度しかトークンを置くことができない．
+アルゴリズムでは$H'$の頂点に$M_{t, d, l}$のトークンを配置していく操作を繰り返す．このとき$M_{t, d, l}$から$H'$への埋め込みの条件を満たすようにトークンを配置することに注意する．アルゴリズムの初期状態では$H'$のすべての頂点がblueで塗られていると仮定し，$H'$のある頂点$v$にトークンが置かれた場合，$v$の色をredに変更し，トークンが$v$から削除されてもredのままであるとする．このときblueの頂点にのみトークンを置くことができるとする．したがって$H'$の各頂点は高々一度しかトークンを置くことができない．
 
 
 \ifthenelse{\boolean{Draft}}{
@@ -1369,7 +1364,7 @@ $T$が完全有向$d$分木であるとき，根から葉までのパスの長�
 	\caption{$\mathsf{GrowTokenTree}$}
 	\label{growtokentree}
 	\begin{algorithmic}[1]
-    \WHILE{there is a vertex $u \in H'$ with token $T$ and a blue neighbor $v$ whose all predecessors are placed token, and token $T$ has an untokened child $T \cdot b$}
+    \WHILE{there is a vertex $u \in H'$ with token $T$ and a blue successor $v$ of $u$ whose all predecessors are placed token, and token $T$ has an untokened child $T \cdot b$}
     \STATE place token $T \cdot b$ on $v$
     \ENDWHILE
     \RETURN \{tokened vertices of $H'$\}
@@ -1378,6 +1373,7 @@ $T$が完全有向$d$分木であるとき，根から葉までのパスの長�
 \end{figure}
 
 
+\begin{comment}
 
 \begin{figure}[!t]
 \begin{algorithm}[H]
@@ -1407,6 +1403,34 @@ $T$が完全有向$d$分木であるとき，根から葉までのパスの長�
 \end{algorithm}
 \end{figure}
 
+\end{comment}
+
+\begin{figure}[!t]
+\begin{algorithm}[H]
+    \caption{$\mathsf{FindEmbedding}$}
+	\label{findEmbedding}
+	\begin{algorithmic}[1]
+    \STATE place root token $\lambda$ on root of $H'$
+    \STATE $i \leftarrow 1$
+    \STATE $X_i  \leftarrow$ call $\mathsf{GrowTokenTree}$
+    \WHILE{$|X_i| < |V[M_{t, d, l}]|$ and $H'$ has at least one blue vertex}
+    \IF{there is a vertex $v \in H'$ with token $T$ such that $v$ has no blue successor and $T$ has at most one tokened child}
+    \STATE remove $T$ from $H'$
+    \IF{$T$ had one tokened child $T \cdot b$}
+    \STATE replece all tokens $T \cdot b \cdot S$ with $T \cdot S$ on $H'$
+    \ENDIF
+    \ELSE
+    \RETURN $X_i$
+    \ENDIF
+    \STATE $i \leftarrow i+1$
+    \STATE $X_i \leftarrow$ call $\mathsf{GrowTokenTree}$
+    \ENDWHILE
+	\end{algorithmic}
+\end{algorithm}
+\end{figure}
+
+
+
 
 \ifthenelse{\boolean{Draft}}{
 \begin{figure}[t]
@@ -1428,31 +1452,73 @@ $\mathsf{GrowTokenTree}$と$\mathsf{FindEmbedding}$の擬似コードをそれ�
 \begin{figure}[t]
 \centering
 \includegraphics[width=15.0cm]{pic12.png}
-\caption{$\mathsf{FindEmbedding}$でトークンを置き換える様子．擬似コード(Algorithm \ref{findEmbedding})の列5の条件を満たす頂点$v$と$v$に置かれたトークン$T$を選択し($M_{t, d, l}$左，$H'$左)，$v$から$T$を取り除く．その後$T$のtokenedな子，孫をそれぞれ$T, T$の子に置き換える($M_{t, d, l}$右，$H'$右)．この操作によりさらに$\mathsf{GrowTokenTree}$を進めることができる．}
+\caption{$\mathsf{FindEmbedding}$でトークンを置き換える様子．擬似コード(Algorithm \ref{findEmbedding})の列5の条件を満たす頂点$v$と$v$に置かれたトークン$T$を選択し($M_{t, d, l}$左，$H'$左)，$v$から$T$を取り除く．その後$T$のtokenedな子孫を構造を保ったまま$T$に連結させる($M_{t, d, l}$右，$H'$右)．この操作によりさらに$\mathsf{GrowTokenTree}$を進めることができる．}
 \label{fig:12}
 \end{figure}
 }
 
-$\mathsf{FindEmbedding}$ (Algorithm \ref{findEmbedding})ではDAGパス分解となる頂点集合の列$(X_1, X_2, \dots)$の出力を試みる．最初に$H'$のただ一つの根にトークン$\lambda$を置く．その後$i=1$とし，$\mathsf{GrowTokenTree}$を実行して出力結果を$X_1$とする．次に各$i$について以下を繰り返す．($X_1, X_2,  \dots , X_i$)までの構築ができているとする．$X_i$で$M_{t, d, l}$の全てのトークンを同時に使用している場合，これは$M_{t, d, l}$から$H'$への埋め込みを表しているため，$H'$のDAGパス幅は$M_{t, d, l}$のDAGパス幅より小さくならないことがわかる．また$H'$の全ての頂点がredになった場合，$H'$の各頂点に1度だけトークンを配置したことになる．このとき列$(X_1, X_2, \dots, X_i)$は$H'$のDAGパス分解になっており，証明はこの後に示す．上記の2つの場合以外，すなわち$M_{t, d, l}$の全てのトークンを同時に使用しておらず，かつ$H'$に少なくとも1つのblueの頂点が存在する場合，トークンの配置を変更することでさらに$\mathsf{GrowTokenTree}$の処理を進めることができる可能性がある．したがって以下で述べる条件を満たす頂点$v \in V[H']$について，$v$に置かれたトークン$T$を$v$から取り除くことを考える．$T$を$v$から取り除くことができる条件は，(a)$v$の後続頂点が全てredであり，かつ(b)$M_{t, d, l}$上で$T$の配置済みの子トークンが高々1つしかないことである．前者はDAGパス分解においてforgetが可能な条件に対応し，後者は埋め込みの状態を保つための条件に対応する．トークン$T$が上記の2つの条件を満たしている場合のみ，$T$を$v$から取り除くことができる．このとき$M_{t, d, l}$上で配置済みのトークン集合を取り出すと$T$で非連結となる場合があるため，配置済みの$T$の子，孫をそれぞれ$T, T$の子と置き換えることで，$M_{t, d, l}$上で配置済みのトークン集合が常に連結になるようにできる．この操作によって$T$の孫が未配置となった場合，孫を$H'$の別の頂点に配置できる可能性があるため，再び$\mathsf{GrowTokenTree}$を行い，$X_{i+1}$をその出力とする．条件(a)(b)を共に満たすトークンが存在しない場合，これ以上トークンの配置を進めることはできず，最後に行った$\mathsf{GrowTokenTree}$の出力をそのまま返してアルゴリズムは終了する．このとき$H'$のDAGパス幅は$M_{t, d, l}$のDAGパス幅より小さくならず，これも以下で証明する．
+$\mathsf{FindEmbedding}$ (Algorithm \ref{findEmbedding})ではDAGパス分解となる頂点集合の列$(X_1, X_2, \dots)$の出力を試みる．最初に$H'$のただ一つの根にトークン$\lambda$を置く．その後$i=1$とし，$\mathsf{GrowTokenTree}$を実行して出力結果を$X_1$とする．次に各$i$について以下を繰り返す．($X_1, X_2,  \dots , X_i$)までの構築ができているとする．$X_i$で$M_{t, d, l}$の全てのトークンを同時に使用している場合，これは$M_{t, d, l}$から$H'$への埋め込みを表しているため，$H'$のDAGパス幅は$M_{t, d, l}$のDAGパス幅より小さくならないことがわかる．また$H'$の全ての頂点がredになった場合，$H'$の各頂点に1度だけトークンを配置したことになる．このとき列$(X_1, X_2, \dots, X_i)$は$H'$のDAGパス分解になっており，証明はこの後に示す．上記の2つの場合以外，すなわち$M_{t, d, l}$の全てのトークンを同時に使用しておらず，かつ$H'$に少なくとも1つのblueの頂点が存在する場合，トークンの配置を変更することでさらに$\mathsf{GrowTokenTree}$の処理を進めることができる可能性がある．したがって以下で述べる条件を満たす頂点$v \in V[H']$について，$v$に置かれたトークン$T$を$v$から取り除くことを考える．$T$を$v$から取り除くことができる条件は，(a)$v$の後続頂点が全てredであり，かつ(b)$M_{t, d, l}$上で$T$の配置済みの子トークンが高々1つしかないことである．前者はDAGパス分解においてforgetが可能な条件に対応し，後者は埋め込みの状態を保つための条件に対応する．トークン$T$が上記の2つの条件を満たしている場合のみ，$T$を$v$から取り除くことができる．このとき$M_{t, d, l}$上で配置済みのトークン集合を取り出すと$T$で非連結となる場合があるため，配置済みの$T$のすべての子孫を1世代ずつ上のトークンに置き換えることで，$M_{t, d, l}$上で配置済みのトークン集合が常に連結になるようにできる．ただしこのとき，置き換え先のトークンがuntokenedであるために，根に近いトークンから順に置き換えることに注意する．この操作によって未配置となったトークンが生まれ，別の頂点に配置できる可能性があるため，再び$\mathsf{GrowTokenTree}$を行い，$X_{i+1}$をその出力とする．条件(a)(b)を共に満たすトークンが存在しない場合，これ以上トークンの配置を進めることはできず，最後に行った$\mathsf{GrowTokenTree}$の出力をそのまま返してアルゴリズムは終了する．このとき$H'$のDAGパス幅は$M_{t, d, l}$のDAGパス幅より小さくならず，これも以下で証明する．
 
-アルゴリズム$\mathsf{FindEmbedding}$は，(1)列4で$H'$がblueの頂点を持たなくなったときか，(2)列4で$|X_i| = |V[M_{t, d, l}]|$が成り立つときか，(3)列14の処理が行われたときのいずれかで終了する．以下では(1)(2)(3)のそれぞれの場合においてアルゴリズムが正しく動作することを示す．
+Theorem~\ref{approximation3}の証明のため，まず以下を示す．
 
-まず(1)の場合を考える．$\mathsf{FindEmbedding}$の列4において$i=s$の時点で$H'$のすべての頂点がredになって終了した場合，アルゴリズムが出力する頂点集合の列$X_{H'} = (X_1, X_2, \dots , X_s)$は$H'$のDAGパス分解になっていることを示す．まず任意の頂点$v \in H'$はredであるためいずれかの頂点集合$X_i$に必ず含まれる．よってDAGパス分解のルール1を満たす．また$v$はちょうど1度だけblueからredに変わり，redのときにのみトークンが削除されてそれ以降トークンが置かれることはないため，$v$を含む頂点集合$X_i$は連結なパスを構成する．したがってDAGパス分解のルール3を満たす．さらに任意の枝$(u, v) \in E[H']$について$v$がblueからredに変わる時点を$i$とする．このとき$\mathsf{FindEmbedding}$の列5の条件より$i$より前の時点で$u$からトークンは削除されず，また$\mathsf{GrowTokenTree}$のwhileの条件より，$v$の先行頂点にはすべてトークンが置かれているため，$u$もまた$X_i$に含まれる．$v$は$X_{i'}$ $(i' < i)$に含まれないことに注意すると$u, v \in X_i, v \notin X_{i-1}$が成り立つためDAGパス分解のルール3を満たす．以上より頂点集合の列$X_{H'}$は$H'$のDAGパス分解となっている．$\lceil \log_d l \rceil < \log_d l +1$に注意すると，このとき$X_{H'}$の幅は高々$|V[M_{t, d, l}]| = d^{\lceil \log_d l \rceil +t+2}-1 < ld^{t+3}-1$である．ここで$X_H = (X_1 \cap V[H], X_2 \cap V[H], \dots , X_s \cap V[H])$は$H$に対してDAGパス分解の3つのルールを満たすことから$H$のDAGパス分解になっていることに注意すると，$X_H$の幅もまた高々$ld^{t+3}-1$である．したがって幅が高々$ld^{t+3}-1$である$H$のDAGパス分解が得られる．
+\begin{lemma}\label{lemma_embedding}
+    $M_{t, d, l}$上でtokenedなトークン集合によって誘導される部分グラフ$G'$は連結であり，さらに$G'$から$H'$への埋め込みが存在する．
+\end{lemma}
 
-次に(2)の場合を考える．$\mathsf{FindEmbedding}$の列4において$i=s$の時点で$|X_s| = |V[M_{t, d, l}]|$が成り立つとき，頂点集合$X_1 \cup X_2 \cup \dots \cup X_s$によって誘導される$H'$の部分グラフを$A'$とする．このときアルゴリズムが出力する頂点集合の列$X_{A'} = (X_1, X_2, \dots , X_s)$は$A'$のDAGパス分解になっている．まず$A'$の定義より明らかにDAGパス分解のルール1を満たす．また上記と同様の議論によりDAGパス分解のルール2, 3を満たす．よって$X_{A'}$は$A'$のDAGパス分解である．ここで$A$を頂点集合$V[A'] \cap V[H]$によって誘導される部分グラフとし，$X_A = (X_1 \cap V[H], X_2 \cap V[H], \dots , X_s \cap V[H])$とする．$X_A$は$A$に対してDAGパス分解の3つのルールを満たすことから$A$のDAGパス分解になっていることに注意すると，上記と同様の議論により幅が高々$ld^{t+3}-1$である$A$のDAGパス分解が得られる．
+\begin{proof}
+    まず$G'$が常に連結であることを示す．トークンの配置や置き換えの操作は$\mathsf{GrowTokenTree}$の列2か，$\mathsf{FindEmbedding}$の列6，8に限られ，前者は明らかに連結になるようにトークンを配置しており，後者は$T$の削除後，直ちに$T$の子孫すべてを1つずつ上の世代のトークンに置き換えることで連結になるように置き換えている．よって$G'$が常に連結は常に連結である．
+    
+    次に$G'$から$H'$への埋め込みが存在することを示す．$\mathsf{GrowTokenTree}$では，トークン$T$が配置された$u \in V[H']$の子$v$にトークン$T\cdot b$を配置する操作なので明らかに埋め込みの条件を満たす．したがって$\mathsf{FindEmbedding}$の列6から列9において埋め込みの条件が満たされることを示せば十分である．列5の処理の時点で$M_{t, d, l}$の各頂点に対して埋め込みの条件が満たされていると仮定する．列5の条件を満たすトークン$T$が存在し，tokenedな子$T\cdot b$を1つだけもつとき列8が実行される．列8での$S$は1から$d$までの$d$個の文字を用いた0文字以上の任意の長さの文字列を表し，この処理は$T\cdot b$を根とする有向木上の全トークンを，$T$を根とする有向木上の各トークンに構造を保ったまま置き換える操作を表す．この置き換えでは根$\lambda$から近い順にトークンを置き換えることとするため，置き換え先のトークンは常にuntokenedであることに注意する．上記より$G'$は常に連結であり，かつ$T$のtokenedな子は$T\cdot b$しか存在しないため，$T$を削除して$T\cdot b$を根とする有向木上のすべてのトークンを$T$を根とする有向木上の各トークンに置き換える操作を行っても埋め込みの条件は満たされる．$T$がtokenedな子を持たないときは列6のみ実行され，列8は実行されない．このとき$T$を削除しても明らかに埋め込みの条件は満たされる．したがって列6から列9の処理を行っても埋め込みの条件は保たれる．この一連の操作を繰り返しても埋め込みの条件は保たれたままであるため，$G'$から$H'$への埋め込みが存在することが示される．
+\end{proof}
 
-さらに，$X_{A'}$の右端のバッグ$X_s$によって誘導される$H'$の部分グラフ$H_{A'3}$は，$M_{t, d, l}$の$H'$への埋め込みを表していることを示す．$\mathsf{GrowTokenTree}$では$u, v \in H'$にそれぞれトークン$T, T\cdot b \in M_{t, d, l}$を配置する操作なので，明らかに埋め込みの条件を満たす．したがって$\mathsf{FindEmbedding}$の列6から列12において埋め込みの条件が満たされることを示せば十分である．列5の処理の時点で$M_{t, d, l}$の各頂点に対して埋め込みの条件が満たされていると仮定する．列5の条件を満たすトークン$T$が存在し，tokenedな子を1つだけ持つとき，列6と列8により$T \cdot b$は$T$に置き換えられる．このとき$T$の親$T'$と$T, T \cdot b$のそれぞれ置かれていた頂点を$u, v, w \in H'$とすると，置き換えによって$w$に$T$が置かれるが，仮定より枝$(T', T)$から辺素パス$u \rightarrow v$への写像があるため，$T$はただ一つのtokenedな子$T \cdot b$をもつことに注意して，明らかに枝$(T', T)$から辺素パス$u \rightarrow w$への写像が存在する．したがって埋め込みの条件は満たされる．$T$がtokenedな子を持たないときは列6のみ実行され，列8は実行されないが，$T$を削除しても明らかに埋め込みの条件は満たされる．次に列10から12の処理を考える．$\mathsf{GrowTokenTree}$では$M_{t, d, l}$の根に近いトークンから順にtokenedになるため，$T$がtokenedな子を持たないならば$T$の孫もまたtokenedでない．したがって列11は行われない．$T$がただ一つのtokenedな子$T \cdot b_1$を持つ場合，$\mathsf{GrowTokenTree}$の操作と$T$がtokenedな子を持たない場合の操作より，$T$のtokenedな孫は必ず$T \cdot b_1$を親に持つ．ここで列8の処理により$T \cdot b_1$がuntokenedになるため$T$のすべての子がuntokenedとなるが，列11の処理によりtokenedな$T$の孫$T \cdot b_1 \cdot b_2$はすべて$T$の子$T \cdot b_2$に置き換えられる．このとき$T \cdot b_1, T \cdot b_1 \cdot b_2$が置かれていた頂点をそれぞれ$u, v \in H'$とすると，仮定より$M_{t, d, l}$の枝$(T \cdot b_1, T \cdot b_1 \cdot b_2)$から$H'$の辺素パス$u \rightarrow v$への写像があるため，トークンの置き換え後は明らかに枝$(T, T \cdot b_2)$から辺素パス$u \rightarrow v$への写像が存在する．したがって埋め込みの条件は満たされる．
+アルゴリズム$\mathsf{FindEmbedding}$は，(1)列4で$H'$がblueの頂点を持たなくなったときか，(2)列4で$|X_i| = |V[M_{t, d, l}]|$が成り立つときか，(3)列11の処理が行われたときのいずれかで終了する．以下では(1)(2)(3)のそれぞれの場合においてアルゴリズムが正しく動作することを以下のLemmaで示す．
 
-以上より$X_{A'}$が出力されるとき，$A'$は$M_{t, d, l}$の$H'$への埋め込みを表している．ここで$A'$は高さ$\lceil \log_d l \rceil +t+2$の完全有向$d$分木を含み，頂点集合$V[A'] \backslash V[A]$によって誘導される部分グラフは高さが高々$\lceil \log_d l \rceil$の完全有向$d$分木であることに注意すると，$A$は少なくとも$(\lceil \log_d l \rceil +t+2) -(\lceil \log_d l \rceil) = t+2$の高さをもつ完全有向$d$分木$T_A$を含む．すなわち$T_A$から$A$への埋め込みが存在する．Lemma~\ref{comp_tree}より$T_A$のDAGパス幅は$t+1$であるため，$A$のDAGパス幅もまた$t+1$以上である．よって$A$を内部に含む$H$のDAGパス幅は$t$より大きいことが示される．
+\begin{lemma}\label{lemma_(1)}
+    $\mathsf{FindEmbedding}$が(1)で終了するとき，幅が高々$ld^{t+3}-1$である$H$のDAGパス分解が存在する．
+\end{lemma}
 
-最後に(3)の場合を考える．$\mathsf{FindEmbedding}$の列14の処理が行われたときに$A$のDAGパス幅が$t$より大きいことを示す．ここで単一の根$r_G$をもつ任意のDAG $G$の各頂点に対し，$r_G$からの最長パスの長さが$k-1$である頂点集合を$L_{G, k}$と表す．以下では$k$を$G$の階層と呼ぶ．ただし$L_{G, 1} = \{r_G\}$とする．$H'$の各頂点の出次数は高々$d$であるため，ある時点$i$において$\lambda \in M_{t, d, l}$が置かれた頂点$r'$の階層を$k_{r'}$，頂点集合$\bigcup_{k_{r'} \leq k \leq k_{r'}+ \lceil \log_d l \rceil +t+1} L_{H', k}$によって誘導される部分グラフを$H_{k_{r'}, t}$とすると，$H_{k_{r'}, t}$に含まれる任意の頂点にはトークンを置くことができる．ここで列14の処理が行われるとき，任意の頂点$v \in V[H_{k_{r'}, t}]$は以下の少なくとも一方が成り立つ．
+\begin{proof}
+    $\mathsf{FindEmbedding}$の列4において$i=s$の時点で$H'$のすべての頂点がredになって終了した場合，アルゴリズムが出力する頂点集合の列$X_{H'} = (X_1, X_2, \dots , X_s)$は$H'$のDAGパス分解になっていることを示す．まず任意の頂点$v \in H'$はredであるためいずれかの頂点集合$X_i$に必ず含まれる．よってDAGパス分解のルール1を満たす．また$v$はちょうど1度だけblueからredに変わり，redのときにのみトークンが削除されてそれ以降トークンが置かれることはないため，$v$を含む頂点集合$X_i$は連結なパスを構成する．したがってDAGパス分解のルール3を満たす．さらに任意の枝$(u, v) \in E[H']$について，$v$が$i=i_v$においてblueからredに変わるとする．このとき$\mathsf{FindEmbedding}$の列5の条件より$i_v$より前の時点で$u$からトークンは削除されず，また$\mathsf{GrowTokenTree}$のwhileの条件より，$v$の先行頂点にはすべてトークンが置かれているため，$u$もまた$X_i$に含まれる．$v$は$X_{i'}$ $(i' < i_v)$に含まれないことに注意すると$u, v \in X_{i_v}, v \notin X_{i_v-1}$が成り立つためDAGパス分解のルール2を満たす．以上より頂点集合の列$X_{H'}$は$H'$のDAGパス分解となっている．$\lceil \log_d l \rceil < \log_d l +1$に注意すると，このとき$X_{H'}$の幅は高々$|V[M_{t, d, l}]| = d^{\lceil \log_d l \rceil +t+2}-1 < ld^{t+3}-1$である．ここで$X_H = (X_1 \cap V[H], X_2 \cap V[H], \dots , X_s \cap V[H])$は$H$に対してDAGパス分解の3つのルールを満たすことから$H$のDAGパス分解になっていることに注意すると，$X_H$の幅もまた高々$ld^{t+3}-1$である．したがって幅が高々$ld^{t+3}-1$である$H$のDAGパス分解が得られる．
+\end{proof}
 
-\begin{enumerate}
-    \item ある$w \in \mathsf{suc}(v)$が存在し，$w \in L_{H, k'}$ $(k' > k_{r'}+ \lceil \log_d l \rceil +t+1)$を満たし，かつ$w$はblueである． \label{cond1}
-    \item $v$に置かれたトークン$T$が2つ以上のtokenedな子をもつ． \label{cond2}
-\end{enumerate}
 
-また，このとき$M_{t, d, l}$においてtokenedであるトークンのパス$\lambda \cdot m_1 \cdot m_2 \cdot \dots m_{\lceil \log_d l \rceil +t+1}$が少なくとも1つ存在する．なぜならば，もしそのようなパスが存在しなければ，上記の議論により$H_{k_{r'}, t}$は階層が高々$\lceil \log_d l \rceil +t+1$しかなく，$H_{k_{r'}, t}$のすべての頂点にトークンを置くことができ矛盾するからである．ここで$P = \lambda \cdot m_1 \cdot m_2 \cdot \dots m_{\lceil \log_d l \rceil +t+1}$とすると，各トークン$m_i \in P$ (ただし$\lambda$を$m_0$と表現する)について$m_i$が置かれた頂点$v_i$は上記の条件\ref{cond1}, \ref{cond2}の少なくとも一方を満たす．条件\ref{cond1}を満たすとき，$v_i$は$v_{\lceil \log_d l \rceil +t+1}$にトークン$m_{\lceil \log_d l \rceil +t+1}$が置かれるまでは$A$のDAGパス分解においてforgetすることはできない．なぜならばDAGパス分解のルール2より，条件\ref{cond1}での$w$のintroduceは$v_{\lceil \log_d l \rceil +t+1}$のintroduceの後，すなわちトークン$m_{\lceil \log_d l \rceil +t+1}$の$v_{\lceil \log_d l \rceil +t+1}$への配置後であり，$w$を後続頂点にもつ$v_i$はそれよりも前にforgetできないからである．このとき$u_i=v_i$とする．$m_i$が条件\ref{cond1}を満たさず\ref{cond2}を満たすとき，$m_i$はtokenedな子$m'_{i+1}\ (\neq m_{i+1})$を少なくとも1つもつ．$m'_{i+1}$が置かれた頂点についても条件\ref{cond1}，\ref{cond2}の少なくとも一方を満たすため，上記の議論を繰り返すことにより，$M_{t, d, l}$のtokenedな葉は条件\ref{cond1}を満たすことに注意すると，$m'_{i+1}$を根とする有向木には条件\ref{cond1}を満たすような頂点が少なくとも1つ存在する．このような頂点を$u_i$とする．上記と同様の理由により，$u_i$は$v_{\lceil \log_d l \rceil +t+1}$に$m_{\lceil \log_d l \rceil +t+1}$が置かれるまでは$A'$のDAGパス分解においてforgetすることができない．これをすべての$m_i \in P$に対して考えることにより，各頂点$u_0, u_1, \dots, u_{\lceil \log_d l \rceil +t+1}$を得る．このとき$A'$の任意のDAGパス分解$X'$において$v_{\lceil \log_d l \rceil +t+1}$のintroduceを行うバッグを$X_p$とすると，DAGパス分解のルール2に注意して$X'$のバッグ$X_1$から$X_p$までの間では少なくとも各$v_i$ $(0 \leq i \leq \lceil \log_d l \rceil +t+1)$のintroduceが行われており，かつ先程の議論により$X_p$には各$i$に対して$v_i$から$u_i$までのパス上の頂点が少なくとも1つずつ含まれることがいえる．したがって$|X_p| \geq |P| = \lceil \log_d l \rceil +t+2$より，$A'$のDAGパス幅は少なくとも$\lceil \log_d l \rceil +t+1$以上である．ここでトークン列$P$のうち$A$の頂点に置かれたトークンのみを取り出してできるトークン列を$P_A$とする．$|P \backslash P_A| \leq \lceil \log_d l \rceil$より$|P_A| = |P| - |P \backslash P_A| \geq (\lceil \log_d l \rceil +t+2) - \lceil \log_d l \rceil = t+2$に注意すると，上記と同様の議論により$A$のDAGパス幅は$t$より大きいことが示される．
+
+\begin{lemma}\label{lemma_(2)}
+    $\mathsf{FindEmbedding}$が(2)で終了するとき，$H$は共通部分をもたない2つの部分グラフ$A, B\ (V[A] \cup V[B] = V[H], V[A] \cap V[B] = \varnothing)$に分割でき，このとき$H$において$A$と$B$の間には$A$から$B$への枝しか存在せず，$A$のDAGパス幅は$t$より大きく，かつ高々$ld^{t+3}-1$である．
+\end{lemma}
+
+\begin{proof}
+    $\mathsf{FindEmbedding}$の列4において$i=s$で$|X_s| = |V[M_{t, d, l}]|$が成り立つとし，頂点集合$X_1 \cup X_2 \cup \dots \cup X_s$によって誘導される$H'$の部分グラフを$A'$とする．このときアルゴリズムが出力する頂点集合の列$X_{A'} = (X_1, X_2, \dots , X_s)$は$A'$のDAGパス分解になっている．まず$A'$の定義より明らかにDAGパス分解のルール1を満たす．また上記と同様の議論によりDAGパス分解のルール2, 3を満たす．よって$X_{A'}$は$A'$のDAGパス分解である．ここで$A$を頂点集合$V[A'] \cap V[H]$によって誘導される部分グラフとし，$B$を頂点集合$V[H] \backslash V[A]$によって誘導される部分グラフとする．$A, B$は共通部分をもたず，DAGパス分解のルール2より$A$と$B$の間には$A$から$B$への枝しか存在しないことに注意する．$X_A = (X_1 \cap V[H], X_2 \cap V[H], \dots , X_s \cap V[H])$とすると，$X_A$は$A$に対してDAGパス分解の3つのルールを満たすことから$A$のDAGパス分解になっている．このとき上記と同様の議論により$X_A$は幅が高々$ld^{t+3}-1$である．
+
+    さらに$X_{A'}$の右端のバッグ$X_s$によって誘導される$H'$の部分グラフを$A'_M$とする．$i=s$において$M_{t, d, l}$上のすべてのトークンが埋め込みに使われていることに注意すると，Lemma~\ref{lemma_embedding}より$A'_M$は$M_{t, d, l}$から$H'$への埋め込みを表している．ここで$M_{t, d, l}$は高さが$\lceil \log_d l \rceil +t+2$であり，$A'$は$A'_M$を内部に含む．また頂点集合$V[A'] \backslash V[A]$によって誘導される部分グラフは高さが高々$\lceil \log_d l \rceil$の完全有向$d$分木であることに注意すると，$A$には少なくとも$(\lceil \log_d l \rceil +t+2) -(\lceil \log_d l \rceil) = t+2$の高さをもつ完全有向$d$分木$T_A$を埋め込むことができる．すなわち$T_A$から$A$への埋め込みが存在する．Lemma~\ref{comp_tree}より$T_A$のDAGパス幅は$t+1$であるため，$A$のDAGパス幅もまた$t+1$以上である．よって$A$を内部に含む$H$のDAGパス幅は$t$より大きいことが示される．以上より$A$のDAGパス幅は$t$より大きく，かつ高々$ld^{t+3}-1$である．
+
+    %$\mathsf{GrowTokenTree}$では$u, v \in H'$にそれぞれトークン$T, T\cdot b \in M_{t, d, l}$を配置する操作なので，明らかに埋め込みの条件を満たす．したがって$\mathsf{FindEmbedding}$の列6から列9において埋め込みの条件が満たされることを示せば十分である．列5の処理の時点で$M_{t, d, l}$の各頂点に対して埋め込みの条件が満たされていると仮定する．【★列5の条件を満たすトークン$T$が存在し，tokenedな子$T\cdot b$を1つだけもつとき列8が実行される．列8での$S$は1から$d$までの$d$個の文字を用いた0文字以上の任意の長さの文字列を表し，この処理は$T\cdot b$を根とする有向木上の全トークンを，$T$を根とする有向木上の各トークンに構造を保ったまま置き換える操作を表す．ここで$M_{t, d, l}$上のtokenedなトークン集合は常に連結である．なぜならば，トークンの配置や置き換えの操作は$\mathsf{GrowTokenTree}$の列2か，$\mathsf{FindEmbedding}$の列6，8に限られ，前者は明らかに連結になるようにトークンを配置しており，後者は$T$の削除後，直ちに$T$の子孫すべてを1つずつ上の世代のトークンに置き換えることで連結になるようにしているからである．このとき根$\lambda$から近い順にトークンを置き換えるため，置き換え先のトークンは常にuntokenedであることに注意する．$T$のtokenedな子は$T\cdot b$しか存在しないため，$T$を削除して$T\cdot b$を根とする有向木上のすべてのトークンを$T$を根とする有向木上の各トークンに置き換える操作を行っても埋め込みの条件は満たされる．$T$がtokenedな子を持たないときは列6のみ実行され，列8は実行されない．このとき$T$を削除しても明らかに埋め込みの条件は満たされる．】
+    
+    %列5の条件を満たすトークン$T$が存在し，tokenedな子を1つだけ持つとき，列6と列8により$T \cdot b$は$T$に置き換えられる．このとき$T$の親$T'$と$T, T \cdot b$のそれぞれ置かれていた頂点を$u, v, w \in H'$とすると，置き換えによって$w$に$T$が置かれるが，仮定より枝$(T', T)$から辺素パス$u \rightarrow v$への写像があるため，$T$はただ一つのtokenedな子$T \cdot b$をもつことに注意して，明らかに枝$(T', T)$から辺素パス$u \rightarrow w$への写像が存在する．したがって埋め込みの条件は満たされる．$T$がtokenedな子を持たないときは列6のみ実行され，列8は実行されない．このとき$T$を削除しても明らかに埋め込みの条件は満たされる．次に列10から12の処理を考える．$\mathsf{GrowTokenTree}$では$M_{t, d, l}$の根に近いトークンから順にtokenedになるため，$T$がtokenedな子を持たないならば$T$の孫もまたtokenedでない．したがって列11は行われない．$T$がただ一つのtokenedな子$T \cdot b_1$を持つ場合，$\mathsf{GrowTokenTree}$の操作と$T$がtokenedな子を持たない場合の操作より，$T$のtokenedな孫は必ず$T \cdot b_1$を親に持つ．ここで列8の処理により$T \cdot b_1$がuntokenedになるため$T$のすべての子がuntokenedとなるが，列11の処理によりtokenedな$T$の孫$T \cdot b_1 \cdot b_2$はすべて$T$の子$T \cdot b_2$に置き換えられる．このとき$T \cdot b_1, T \cdot b_1 \cdot b_2$が置かれていた頂点をそれぞれ$u, v \in H'$とすると，仮定より$M_{t, d, l}$の枝$(T \cdot b_1, T \cdot b_1 \cdot b_2)$から$H'$の辺素パス$u \rightarrow v$への写像があるため，トークンの置き換え後は明らかに枝$(T, T \cdot b_2)$から辺素パス$u \rightarrow v$への写像が存在する．したがって埋め込みの条件は満たされる
+\end{proof}
+
+
+
+\begin{lemma}\label{lemma_(3)}
+    $\mathsf{FindEmbedding}$が(3)で終了するとき，$H$のDAGパス幅は$t$よりも大きい．
+\end{lemma}
+
+\begin{proof}
+    $\mathsf{FindEmbedding}$の列11の処理が行われたときに$H$のDAGパス幅が$t$より大きいことを示す．ここで単一の根$r_G$をもつ任意のDAG $G$の各頂点に対し，$r_G$からの最長パスの長さが$k-1$である頂点集合を$L_{G, k}$と表す．以下では$k$を$G$の階層と呼ぶ．ただし$L_{G, 1} = \{r_G\}$とする．$H'$の各頂点の出次数は高々$d$であるため，ある時点$i$において$\lambda \in M_{t, d, l}$が置かれた頂点$r'$の階層を$k_{r'}$，頂点集合$\bigcup_{k_{r'} \leq k \leq k_{r'}+ \lceil \log_d l \rceil +t+1} L_{H', k}$によって誘導される部分グラフを$H_{k_{r'}, t}$とすると，$H_{k_{r'}, t}$に含まれる任意の頂点にはトークンを置くことができる．ここで列11の処理が行われるとき，任意の頂点$v \in V[H_{k_{r'}, t}]$は以下の少なくとも一方が成り立つ．
+
+    \begin{enumerate}
+        \item ある$w \in \mathsf{suc}(v)$が存在し，$w \in L_{H, k'}$ $(k' > k_{r'}+ \lceil \log_d l \rceil +t+1)$を満たし，かつ$w$はblueである． \label{cond1}
+        \item $v$に置かれたトークン$T$が2つ以上のtokenedな子をもつ． \label{cond2}
+    \end{enumerate}
+    
+    また，このとき$M_{t, d, l}$においてtokenedであるトークンのパス$\lambda \cdot m_1 \cdot m_2 \cdot \dots m_{\lceil \log_d l \rceil +t+1}$が少なくとも1つ存在する．なぜならば，もしそのようなパスが存在しなければ，上記の議論により$H_{k_{r'}, t}$は階層が高々$\lceil \log_d l \rceil +t+1$しかなく，$H_{k_{r'}, t}$のすべての頂点にトークンを置くことができ矛盾するからである．ここで$P = \lambda \cdot m_1 \cdot m_2 \cdot \dots m_{\lceil \log_d l \rceil +t+1}$とすると，各トークン$m_i \in P$ (ただし$\lambda$を$m_0$と表現する)について$m_i$が置かれた頂点$v_i$は上記の条件\ref{cond1}, \ref{cond2}の少なくとも一方を満たす．条件\ref{cond1}を満たすとき，$v_i$は$v_{\lceil \log_d l \rceil +t+1}$にトークン$m_{\lceil \log_d l \rceil +t+1}$が置かれるまでは$H$のDAGパス分解においてforgetすることはできない．なぜならばDAGパス分解のルール2より，条件\ref{cond1}での$w$のintroduceは$v_{\lceil \log_d l \rceil +t+1}$のintroduceの後，すなわちトークン$m_{\lceil \log_d l \rceil +t+1}$の$v_{\lceil \log_d l \rceil +t+1}$への配置後であり，$w$を後続頂点にもつ$v_i$はそれよりも前にforgetできないからである．このとき$u_i=v_i$とする．$m_i$が条件\ref{cond1}を満たさず\ref{cond2}を満たすとき，$m_i$はtokenedな子$m'_{i+1}\ (\neq m_{i+1})$を少なくとも1つもつ．$m'_{i+1}$が置かれた頂点についても条件\ref{cond1}，\ref{cond2}の少なくとも一方を満たすため，上記の議論を繰り返すことにより，$M_{t, d, l}$のtokenedな葉は条件\ref{cond1}を満たすことに注意すると，$m'_{i+1}$を根とする有向木には条件\ref{cond1}を満たすような頂点が少なくとも1つ存在する．このような頂点を$u_i$とする．上記と同様の理由により，$u_i$は$v_{\lceil \log_d l \rceil +t+1}$に$m_{\lceil \log_d l \rceil +t+1}$が置かれるまでは$H'$のDAGパス分解においてforgetすることができない．これをすべての$m_i \in P$に対して考えることにより，各頂点$u_0, u_1, \dots, u_{\lceil \log_d l \rceil +t+1}$を得る．このとき$H'$の任意のDAGパス分解$X'$において$v_{\lceil \log_d l \rceil +t+1}$のintroduceを行うバッグを$X_p$とすると，DAGパス分解のルール2に注意して$X'$のバッグ$X_1$から$X_p$までの間では少なくとも各$v_i$ $(0 \leq i \leq \lceil \log_d l \rceil +t+1)$のintroduceが行われており，かつ先程の議論により$X_p$には各$i$に対して$v_i$から$u_i$までのパス上の頂点が少なくとも1つずつ含まれることがいえる．したがって$|X_p| \geq |P| = \lceil \log_d l \rceil +t+2$より，$H'$のDAGパス幅は少なくとも$\lceil \log_d l \rceil +t+1$以上である．ここでトークン列$P$のうち$H$の頂点に置かれたトークンのみを取り出してできるトークン列を$P_H$とする．$|P \backslash P_H| \leq \lceil \log_d l \rceil$より$|P_H| = |P| - |P \backslash P_H| \geq (\lceil \log_d l \rceil +t+2) - \lceil \log_d l \rceil = t+2$に注意すると，上記と同様の議論により$H$のDAGパス幅は$t$より大きいことが示される．
+\end{proof}
+
+
+最後にTheorem~\ref{approximation3}を示す．
+
+\begin{proof}(Theorem~\ref{approximation3})\\
+    DAG $H$を$\mathsf{FindEmbedding}$に入力することで上記の(1)(2)(3)のいずれか1つで必ず終了する．(1)で終了するとき，Lemma~\ref{lemma_(1)}よりTheorem~\ref{approximation3}の(a)が成り立つ．(2)で終了するとき，Lemma~\ref{lemma_(2)}よりTheorem~\ref{approximation3}の(b)が成り立つ．(3)で終了するとき，Lemma~\ref{lemma_(1)}より$A=H$とすることでTheorem~\ref{approximation3}の(b)が成り立つ．以上よりTheorem~\ref{approximation3}が示される．
 \end{proof}
 
 
