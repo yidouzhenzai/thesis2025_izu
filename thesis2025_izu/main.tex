@@ -30,8 +30,8 @@
 \usepackage{enumitem}
 \newboolean{Draft}
 \newboolean{Draft2}
-\setboolean{Draft}{false} %図を挿入するならtrue
-\setboolean{Draft2}{false} %付録を挿入するならtrue
+\setboolean{Draft}{true} %図を挿入するならtrue
+\setboolean{Draft2}{true} %付録を挿入するならtrue
 
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}
@@ -106,7 +106,7 @@
 
 次にDAGパス幅に対し，$O(\log^2 n)$の近似比をもつ多項式時間アルゴリズムを提案する．DAGパス分解を構成する問題はone-shot Black Pebbling gameを解く問題と等価であることを示し，これによりさらに近似比を$O(\log^{3/2} n)$まで小さくできることを示す．
 
-DAGパス幅の計算はNP困難であることが知られており，小さなDAGパス幅を求めるアルゴリズムは我々の知る限り知られていなかった．本研究では最大出次数，根数がそれぞれ$d, l$のDAG $G$と整数$k$が与えられたとき，幅が高々$O(l\dot d^k)$である$G$のDAGパス分解か，もしくは$G$のDAGパス幅が$k$よりも大きい証拠であるDAGパス分解のいずれかを返すアルゴリズムを提案する．
+DAGパス幅の計算はNP困難であることが知られており，小さなDAGパス幅を求めるアルゴリズムは我々の知る限り知られていなかった．本研究では最大出次数，根数がそれぞれ$d, l$のDAG $G$と整数$t$が与えられたとき，幅が高々$O(l d^t)$である$G$のDAGパス分解か，もしくは$G$のDAGパス幅が$t$よりも大きい証拠であるDAGパス分解のいずれかを返すアルゴリズムを提案する．
 
 
 最後にDAGパス幅の一般化となる概念であるDAG木幅を新たに定義する．DAG木幅は有向グラフが有向木からどれだけ近いかを表すパラメータであり，DAG木幅の値が小さいほどグラフが有向木に近い構造をしていることを表す．DAG木幅を与える最適なDAG木分解の構成がNP困難であることを示し，その後DAG木幅をパラメータとしてDirected Dominating Set Problemを解く$O(2^w(k+w)n+n^2)$時間のFPTアルゴリズムを提案する．
@@ -125,7 +125,7 @@ DAGパス幅の計算はNP困難であることが知られており，小さな
 
 \begin{eabstract}				% 英文梗概
 
-DAG (directed acyclic graph)-pathwidth is a parameter that measures how similar is the structure of a directed graph to that of a directed path. This parameter provides a non-trivial width even for DAG, which is difficult to parameterize using existing width. DAG-pathwidth is useful for designing parameterized algorithms to solve NP-hard problems on DAGs.
+DAG (directed acyclic graph)-pathwidth is a parameter that measures how closely a directed graph resembles a directed path. This parameter provides a non-trivial width even for DAG, which is difficult to parameterize using existing width. DAG-pathwidth is useful for designing parameterized algorithms to solve NP-hard problems on DAGs.
 
 In this thesis, we first design parameterized algorithms with DAG-pathwidth for various NP-hard problems even on DAGs. Specifically, we design fixed-parameter tractable (FPT) algorithms for the Directed Dominating Set Problem and the Max Leaf Outbranching Problem. Given a DAG with $n$ vertices and a DAG-path-decomposition of width $w$, both problems can be solved exactly in $O(2^w w n)$ time. Similarly, we propose parameterized algorithms for the Directed Steiner Tree Problem and the $k$-Disjoint Path Problem. 
 
@@ -133,7 +133,7 @@ In this thesis, we first design parameterized algorithms with DAG-pathwidth for 
 
 Next, we design a polynomial-time approximation algorithm for DAG-path-width that achieves an $O(\log^2 n)$ approximation ratio. We further improve this ratio to $O(\log^{3/2} n)$ by demonstrating the equivalence between constructing DAG-path-decomposition and solving one-shot Black Pebbling game. 
 
-It is known that computing DAG-pathwidth is NP-hard, and, as far as we know, no algorithm has been known for finding small DAG-pathwidth. In this thesis, we also design an algorithm that, given an integer $k$ and DAG $G$ with $l$ roots and at most $d$ outdegree, either computes a DAG-path-decomposition of $G$ with width at most $O(l d^k)$ or provides an evidence that the DAG-pathwidth of $G$ is greater than $k$.
+It is known that computing DAG-pathwidth is NP-hard, and, as far as we know, no algorithm has been known for finding small DAG-pathwidth. In this thesis, we also design an algorithm that, given an integer $t$ and DAG $G$ with $l$ roots and at most $d$ outdegree, either computes a DAG-path-decomposition of $G$ with width at most $O(l d^t)$ or provides an evidence that the DAG-pathwidth of $G$ is greater than $t$.
 
 Finally, we define a new parameter DAG-treewidth as a generalization of DAG-pathwidth. DAG-treewith is a parameter that measures how similar is the structure of a directed graph to that of a directed tree. We show that constructing an optimal DAG-tree-decomposition that minimizes DAG-treewidth is NP-hard. After that, we design an FPT algorithm for the Directed Dominating Set Problem in $O(2^w w^2 n)$ time, with the DAG-treewidth $w$ as a parameter.
 
@@ -180,10 +180,10 @@ NP困難な問題に対して高速に解を求める方法の一つとして木
 
 有向グラフに対しても様々な幅が考えられてきた．1997年にReed [9]が有向パス幅を提案しており，2001年にはJohnsonら[10]が有向木幅を提案している．また2012年には，Berwangerら[11]によってDAGに対する幅が提案されている．
 
-有向パス幅は有向グラフがどれだけDAGに近い構造をしているかを表すパラメータである．そのためDAGに対しては有向パス幅は常に０になり，DAG上の問題に対してパラメータ化アルゴリズムの構築が難しい場合があった．これに対し，2023年にKasaharaら[12]によって，新たにDAGパス幅が提案されている．DAGパス幅は有向有向グラフがどれだけ有向パスに近い構造をしているかを表すパラメータであり，有向パス分解の条件に加え，任意の枝に対してその端点を同時に含むバッグが存在することをルールに加えている．これにより有向グラフ上の強連結成分は同時に1つのバッグに含まれていなければならない．この条件によって特にDAGについて非自明な幅が得られ，DAGに対して有効なFPTアルゴリズムの構築が可能となっている．[12]ではDAGパス幅を用いた$k$-独立集合問題のパラメータ化アルゴリズムの構築やDAGパス幅を求めることがNP困難であることの証明などが行われている．一方で$k$-独立集合問題以外でのDAG上でもNP困難な問題に対するパラメータ化アルゴリズムの構築やDAGパス分解自体を求めるアルゴリズムは著者が知る限りこれまでわかっていなかった．
+有向パス幅は有向グラフがどれだけDAGに近い構造をしているかを表すパラメータである．そのためDAGに対しては有向パス幅は常に0になり，DAG上の問題に対してパラメータ化アルゴリズムの構築が難しい場合があった．これに対し，2023年にKasaharaら[12]によって，新たにDAGパス幅が提案されている．DAGパス幅は有向有向グラフがどれだけ有向パスに近い構造をしているかを表すパラメータであり，有向パス分解の条件に加え，任意の枝に対してその端点を同時に含むバッグが存在することをルールに加えている．これにより有向グラフ上の強連結成分は同時に1つのバッグに含まれていなければならない．この条件によって特にDAGについて非自明な幅が得られ，DAGに対して有効なFPTアルゴリズムの構築が可能となっている．[12]ではDAGパス幅を用いた$k$-独立集合問題のパラメータ化アルゴリズムの構築やDAGパス幅を求めることがNP困難であることの証明などが行われている．一方で$k$-独立集合問題以外でのDAG上でもNP困難な問題に対するパラメータ化アルゴリズムの構築やDAGパス分解自体を求めるアルゴリズムは著者が知る限りこれまでわかっていなかった．
 
 
-そこで今回は次の3つの研究を行った．1つ目はDAGパス分解を用いてDAG上での様々なNP困難問題に対するパラメータ化アルゴリズムの構築である．2つ目はDAGパス分解を求める近似アルゴリズム，及び制限された幅をもつDAGパス分解の構築を行うパラメータ化アルゴリズムの提案である．3つ目はDAGパス幅の拡張となるDAG木幅の提案である．まず第3章では，DAG上でもNP困難な問題であるDirected Dominating Set Problem, Max Leaf Outbranching Problemの2つの問題に対して，頂点数が$n$のDAG，幅が$w$のDAGパス分解を入力したとき，$O(2^wwn)$時間のFPTアルゴリズムを提案する．Directed Steiner Tree Problemに対しては，ターミナル集合のサイズを$k$としたときに$O(2^w(k+w)n+n^2)$時間のFPTアルゴリズムを提案する．また$k$-Disjoint Path Problemに対しては$O((k+1)^w(w^2+k)n+n^2)$時間のパラメータ化アルゴリズムを提案する．第3章の最後ではDirected Edge Dominating Set Problemを用いて木分解と比較したときのDAGパス分解の利点を述べる．提案するアルゴリズムはDAGを入力としているが，一般の有向グラフに対しても強連結成分分解を行うことで本アルゴリズムを提供することができる．次に第4章ではDAGパス幅に対し，$O(\log^2 n)$-近似アルゴリズムを提案する．またより近似比の小さい$O(\log^{3/2} n)$-近似アルゴリズムの存在を示す．これはone-shot Black Pebbling ProblemがDAGパス分解を求める問題と等価であることから示される．さらに第5章では，DAGパス幅とグラフの最大出次数，根数がそれぞれ$w, d, l$であるDAGが与えられたとき，$O(l\cdot d^w)$の幅をもつDAGパス分解を与えるアルゴリズムを提案する．このアルゴリズムは無向パス分解に対するアルゴリズム[8]を参考にして構築しており，完全有向$d$分木の埋め込みを行うことでアルゴリズムを構築している．最後に第6章, 第7章ではDAGパス幅の一般化となる概念であるDAG木幅の提案を行っている．DAG木幅は有向グラフが有向木からどれだけ近いかを表すパラメータであり，DAG木幅の値が小さいほどグラフが有向木に近い構造をしていることを表す．第6章でDAG木幅を与える最適なDAG木分解の構成がNP困難であることを示し，第7章でDAG木幅をパラメータとしてDirected Dominating Set Problemを解く$O(2^ww^2n)$時間のFPTアルゴリズムを提案している．
+そこで今回は次の3つの研究を行った．1つ目はDAGパス分解を用いてDAG上での様々なNP困難問題に対するパラメータ化アルゴリズムの構築である．2つ目はDAGパス分解を求める近似アルゴリズム，及び制限された幅をもつDAGパス分解の構築を行うパラメータ化アルゴリズムの提案である．3つ目はDAGパス幅の拡張となるDAG木幅の提案である．まず第3章では，DAG上でもNP困難な問題であるDirected Dominating Set Problem, Max Leaf Outbranching Problemの2つの問題に対して，頂点数が$n$のDAG，幅が$w$のDAGパス分解を入力したとき，$O(2^wwn)$時間のFPTアルゴリズムを提案する．Directed Steiner Tree Problemに対しては，ターミナル集合のサイズを$k$としたときに$O(2^w(k+w)n+n^2)$時間のFPTアルゴリズムを提案する．また$k$-Disjoint Path Problemに対しては$O((k+1)^w(w^2+k)n+n^2)$時間のパラメータ化アルゴリズムを提案する．第3章の最後ではDirected Edge Dominating Set Problemを用いて木分解と比較したときのDAGパス分解の利点を述べる．提案するアルゴリズムはDAGを入力としているが，一般の有向グラフに対しても強連結成分分解を行うことで本アルゴリズムを提供することができる．次に第4章ではDAGパス幅に対し，$O(\log^2 n)$-近似アルゴリズムを提案する．またより近似比の小さい$O(\log^{3/2} n)$-近似アルゴリズムの存在を示す．これはone-shot Black Pebbling ProblemがDAGパス分解を求める問題と等価であることから示される．さらに第5章では，整数$t$と最大出次数，根数がそれぞれ$d, l$であるDAGが与えられたとき，$O(l d^t)$の幅をもつDAGパス分解を与えるアルゴリズムを提案する．このアルゴリズムは無向パス分解に対するアルゴリズム[8]を参考にして構築しており，完全有向$d$分木の埋め込みを行うことでアルゴリズムを構築している．最後に第6章, 第7章ではDAGパス幅の一般化となる概念であるDAG木幅の提案を行っている．DAG木幅は有向グラフが有向木からどれだけ近いかを表すパラメータであり，DAG木幅の値が小さいほどグラフが有向木に近い構造をしていることを表す．第6章でDAG木幅を与える最適なDAG木分解の構成がNP困難であることを示し，第7章でDAG木幅をパラメータとしてDirected Dominating Set Problemを解く$O(2^ww^2n)$時間のFPTアルゴリズムを提案している．
 
 
 
@@ -351,7 +351,7 @@ Lemma~\ref{catapillar}の証明は付録で示す．
 以下では動的計画法を行いやすくするためのDAGパス分解としてnice DAGパス分解を定義する．
 
 \begin{definition*}[nice DAGパス分解][12]
-    DAG $G=(V, E)$のDAGパス分解$X=(X_1, X_2,  \dots, X_s)$がnice DAGパス分解であるとは，$X$が以下のルールを満たすことをいう．
+    有向グラフ $G=(V, E)$のDAGパス分解$X=(X_1, X_2,  \dots, X_s)$がnice DAGパス分解であるとは，$X$が以下のルールを満たすことをいう．
 
     \begin{enumerate}
         \item $X_1 = X_s = \emptyset$
@@ -391,10 +391,7 @@ $G$がDAGであるとき，nice DAGパス分解は各バッグが1つの頂点�
 以下ではDAGパス分解との比較を行うため，Black Pebbling gameの定義を行う．
 
 \begin{definition*}[Black Pebbling game][13]
-    Black Pebbling gameとは，DAG $G = (V, E)$が与えられたときに，以下のルールを満たす戦略$P=(P_1, P_2, \dots, P_t)$ $(P_i \subseteq V)$を構成するゲームである．
-
-
-    Black Pebbling gameの戦略とは，以下の4つのルールを満たすような$V$の部分集合$ P_i\ (i = 0, 1,   \dots, s)$ の列 $P = (P_0, P_1,   \dots, P_{\tau})$である．
+    Black Pebbling gameとは，DAG $G = (V, E)$が与えられたときに，以下のルールを満たす頂点集合の列(戦略と呼ぶ) $P=(P_0, P_1, \dots, P_t)$ $(P_i \subseteq V)$を構成するゲームである．
 
     \begin{description}
         \item[ルール1] $P_0 = \emptyset$
@@ -407,7 +404,7 @@ $G$がDAGであるとき，nice DAGパス分解は各バッグが1つの頂点�
 pebbleは頂点に小石を置く操作を表し，unpebbleは頂点から小石を取り除く操作を表す．ただしグラフの根は先行頂点をもたないため任意の時点でpebbleできる．また，ペブリング数を以下のように定義する．
 
 \begin{definition*}[ペブリング数]
-    DAG $G$の戦略$P = (P_0, P_1,   \dots, P_{\tau})$に対し，$space$と$time$を以下のように定義する．
+    DAG $G$の戦略$P = (P_0, P_1,   \dots, P_{\tau})$に対し，$\mathsf{space}$と$\mathsf{time}$を以下のように定義する．
 
     \begin{enumerate}
         \item $\mathsf{space}(P) =  \underset{i}{\max} \{ |P_i| \}$
@@ -578,39 +575,44 @@ $\mathsf{Compute}(P)$
 
 \subsection{Max Leaf Outbranchingの$O(2^wwn)$時間アルゴリズム}
 
-本節では頂点数$n$のDAG $G$, 幅が$w$である$G$のnice DAGパス分解, 根$r$が与えられたとき，$G$のMax Leaf Outbranching Problemを$O(2^wwn)$で計算するアルゴリズムを示す．
+本節では頂点数$n$のDAG $G$, 幅が$w$である$G$のnice DAGパス分解, 根$r$が与えられたとき，$G$のMax Leaf Outbranching Problem (MaxLOB)を$O(2^wwn)$で計算するアルゴリズムを示す．そのためまずMaxLOBに関する定義を示す．
 
-
-以下でMax Leaf Outbranching Problemに関する定義と定理を与える．
-
-\begin{definition*}[Max Leaf Outbranching Problem\ (MaxLOB)]
+\begin{definition*}[MaxLOB]
     有向グラフ $G=(V, E)$, 根$r \in V$が入力されたとき，$r$を根とする$G$の有向全域木のうち葉数が最大となる有向全域木$T$の葉数を求める問題である．
 \end{definition*}
 
 Ganianら[17]は以下を示した．
 
 \begin{proposition}[計算量クラス]
-    MaxLOBは$G$がDAGの場合でもNP困難である．
+    MaxLOBは$G$がDAGでもNP困難である．
 \end{proposition}
 
-今回は入力グラフをDAGとし，入次数が0の頂点がただ１つ存在し，その頂点が根$r$であるとする．このとき$G$には葉数が最大の有向全域木が必ず存在する．これは次の補題を示せば十分である．
+今回は入力グラフをDAGとし，根が$r$のみであるとする．このとき$G$には葉数が最大の有向全域木が必ず存在する．これは次の補題を示せば十分である．
 
-\begin{lemma}
+\begin{lemma}\label{lemma_spanning}
     連結なDAG $G$について，$G$が入次数0の根をただ一つもつことと，$G$に有向全域木が存在することは必要十分である．
 \end{lemma}
 
+
+
+\begin{comment}
+    
 \begin{proof}
     $G$に入次数0の頂点が2つ以上存在する場合，明らかに有向全域木が存在しない．逆に入次数0のただ1つの頂点$r$が存在する場合，$G$の各頂点を$r$を先頭とするトポロジカル順序に並べる．これを$r, v_1, v_2, \dots, v_{n-1}$とする．$G$は連結なDAGであることに注意すると，$r$以外の各頂点$v_i\ (i=1, 2, \dots, n-1)$は$r, v_1, v_2, \dots, v_{i-1}$に少なくとも1つの親を持つ．これを全ての$v_i$に対して考えることにより，各$v_i$は$r$からの到達可能なパス$P_i$が存在する．全ての$P_i$の和を考えたときに有向木であれば，それは有向全域木である．有向木でなく閉路が存在する場合，ある2つのパス$P_i, P_j\ (i\neq j)$があり，それぞれのパスの内部に$P'_i, P'_j$ ($P'_i, P'_j$は始点と終点が一致する点素なパス)を含むとすることができる．このときパス$P_i$の$P'_i$を$P'_j$に変えることで$P'_i, P'_j$による閉路を削除できる．この操作を全ての閉路に対して行うことにより，全てのパス$P_i$の和を有向木に変換できる．このとき有向木は有向全域木である．
 \end{proof}
 
+\end{comment}
+
 
 本節の以降ではDAGパス幅を用いたFPTアルゴリズムの構築を行う．
 
-\begin{theorem}
+\begin{theorem}\label{alg_lob}
     DAG $G$に対し，幅が$w$である$G$のnice DAGパス分解が与えられたとき，$G$のMaxLOBを$O(2^wwn)$で解くアルゴリズムが存在する．
 \end{theorem}
 
+Lemma~\ref{lemma_spanning}及び\ref{lob}，\ref{complexity_lob}の証明，Theorem~\ref{alg_lob}のアルゴリズム$\mathsf{Compute}$及び関数$\mathsf{LOB}$は付録で示す．
 
+\begin{comment}
 
 上記のアルゴリズムを構成するため，まず関数$\mathsf{LOB}$を定義する．$\mathsf{LOB}$は各$i$においてバッグ$X_i$を共通部分をもたない頂点集合$A_i, B_i \subseteq X_i$に分ける．その後$X_1 \cup X_2 \cup \dots \cup X_i$によって誘導される部分グラフ$G_i$の有向全域木のうち，$A_i$が葉であり，$B_i$が葉でなく，かつ葉数が最大のものを求める．これを全ての$A_i, B_i$の組合せについて計算することで，$G_i$での最大葉数の有向全域木を得る．全ての$i$について上記の計算を行うことで最終的に入力グラフ$G$の最大葉数の有向全域木を得る．
 
@@ -657,12 +659,16 @@ $\mathsf{Compute}(P)$
     \item Final Step: $i = s$ならば，$\mathsf{LOB}(s, \varnothing, \varnothing)$を出力する．
 \end{enumerate}
 
+\end{comment}
+
+
+
+
 
 \begin{lemma}\label{lob}
     $\mathsf{Compute}$は$G$のMaxLOBの解を出力する．
 \end{lemma}
 
-Lemma~\ref{lob}の証明は付録で示す．
 
 \begin{comment}
     
@@ -686,16 +692,19 @@ Lemma~\ref{lob}の証明は付録で示す．
 
 
 
-最後に$\mathsf{Compute}$の計算量を示す．
 
-\begin{lemma}
-    DAG $G$の頂点数が$n$であるとする．このとき，幅が$w$である$G$のDAGパス分解$P$が与えられたとき，$\mathsf{Compute}(P)$は$O(2^wwn)$の計算時間で結果を出力する．
+\begin{lemma}\label{complexity_lob}
+    DAG $G$の頂点数を$n$とする．幅が$w$である$G$のDAGパス分解$P$が与えられたとき，$\mathsf{Compute}(P)$は$O(2^wwn)$の計算時間で結果を出力する．
 \end{lemma}
 
+
+\begin{comment}
+    
 \begin{proof}
     First Step, Final Stepは各々O(1)で計算できる．以下でExection Stepでの計算量を考える．各$X_i$に対し，$|X_i| \leq w+1$に注意すると，$A, B$の組合せは高々$2^{w+1}$通り存在する．またProposition~\ref{number_of_bag}より$0 \leq i \leq 2|V|+1$である．さらに$\mathsf{pred}(v)$の計算量が高々$O(w)$であることに注意すると，$\mathsf{LOB}(i, A_i, B_i)$の計算量は，$X_i$がintroduceならば$O(w)$であり，forgetならば$O(1)$である．以上より，$\mathsf{Compute}$の計算量は$O(w2^wn)$である．
 \end{proof}
 
+\end{comment}
 
 
 
@@ -1008,8 +1017,7 @@ DEDS problemとは，$G$のmDEDSのサイズを求める問題である．Hanaka
     有向グラフ$G$の基礎グラフの木幅が高々$tw$であるとき，$G$のDEDS problemを$4^{2tw^2}4^{2tw}n^{O(1)}$の時間で解くFPTアルゴリズムが存在する．
 \end{proposition}
 
-上記のアルゴリズムは幅が高々$tw$の木分解を利用したアルゴリズムであり，DPを行う上での必要な情報として，木分解上の各バッグ$B_t$に対して部分解となる枝集合$A\subseteq E(B_t)$，各頂点$v \in B_t$に対して前方の向きを支配できるかを表す関数$f$，$f$の支配関係の根拠を示す関数$s_f$を保持する必要がある．このアルゴリズムは一般の有向グラフ上で利用でき，より一般化した問題に対しても動作するといった利点がある．一方で木分解は入力グラフの枝の向きの情報をもたないため，向きの情報を表す$f, s_f$を計算する必要があり，計算量が$O(4^{2tw})$だけ大きくなっている．これに対し，一般のDAGに対して幅を$w$とするnice DAGパス分解が与えられたとき，$O(2^{w^2}w^2n^2)$の時間でDEDS problemを解くアルゴリズムを構築する．このアルゴリズムで利用するDAGパス分解は入力グラフの向きの情報を内部に含んでいるため，$f, s_f$といったパラメータが不要になる．木幅が抑えられたDAGでもDAGパス幅は任意に大きくなることがあるため，計算量の単純な比較はできないが，木分解を用いた場合よりもアルゴリズムの構築が容易になる利点がある．
-%★より詳しく読む
+上記のアルゴリズムは幅が高々$tw$の木分解を利用したアルゴリズムであり，DPを行う上での必要な情報として，木分解上の各バッグ$B_t$に対して問題の解を構成する枝集合$A\subseteq E(B_t)$，各頂点$v \in B_t$に対して解集合からの最短距離を表す関数$f$，解集合からの距離を調査済みかを表す関数$s_f$を保持する必要がある．このアルゴリズムは一般の有向グラフ上で利用でき，より一般化した問題に対しても動作するといった利点がある．これに対しDAGパス分解は入力グラフの枝の向きの情報を含むため，枝の支配関係を根から順に調査することができ計算量を小さくすることができる．木幅が抑えられたDAGでもDAGパス幅は任意に大きくなることがあるため，計算量の単純な比較はできないが，木分解を用いた場合よりもアルゴリズムの構築が容易になるといった利点もある．本節では幅が$w$のnice DAGパス分解が与えられたとき，$O(2^{w^2}w^2n^2)$時間でDEDS problemを解くアルゴリズムを構築する．
 
 \begin{theorem}\label{DEDS_FPT}
     DAG $G$に対し，幅が$w$である$G$のnice DAGパス分解が与えられたとき，$G$のDEDS problemを$O(2^{w^2}w^2n^2)$で解くアルゴリズムが存在する．
@@ -1362,7 +1370,7 @@ $T$が完全有向$d$分木であるとき，根から葉までのパスの長�
 
 
 
-
+\ifthenelse{\boolean{Draft}}{
 \begin{figure}[!t]
 \begin{algorithm}[H]
 	\caption{$\mathsf{GrowTokenTree}$}
@@ -1374,7 +1382,9 @@ $T$が完全有向$d$分木であるとき，根から葉までのパスの長�
     \RETURN \{tokened vertices of $H'$\}
 	\end{algorithmic}
 \end{algorithm}
+\caption{$\mathsf{GrowTokenTree}$の擬似コード．グラフの木構造を保ちながら$H'$にトークンを埋め込んでいく．}
 \end{figure}
+}
 
 
 \begin{comment}
@@ -1409,6 +1419,7 @@ $T$が完全有向$d$分木であるとき，根から葉までのパスの長�
 
 \end{comment}
 
+\ifthenelse{\boolean{Draft}}{
 \begin{figure}[!t]
 \begin{algorithm}[H]
     \caption{$\mathsf{FindEmbedding}$}
@@ -1431,8 +1442,9 @@ $T$が完全有向$d$分木であるとき，根から葉までのパスの長�
     \ENDWHILE
 	\end{algorithmic}
 \end{algorithm}
+\caption{$\mathsf{FindEmbedding}$の擬似コード．$\mathsf{GrowTokenTree}$とトークンの入れ替えを交互に行い，DAGパス分解に相当する頂点集合の列を得る．}
 \end{figure}
-
+}
 
 
 
@@ -1503,20 +1515,130 @@ Theorem~\ref{approximation3}の証明のため，まず以下を示す．
 
 
 
+
+\ifthenelse{\boolean{Draft}}{
+\begin{figure*}[t]
+\centering
+\begin{minipage}[c]{0.48\textwidth}
+    \centering
+    \includegraphics[width=7.0cm]{pic13.png}
+    \vspace{0.0cm} % 図とキャプション間の調整
+    \caption{Lemma~\ref{blue_reachable}の証明の様子．$r_0$と$v$の直近の共通の子孫を$r_0'$としている．証明ではblueな頂点$v$が$r_0$とその子孫からなる$G_{r_0}$に含まれていなければ矛盾が生じることを示している．}
+    \label{fig:13}
+\end{minipage}
+\hfill
+\begin{minipage}[c]{0.48\textwidth}
+    \centering
+    \includegraphics[width=6.0cm]{pic14.png}
+    \vspace{0.0cm} % 図とキャプション間の調整
+    \caption{Lemma~\ref{lemma_(3)}の証明の様子．青い頂点はblueを，チェックの赤い頂点はremove済みの頂点を，それ以外の赤い頂点はトークンが置かれていることを表す．証明では$V_{h(M_{t, d, l})}$に頂点が存在しなければ矛盾が生じることを示している．}
+    %親が全て$\mathcal{V}$に含まれるようなblueな頂点$w^{'\dots '}$が存在することを示すことで矛盾を導いている．}
+    \label{fig:14}
+\end{minipage}
+\end{figure*}
+}
+
+
+
+
+
+Lemma~\ref{lemma_(3)}の証明の前に以下を示す．証明の様子は図\ref{fig:13}で示す．
+\begin{lemma}\label{blue_reachable}
+    任意の時点$i=k$において，$H'$の頂点のうち根トークン$\lambda$が置かれた頂点を$r_0$とする．このとき$H'$上のblueな頂点は必ず$r_0$を祖先にもつ．
+\end{lemma}
+
+\begin{proof}
+    背理法で示す．$i=k$において，あるblueな$v\in V[H']$が$r_0$を祖先にもたないと仮定する．$H'$は根が1つだけであることに注意すると，$r_0$と$v$の共通の祖先が存在する．このうち子孫に$r_0$と$v$の共通の祖先をもたないものを$r'_0$とする．$r'_0$が複数存在する場合はそのうち1つを$r'_0$とする．このとき$v\neq r'_0$に注意する．なぜならば$i=k$において$r_0$には根トークン$\lambda$が置かれており，その祖先$r'_0$はトークンがremove済みである必要がある．したがって$r'_0 = v$と仮定すれば$v$がblueであることと矛盾するからである．ここで$r'_0$の子のうち子孫に$r_0$を持つ頂点集合を$A_{r_0}$，それ以外の子の頂点集合を$A'_{r_0}$とし，$A_{r_0}$に含まれる頂点の子孫の集合によって誘導される部分グラフを$G_{A_{r_0}}$，$A'_{r_0}$に含まれる頂点の子孫の集合のうち，$G_{A_{r_0}}$に含まれない頂点集合によって誘導される部分グラフを$G_{A'_{r_0}}$とする．また$r_0$の子孫によって誘導される部分グラフを$G_{r_0}$とする．仮定より$v \notin V[G_{r_0}]$であるため，$v \in V[G_{A_{r_0}}] \setminus V[G_{r_0}]$もしくは$v \in V[G_{A'_{r_0}}]$が成り立つ必要がある．ここで$G_{A_{r_0}}$上のいずれかの頂点に初めてトークン$\lambda$が置かれた瞬間を$i=l\ (l \leq k)$とする．このとき$i=l$の時点で$G_{A'_{r_0}}$上の頂点はすべてトークンがremoveされている必要がある．以下で理由を説明する．$H'$上の頂点は(a)blueか，(b)redでトークンが置かれているか，(c)redでトークンがremoveされているかのいずれかである．$i=l$のとき$v$はblueであるため，$\mathsf{FindEmbedding}$の列5の条件から$v$の親は(a)か(b)のいずれかである．(a)の場合はさらにその親を見ると同様に(a)か(b)のいずれかである．これを(a)である限り繰り返すことにより，$v$の祖先が全て(a)であれば，$i=l$において$A'_{r_0}$にblueな頂点が少なくとも1つ存在し，1つでも(b)の祖先が存在すれば，$r'_0$に置かれていたトークンには$G_{A'_{r_0}}$側と$G_{A'_{r_0}}$側で少なくとも2つ以上のtokenedな子トークンをもっていたことになる．$i=l$で$r'_0$は(c)に当てはまることに注意すると，前者では$\mathsf{FindEmbedding}$の列5の条件である$r'_0$にblueな子が存在しないことに反し，後者では列5の条件である$r'_0$に置かれたトークンは高々1つのtokenedな子しかもたないことに反する．よって$v \notin V[G_{A'_{r_0}}]$であることが必要．仮定より$v \notin V[G_{A_{r_0}}]$であるため，$v \in V[G_{A_{r_0}}] \setminus V[G_{r_0}]$が成り立つ必要がある．ところがこのとき$v$と$r_0$の共通の祖先がかならず$A_{r_0}$に含まれるため，$r'_0$の子孫に$v$と$r_0$の共通の祖先が存在しないことと矛盾する．したがってLemma~\ref{lemma_(3)}の主張が示される．
+\end{proof}
+
+
+
+
+
+
+Lemma~\ref{blue_reachable}を利用してLemma~\ref{lemma_(3)}を示す．証明の様子は図\ref{fig:14}で示す．
+
 \begin{lemma}\label{lemma_(3)}
     $\mathsf{FindEmbedding}$が(3)で終了するとき，$H$のDAGパス幅は$t$よりも大きい．
 \end{lemma}
 
 \begin{proof}
-    $\mathsf{FindEmbedding}$の列11の処理が行われたときに$H$のDAGパス幅が$t$より大きいことを示す．ここで単一の根$r_G$をもつ任意のDAG $G$の各頂点に対し，$r_G$からの最長パスの長さが$k-1$である頂点集合を$L_{G, k}$と表す．以下では$k$を$G$の階層と呼ぶ．ただし$L_{G, 1} = \{r_G\}$とする．$H'$の各頂点の出次数は高々$d$であるため，ある時点$i$において$\lambda \in M_{t, d, l}$が置かれた頂点$r'$の階層を$k_{r'}$，頂点集合$\bigcup_{k_{r'} \leq k \leq k_{r'}+ \lceil \log_d l \rceil +t+1} L_{H', k}$によって誘導される部分グラフを$H_{k_{r'}, t}$とすると，$H_{k_{r'}, t}$に含まれる任意の頂点にはトークンを置くことができる．ここで列11の処理が行われるとき，任意の頂点$v \in V[H_{k_{r'}, t}]$は以下の少なくとも一方が成り立つ．
+    列11が処理された時点を$i=k$とする．まず$i=k$において$M_{t, d, l}$上でtokenedなトークン集合上に根から葉までのパス$P = (\lambda \cdot m_1 \cdot m_2 \cdot \dots m_{\lceil \log_d l \rceil +t+1})$が少なくとも1つ存在することを示す．そのためこのようなパスが存在しないと仮定して背理法で示す．$M_{t, d, l}$上のtokenedなトークン集合上で根を始点とする最長のパスを$P'$とする．また$M_{t, d, l}$の高さ$\lceil \log_d l \rceil +t+2$を$h(M_{t, d, l})$と表す．仮定より$|P'| \leq h(M_{t, d, l})-1$が成り立つ．$P'$の終点を$T'$，$T'$が置かれた頂点を$u' \in V[H']$とする．$\mathsf{GrowTokenTree}$の列1の条件より，次の少なくとも一方が成立する．
+
+    \begin{enumerate}
+        \item ある頂点$v' \in \mathsf{suc}(u')$が存在し，$v'$のある親$w'$がblueである．\label{cond11}
+        \item $T'$がuntokenedな子をもたない．\label{cond22}
+    \end{enumerate}
+
+    なお$u'$の子が存在しない場合は考えなくてよい．なぜならばこのとき$u'$に置かれたトークンをremoveでき，(3)の状態にならないからである．条件\ref{cond22}が成り立つならば，$T'$が葉であるか$T'$の子がすべてtokenedであるかのいずれかであるが，これらはいずれも成り立たない．なぜならば仮定より$P'$の終点$T'$は葉でなく，また$T'$がtokenedな子をもてば$P'$が最長のパスであることに矛盾するからである．したがって条件\ref{cond11}が成り立つ必要がある．ここで根トークン$\lambda$が置かれた頂点を$r_0$とする．$H'$上で$r_0$の子孫によって誘導される部分グラフを$G_{r_0}$とし，$G_{r_0}$上の頂点のうち，$M_{t, d, l}$上で高さが$h\ (1 \leq h \leq h(M_{t, d, l}))$であるトークンが置かれた頂点の集合を$V_h$とする．また$\mathcal{V} = \bigcup_{1 \leq h \leq h(M_{t, d, l})} V_h$とする．仮定より$u' \in V_{h'}\ (1 \leq h' \leq h(M_{t, d, l})-1)$である．またLemma~\ref{blue_reachable}より，blueな$v', w'$は共に$r_0$から到達可能であるため$G_{r_0}$に含まれている．また$\mathsf{GrowTokenTree}$のトークンの置き方からblueな頂点の子はredにならないことに注意すると，$v', w'$及びこれらの子孫はすべて$\mathcal{V}$に含まれていない．ここで$w'$について次のいずれか一方が必ず成り立つ．
+
+    \begin{enumerate}
+        \item $w'$の親がすべて$\mathcal{V}$に含まれる．\label{cond_a}
+        \item $w'$の親で$\mathcal{V}$に含まれないblueな頂点が少なくとも１つ存在する．\label{cond_b}
+    \end{enumerate}
+
+    なお，$w'$の親で$\mathcal{V}$に含まれないredな頂点は存在しない．なぜならばLemma~\ref{blue_reachable}と同様の議論により，$w'$の親はそれぞれ(a)blueか，(b)redでトークンが置かれているかのいずれかしかないからである．したがって1つでも(a)である親が存在すれば条件\ref{cond_b}となり，それ以外であれば条件\ref{cond_a}となる．もし条件\ref{cond_a}が成り立つならば，$w'$にはトークンを置くことができるはずである．なぜならば，パス$P'$が最長であることから$w'$の親はすべて$V_1, V_2, \dots, V_{h'}$のいずれかに必ず含まれ，かつ$w'$の各親に置かれたトークンは$H'$の最大出次数である$d$個の子をそれぞれ持っている．よって$w'$の各親に置かれたトークンは少なくとも1つのuntokenedな子を持っているはずであり，このようなトークンを$w'$に置くことができるからである．したがって条件\ref{cond_a}が成り立つならば$w'$がblueであることと矛盾する．これより条件\ref{cond_b}が成り立つ必要がある．このとき条件\ref{cond_b}を満たすような$w'$のblueな親を$w''$とすると，$w''$についても同様の議論によって条件\ref{cond_b}を満たすblueな親$w'''$が存在する必要がある．この議論を繰り返すと，$H'$の頂点数は有限個であるため，いずれ必ず条件\ref{cond_a}を満たすblueな頂点$w^{'\dots '}$が存在する．したがって必ず矛盾が生じるため，背理法により$M_{t, d, l}$でtokenedなトークン集合上に根から葉までのパス$P = (\lambda \cdot m_1 \cdot m_2 \cdot \dots m_{h(M_{t, d, l})-1})$が少なくとも1つは存在する．
+
+    次に上記の$P$を用いて$H$のDAGパス幅が$t$よりも大きいことを示す．(3)では$\mathsf{FindEmbedding}$の列5を満たすトークンが存在しないことから，各トークン$m_i \in P$ (ただし$\lambda$を$m_0$と表現する)について$m_i$が置かれた頂点$v_i \in V[H']$は以下の少なくとも一方が成り立つ．
+
+    \begin{enumerate}
+        \item ある$w_i \in \mathsf{suc}(v_i)$が存在し，$w_i$及びその子孫はすべて$\mathcal{V}$に含まれず，かつ$w_i$はblueである． \label{cond1}
+        \item $v$に置かれたトークン$T$が2つ以上のtokenedな子をもつ． \label{cond2}
+    \end{enumerate}
+    
+    以降では各$v_i$に対しある頂点$u_i$が存在し，$H'$の任意のDAGパス分解には各$u_i\ (0 \leq i \leq h(M_{t, d, l})-1)$をすべて含むバッグが必ず存在するように$u_i$を構成できることを示す．まず$v_i$が条件\ref{cond1}を満たす場合を考える．このとき$v_i$は$v_{h(M_{t, d, l})-1}$にトークン$m_{h(M_{t, d, l})-1}$が置かれるまでは$H$のDAGパス分解においてforgetすることはできない．なぜならば，$w_i$及びその子孫はすべて$\mathcal{V}$に含まれないことから，$\mathsf{GrowTokenTree}$の動作に注意して$w_i$にトークンが置かれるのは$v_{h(M_{t, d, l})-1}$にトークン$m_{h(M_{t, d, l})-1}$が置かれた後であり，$w_i$を後続頂点にもつ$v_i$はそれよりも前にトークンをremoveできないためである．これより$H'$のDAGパス分解上では$v_{h(M_{t, d, l})-1}$のintroduceよりも前に$v_i$をforgetできない．このとき$u_i=v_i$とする．次に$m_i$が条件\ref{cond1}を満たさず\ref{cond2}を満たす場合を考える．$m_i$は$m_{i+1}$以外のtokenedな子$m'_{i+1}$を少なくとも1つもつ．$m'_{i+1}$が置かれた頂点についても条件\ref{cond1}，\ref{cond2}の少なくとも一方を満たすため，上記の議論を繰り返すことにより，$M_{t, d, l}$の葉でtokenedなものは必ず条件\ref{cond1}を満たすことに注意すると，$m'_{i+1}$のある子孫のトークンが置かれ，条件\ref{cond1}を満たすような頂点が少なくとも1つ存在する．このような頂点を$u_i$とする．上記と同様の理由により，$u_i$は$v_{h(M_{t, d, l})-1}$に$m_{h(M_{t, d, l})-1}$が置かれるまでは$H'$のDAGパス分解においてforgetすることができない．以上より各$v_i$に対して$u_i$を構築できる．
+    
+    $H'$の任意のDAGパス分解$X'$において$v_{h(M_{t, d, l})-1}$がintroduceされるバッグ$X_p$では，上記の議論により各$u_i$が含まれているため，$X'$の幅は少なくとも$h(M_{t, d, l})-1$以上である．ここでトークン列$P$のうち$H$の頂点に置かれたトークンのみを取り出してできるトークン列を$P_H$とすると，$|P \backslash P_H| \leq \lceil \log_d l \rceil$より$|P_H| = |P| - |P \backslash P_H| \geq (\lceil \log_d l \rceil +t+2) - \lceil \log_d l \rceil = t+2$が言え，上記と同様の議論により$H$の任意のDAGパス分解の幅は$t$より大きいことが示される．
+
+    
+\end{proof}
+
+
+
+
+
+
+
+\begin{comment}
+\begin{proof}
+    blueな頂点へトークンを配置する処理は$\mathsf{GrowTokenTree}$の列2のみであることに注意すると，$\mathsf{GrowTokenTree}$の列1の条件よりトークンが置かれた頂点の子にのみ新たにトークンが置かれるため，$i$以降でトークンが置かれる頂点は必ず$r_0$を祖先に持つ．
+    Lemma~\ref{lemma_embedding}より，$M_{t, d, l}$上のtokenedなトークン集合により誘導される部分グラフ$G'$から$H'$への埋め込みが存在するため，
+    背理法で示す．あるblueな$v\in V[H']$が$r_0$を祖先にもたないと仮定する．ある時点$i=l\ (k < l)$で$v$にトークンが置かれたとし，$i=l$での$M_{t, d, l}$上のtokenedなトークン集合により誘導される部分グラフを$G'$とする．$v$は$r_0$および$r_0$の子孫によって誘導される部分グラフと非連結であるから，
+    
+    すると，$i=k$において根トークン$\lambda$は$r_0$に置かれていることから，$\mathsf{FindEmbedding}$の動作に注意すると，$i=l$において$r'_0$はredであり，かつトークンはすでに削除されている．すなわちある時点$i=k\ (k < l)$が存在し，$i=k$において$r'_0$にトークン$T'$が置かれており，かつ$T'$が列5の条件を満たして$r'_0$からremoveされ，$u_1$上のトークンと置き換えられたとすることができる．列5の条件と$i=l$で$r_0$に$\lambda$が置かれていることに注意すると，$i=k$において$u_1$はredかつトークンが削除済みである．$u_1$についても$r'_0$と同様に考えることにより，$i=k$において$u_2$もまたredかつトークンが削除済みであることがいえる．この議論を繰り返すことにより，$i=k$において$r'_0, u_1, u_2, \dots, u_m$はすべてredかつトークンが削除済みであることがいえる．仮定より$v$
+\end{proof}
+
+
+\begin{proof}
+    背理法で示す．あるblueな$v\in V[H']$が$r_0$を祖先にもたないと仮定する．$H'$は根が1つだけであることに注意すると，$r_0$と$v$の共通の祖先が存在する．このうち子孫に$r_0$と$v$の共通の祖先をもたないものを$r'_0$とする．現時点を$i=l$とすると，$i=l$において根トークン$\lambda$は$r_0$に置かれていることから，$\mathsf{FindEmbedding}$の動作に注意すると，$i=l$において$r'_0$はredであり，かつトークンはすでに削除されている．すなわちある時点$i=k\ (k < l)$が存在し，$i=k$において$r'_0$にトークン$T'$が置かれており，かつ$T'$が列5の条件を満たして$r'_0$からremoveされ，$u_1$上のトークンと置き換えられたとすることができる．列5の条件と$i=l$で$r_0$に$\lambda$が置かれていることに注意すると，$i=k$において$u_1$はredかつトークンが削除済みである．$u_1$についても$r'_0$と同様に考えることにより，$i=k$において$u_2$もまたredかつトークンが削除済みであることがいえる．この議論を繰り返すことにより，$i=k$において$r'_0, u_1, u_2, \dots, u_m$はすべてredかつトークンが削除済みであることがいえる．仮定より$v$
+\end{proof}
+
+
+
+
+
+
+
+\begin{lemma}\label{lemma_(3)}
+    $\mathsf{FindEmbedding}$が(3)で終了するとき，$H$のDAGパス幅は$t$よりも大きい．
+\end{lemma}
+
+\begin{proof}
+    $\mathsf{FindEmbedding}$の列11の処理が行われたときに$H$のDAGパス幅が$t$より大きいことを示す．ここで単一の根$r_G$をもつ任意のDAG $G$の各頂点に対し，$r_G$からの最長パスの長さが$k-1$である頂点集合を$L_{G, k}$と表す．以下では$k$を$G$の階層と呼ぶ．ただし$L_{G, 1} = \{r_G\}$とする．列11の処理が行われた時点を$i$とし，$M_{t, d, l}$の根トークン$\lambda$が置かれた頂点を$r'$，$r'$が存在する階層を$k_{r'}$とする．ここで頂点集合$V_{H', k} = \bigcup_{k_{r'} \leq k \leq k_{r'}+ \lceil \log_d l \rceil +t+1} L_{H', k}$上の任意の頂点は，トークンが置かれているか，もしくはトークンが置かれておらずかつredであるかのいずれかである．なぜならば，$L_{H', k_{r'}}$に含まれる頂点のうち，$r'$以外の各頂点を$w_1, w_2, \dots, w_m$とすると，
+    
+    
+    $V_{H', k} \setminus L_{H', k_{r'}}$上の任意の頂点は$r', w_{m'}\ (m'=1, 2, \dots, m)$の少なくとも1つを祖先にもつ．
+    
+    $w_0$を祖先に持つ頂点には必ずトークンが置かれている．これは$M_{t, d, l}$の階層が最大で$\lceil \log_d l \rceil +t+2$まであり，かつ各頂点の出次数がすべて$d$であることから導かれる．また$w_0$を祖先にもたず，かつ$w_1, w_2, \dots, w_m$のいずれかを祖先に持つ頂点は必ずredである．もしblueの頂点$w'$が存在すると仮定すると，$\mathsf{FindEmbedding}$の列5の条件に注意して，$w'$の祖先でトークンが置かれた頂点$w''$が必ず存在する．Lemma~\ref{lemma_embedding}より$M_{t, d, l}$上でtokenedなトークン集合は常に連結であるから，$w''$の祖先には$w_0$が必ず存在する．これは$w'$の定義と矛盾する．したがって$w_0$を祖先にもたず，かつ$w_1, w_2, \dots, w_m$のいずれかを祖先に持つ頂点は必ずredである．ここで$V_{H', k}$のうち，$w_0$を祖先に持つ(もしくは$w_0$自身である)頂点の集合によって誘導される部分グラフを$H_{k_{r'}, t}$とする．上記の議論により$H_{k_{r'}, t}$上の任意の頂点にはトークンが置かれている．ここで列11の処理が行われるとき，上記の議論により$V_{H', k}$上の頂点はすべてredであることに注意すると，任意の頂点$v \in V[H_{k_{r'}, t}]$は以下の少なくとも一方が成り立つ．
 
     \begin{enumerate}
         \item ある$w \in \mathsf{suc}(v)$が存在し，$w \in L_{H, k'}$ $(k' > k_{r'}+ \lceil \log_d l \rceil +t+1)$を満たし，かつ$w$はblueである． \label{cond1}
         \item $v$に置かれたトークン$T$が2つ以上のtokenedな子をもつ． \label{cond2}
     \end{enumerate}
     
-    また，このとき$M_{t, d, l}$においてtokenedであるトークンのパス$\lambda \cdot m_1 \cdot m_2 \cdot \dots m_{\lceil \log_d l \rceil +t+1}$が少なくとも1つ存在する．なぜならば，もしそのようなパスが存在しなければ，上記の議論により$H_{k_{r'}, t}$は階層が高々$\lceil \log_d l \rceil +t+1$しかなく，$H_{k_{r'}, t}$のすべての頂点にトークンを置くことができ矛盾するからである．ここで$P = \lambda \cdot m_1 \cdot m_2 \cdot \dots m_{\lceil \log_d l \rceil +t+1}$とすると，各トークン$m_i \in P$ (ただし$\lambda$を$m_0$と表現する)について$m_i$が置かれた頂点$v_i$は上記の条件\ref{cond1}, \ref{cond2}の少なくとも一方を満たす．条件\ref{cond1}を満たすとき，$v_i$は$v_{\lceil \log_d l \rceil +t+1}$にトークン$m_{\lceil \log_d l \rceil +t+1}$が置かれるまでは$H$のDAGパス分解においてforgetすることはできない．なぜならばDAGパス分解のルール2より，条件\ref{cond1}での$w$のintroduceは$v_{\lceil \log_d l \rceil +t+1}$のintroduceの後，すなわちトークン$m_{\lceil \log_d l \rceil +t+1}$の$v_{\lceil \log_d l \rceil +t+1}$への配置後であり，$w$を後続頂点にもつ$v_i$はそれよりも前にforgetできないからである．このとき$u_i=v_i$とする．$m_i$が条件\ref{cond1}を満たさず\ref{cond2}を満たすとき，$m_i$はtokenedな子$m'_{i+1}\ (\neq m_{i+1})$を少なくとも1つもつ．$m'_{i+1}$が置かれた頂点についても条件\ref{cond1}，\ref{cond2}の少なくとも一方を満たすため，上記の議論を繰り返すことにより，$M_{t, d, l}$のtokenedな葉は条件\ref{cond1}を満たすことに注意すると，$m'_{i+1}$を根とする有向木には条件\ref{cond1}を満たすような頂点が少なくとも1つ存在する．このような頂点を$u_i$とする．上記と同様の理由により，$u_i$は$v_{\lceil \log_d l \rceil +t+1}$に$m_{\lceil \log_d l \rceil +t+1}$が置かれるまでは$H'$のDAGパス分解においてforgetすることができない．これをすべての$m_i \in P$に対して考えることにより，各頂点$u_0, u_1, \dots, u_{\lceil \log_d l \rceil +t+1}$を得る．このとき$H'$の任意のDAGパス分解$X'$において$v_{\lceil \log_d l \rceil +t+1}$のintroduceを行うバッグを$X_p$とすると，DAGパス分解のルール2に注意して$X'$のバッグ$X_1$から$X_p$までの間では少なくとも各$v_i$ $(0 \leq i \leq \lceil \log_d l \rceil +t+1)$のintroduceが行われており，かつ先程の議論により$X_p$には各$i$に対して$v_i$から$u_i$までのパス上の頂点が少なくとも1つずつ含まれることがいえる．したがって$|X_p| \geq |P| = \lceil \log_d l \rceil +t+2$より，$H'$のDAGパス幅は少なくとも$\lceil \log_d l \rceil +t+1$以上である．ここでトークン列$P$のうち$H$の頂点に置かれたトークンのみを取り出してできるトークン列を$P_H$とする．$|P \backslash P_H| \leq \lceil \log_d l \rceil$より$|P_H| = |P| - |P \backslash P_H| \geq (\lceil \log_d l \rceil +t+2) - \lceil \log_d l \rceil = t+2$に注意すると，上記と同様の議論により$H$のDAGパス幅は$t$より大きいことが示される．
+    また，このとき$M_{t, d, l}$においてtokenedであるトークンのパス$\lambda \cdot m_1 \cdot m_2 \cdot \dots m_{\lceil \log_d l \rceil +t+1}$が少なくとも1つ存在する．なぜならば，もしそのようなパスが存在しなければ，上記の議論により$H_{k_{r'}, t}$は階層の幅が高々$\lceil \log_d l \rceil +t+1$しかなく，$H_{k_{r'}, t}$のすべての頂点にトークンを置くことができ矛盾するからである．ここで$P = \lambda \cdot m_1 \cdot m_2 \cdot \dots m_{\lceil \log_d l \rceil +t+1}$とすると，各トークン$m_i \in P$ (ただし$\lambda$を$m_0$と表現する)について$m_i$が置かれた頂点$v_i$は上記の条件\ref{cond1}, \ref{cond2}の少なくとも一方を満たす．条件\ref{cond1}を満たすとき，$v_i$は$v_{\lceil \log_d l \rceil +t+1}$にトークン$m_{\lceil \log_d l \rceil +t+1}$が置かれるまでは$H$のDAGパス分解においてforgetすることはできない．なぜならばDAGパス分解のルール2より，条件\ref{cond1}での$w$のintroduceは$v_{\lceil \log_d l \rceil +t+1}$のintroduceの後，すなわちトークン$m_{\lceil \log_d l \rceil +t+1}$の$v_{\lceil \log_d l \rceil +t+1}$への配置後であり，$w$を後続頂点にもつ$v_i$はそれよりも前にforgetできないからである．このとき$u_i=v_i$とする．$m_i$が条件\ref{cond1}を満たさず\ref{cond2}を満たすとき，$m_i$はtokenedな子$m'_{i+1}\ (\neq m_{i+1})$を少なくとも1つもつ．$m'_{i+1}$が置かれた頂点についても条件\ref{cond1}，\ref{cond2}の少なくとも一方を満たすため，上記の議論を繰り返すことにより，$M_{t, d, l}$のtokenedな葉は条件\ref{cond1}を満たすことに注意すると，$m'_{i+1}$を根とする有向木には条件\ref{cond1}を満たすような頂点が少なくとも1つ存在する．このような頂点を$u_i$とする．上記と同様の理由により，$u_i$は$v_{\lceil \log_d l \rceil +t+1}$に$m_{\lceil \log_d l \rceil +t+1}$が置かれるまでは$H'$のDAGパス分解においてforgetすることができない．これをすべての$m_i \in P$に対して考えることにより，各頂点$u_0, u_1, \dots, u_{\lceil \log_d l \rceil +t+1}$を得る．このとき$H'$の任意のDAGパス分解$X'$において$v_{\lceil \log_d l \rceil +t+1}$のintroduceを行うバッグを$X_p$とすると，DAGパス分解のルール2に注意して$X'$のバッグ$X_1$から$X_p$までの間では少なくとも各$v_i$ $(0 \leq i \leq \lceil \log_d l \rceil +t+1)$のintroduceが行われており，かつ先程の議論により$X_p$には各$i$に対して$v_i$から$u_i$までのパス上の頂点が少なくとも1つずつ含まれることがいえる．したがって$|X_p| \geq |P| = \lceil \log_d l \rceil +t+2$より，$H'$のDAGパス幅は少なくとも$\lceil \log_d l \rceil +t+1$以上である．ここでトークン列$P$のうち$H$の頂点に置かれたトークンのみを取り出してできるトークン列を$P_H$とする．$|P \backslash P_H| \leq \lceil \log_d l \rceil$より$|P_H| = |P| - |P \backslash P_H| \geq (\lceil \log_d l \rceil +t+2) - \lceil \log_d l \rceil = t+2$に注意すると，上記と同様の議論により$H$のDAGパス幅は$t$より大きいことが示される．
 \end{proof}
+\end{comment}
 
 
 最後にTheorem~\ref{approximation3}を示す．
@@ -2088,14 +2210,19 @@ $\mathsf{Compute}(T, \beta)$
 
 まず1つ目にDAGパス幅をパラメータとして有向支配集合問題，最大葉分岐問題，$k$-有向点素パス問題，有向シュタイナー木問題を解くアルゴリズムを構築した．前提として入力グラフのDAGパス分解がすでに与えられているとし，バッグがintroduceかforgetかで場合分けを行っている．これにより幅が$w$であるDAGパス分解を入力したときにそれぞれ$O(2^w w n)$, $O(2^w w n + n^2)$, $O((k+1)^w(w^2+k)n+n^2)$, $O(2^w (k + w)n + n^2)$で計算できることを示した．
 
-2つ目にDAGパス分解を求める近似アルゴリズム及びパラメータ化アルゴリズムを構築した．近似アルゴリズムでは，DAG上のセパレータを利用した分割統治法を用いることで$O(\log^2 n)$-近似のアルゴリズムを構築した．またDAG上でのDAGパス分解の構築が\textit{one-shot Black Pebbling}問題と等価であることを示し，近似比がより小さい$O(\log^{2/3} n)$-近似アルゴリズムの存在も示した．さらに入力DAGの最大出次数を$d$，根数を$l$としたとき，入力整数$k$に対して幅が高々$O(ld^k)$のDAGパス分解を出力するか，DAGパス幅が$k$より大きいことの証拠を示すアルゴリズムを構築した．このアルゴリズムは完全有向$d$分木の埋め込みを利用して設計したもので，出次数が制限されたDAGに対して効率的にDAGパス分解を構築できることを初めて示した．
+2つ目にDAGパス分解を求める近似アルゴリズム及びパラメータ化アルゴリズムを構築した．近似アルゴリズムでは，DAG上のセパレータを利用した分割統治法を用いることで$O(\log^2 n)$-近似のアルゴリズムを構築した．またDAG上でのDAGパス分解の構築が\textit{one-shot Black Pebbling}問題と等価であることを示し，近似比がより小さい$O(\log^{2/3} n)$-近似アルゴリズムの存在も示した．さらに入力DAGの最大出次数を$d$，根数を$l$としたとき，入力整数$t$に対して幅が高々$O(ld^t)$のDAGパス分解を出力するか，DAGパス幅が$t$より大きいことの証拠を示すアルゴリズムを構築した．このアルゴリズムは完全有向$d$分木の埋め込みを利用して設計したもので，出次数が制限されたDAGに対して効率的にDAGパス分解を構築できることを初めて示した．
 
 3つ目にDAGパス幅を拡張する概念としてDAG木幅を提案した．DAG木幅は有向グラフがどれだけ有向木に近い構造を持つかを表すパラメータであり，DAGパス幅より大きくならず，同様の手法でアルゴリズムを構築できる点が利点である．本論文ではDAG木幅を用いて有向支配集合問題を解く$O(2^w w n)$時間アルゴリズムを構築した．これによりDAGパス幅を用いたアルゴリズムと比較して計算速度の向上を実現した．
 
-最後に今後の課題として2点挙げる．1つ目は$O(ld^k)$の幅を持つDAGパス分解を出力するアルゴリズムにおいて幅の値を小さくすることである．特に最大出次数$d$は頂点数$n$まで増大する可能性があるため，これを定数にまで抑える方法を検討したい．2つ目はDAGパス分解アルゴリズムを有向グラフ全体に拡張することである．本研究でのアルゴリズムはDAGに限定されているが，DAGパス幅自体は一般の有向グラフに対して定義されているため，幅の小さなDAGパス分解を一般の有向グラフに対しても適用できるようにする余地がある．
+最後に今後の課題として2点挙げる．1つ目は$O(ld^t)$の幅を持つDAGパス分解を出力するアルゴリズムにおいて幅の値を小さくすることである．特に最大出次数$d$は頂点数$n$まで増大する可能性があるため，これを定数にまで抑える方法を検討したい．2つ目はDAGパス分解アルゴリズムを有向グラフ全体に拡張することである．本研究でのアルゴリズムはDAGに限定されているが，DAGパス幅自体は一般の有向グラフに対して定義されているため，幅の小さなDAGパス分解を一般の有向グラフに対しても適用できるようにする余地がある．
 
 
 
+
+
+\begin{comment}
+本研究では，まずDAGパス幅をパラメータとしてDAG上の様々なNP困難問題に対する動的計画法アルゴリズムを設計した．またDAGパス分解を求める$O(\log^2 n)$-近似アルゴリズムを構築したほか，幅が高々$O(ld^t)$のDAGパス分解を求めるパラメータ化アルゴリズムを構築した．前者はDAG上のセパレータを利用した分割統治法を用いており，後者はDAGの埋め込みを利用している．特に後者は幅の値が入力グラフの頂点数に影響を受けず，またone-shot Black Pebbling numberの近似的な値を求めるアルゴリズムとしても利用できる．今後の課題は後者のパラメータ化アルゴリズムにおいて幅の値をより小さくすることである．特に最大出次数$d$は頂点数$n$まで増大する可能性があるため，これを定数にまで抑える方法を検討したい．
+\end{comment}
 
 
 
@@ -2113,17 +2240,7 @@ $\mathsf{Compute}(T, \beta)$
 最後に，本研究にあたって様々な助力をしていただいた指導教員である川原純准教授及び湊真一教授や岩政勇仁助教など湊研究室の方々に深謝いたします．また，私生活の面で20年以上にもわたって支えていただいた両親に感謝します．
 
 
-\begin{comment}
-残り：\\
-・タイトル→OK!\\
-・abstract→OK!\\
-・introduction→OK!\\
-・結論→OK!\\
-・bib→OK!\\
-・付録に回す箇所→OK!\\
-・図☆☆\\
-    
-\end{comment}
+
 
 
 
@@ -2158,6 +2275,87 @@ $\mathsf{Compute}(T, \beta)$
 
 
 
+
+
+
+
+
+
+
+\section{Lemma~\ref{lemma_spanning}の証明}
+
+\begin{proof}
+    $G$に入次数0の頂点が2つ以上存在する場合，明らかに有向全域木が存在しない．逆に入次数0のただ1つの頂点$r$が存在する場合，$G$の各頂点を$r$を先頭とするトポロジカル順序に並べる．これを$r, v_1, v_2, \dots, v_{n-1}$とする．$G$は連結なDAGであることに注意すると，$r$以外の各頂点$v_i\ (i=1, 2, \dots, n-1)$は$r, v_1, v_2, \dots, v_{i-1}$に少なくとも1つの親を持つ．これを全ての$v_i$に対して考えることにより，各$v_i$は$r$からの到達可能なパス$P_i$が存在する．全ての$P_i$の和を考えたときに有向木であれば，それは有向全域木である．有向木でなく閉路が存在する場合，ある2つのパス$P_i, P_j\ (i\neq j)$があり，それぞれのパスの内部に$P'_i, P'_j$ ($P'_i, P'_j$は始点と終点が一致する点素なパス)を含むとすることができる．このときパス$P_i$の$P'_i$を$P'_j$に変えることで$P'_i, P'_j$による閉路を削除できる．この操作を全ての閉路に対して行うことにより，全てのパス$P_i$の和を有向木に変換できる．このとき有向木は有向全域木である．
+\end{proof}
+
+
+
+
+
+
+
+
+
+
+
+\section{Theorem~\ref{alg_lob}に対する関数$\mathsf{LOB}$及びアルゴリズム$\mathsf{Compute}$の定義}
+
+まず関数$\mathsf{LOB}$を定義する．$\mathsf{LOB}$は各$i$においてバッグ$X_i$を共通部分をもたない頂点集合$A_i, B_i \subseteq X_i$に分ける．その後$X_1 \cup X_2 \cup \dots \cup X_i$によって誘導される部分グラフ$G_i$の有向全域木のうち，$A_i$が葉であり，$B_i$が葉でなく，かつ葉数が最大のものを求める．これを全ての$A_i, B_i$の組合せについて計算することで，$G_i$での最大葉数の有向全域木を得る．全ての$i$について上記の計算を行うことで最終的に入力グラフ$G$の最大葉数の有向全域木を得る．
+
+
+\begin{definition*}[$\mathsf{LOB}$]
+    DAG $G=(V, E)$のnice DAGパス分解を$P=(X_1, X_2, \dots , X_s)$とする．ある$i$ $(i=1, 2, \dots , s)$に対し，頂点集合$A_i, B_i \subseteq V$が$A_i \cup B_i = X_i, A_i \cap B_i = \varnothing$を満たすとする．$G_i$を頂点集合$X_1 \cup X_2 \cup,  \dots \cup X_i$によって誘導される$G$の部分グラフとする．関数$\mathsf{LOB}$を以下のように定める．ただし有向木$T$の葉の集合を$\mathsf{Leaf}(T)$と表す．
+
+    \begin{equation}\label{def_lob}
+        \mathsf{LOB}(i, A_i, B_i) = \max \left\{ |\mathsf{Leaf}(T_i)| \left |
+        \begin{array}{l}
+            T_i = (V[T_i], E[T_i]) \text{は} r \text{を根とする} G_i \text{の有向全域木} \\
+            V[T_i] = V[G_i], E[T_i] \subseteq E[G_i]\\
+            A_i \subseteq \mathsf{Leaf}(T_i), B_i \subseteq V[T_i] \backslash \mathsf{Leaf}(T_i)
+        \end{array}
+        \right. \right\}.
+    \end{equation}
+\end{definition*}
+
+
+$\mathsf{LOB}$は$G_i$でのMaxLOBを計算する関数である．以下で$\mathsf{LOB}$の計算式を与える．各$X_i$がintroduceかforgetかで場合分けをして計算する．
+
+\begin{align}
+    \intertext{$\bullet$ $X_i$が$v \in V$をintroduceしているとき}
+    &\mathsf{LOB}(i, A_i, B_i) = \label{intro_lob}
+    \begin{cases}
+        \mathsf{LOB}(i-1, A_i \backslash \{v\}, B_i)+1 &(v \in A_i \text{かつ} \mathsf{pred}(v) \cap B_i \neq \varnothing) \\
+        \mathsf{LOB}(i-1, A_i, B_i \backslash \{v\})   &(v \in B_i \text{かつ} \mathsf{pred}(v) \cap B_i \neq \varnothing) \\
+        -\infty                      &(otherwise)
+    \end{cases}.
+    \intertext{$\bullet$ $X_i$が$v \in V$をforgetしているとき}
+    &\mathsf{LOB}(i, A_i, B_i) = \label{forget_lob}
+    \max \{\mathsf{LOB}(i-1, A_i \cup \{v\}, B_i), \mathsf{LOB}(i-1, A_i, B_i \cup \{v\})\}.
+\end{align}
+
+$\mathsf{LOB}$を用いて，DAG $G$のnice DAGパス分解$P$が与えられたときに，$G$のMaxLOBの解を出力するアルゴリズム$\mathsf{Compute}$を示す．
+
+%\vskip\baselineskip
+
+$\mathsf{Compute}(P)$
+
+\begin{enumerate}
+    \item First Step: $V_r = \{r\}$ならば1を解として出力する．$V_r \neq \{r\}$ならば$\mathsf{LOB}(1, \{r\}, \varnothing) = -\infty, \mathsf{LOB}(1, \varnothing, \{r\}) = 0$とする．
+    \item Exection Step: $P$の各$X_i$ $(i=1, 2, ..., s)$に対し，$A_i, B_i$全ての組合せについて順に$\mathsf{LOB}(i, A_i, B_i)$を計算する．
+    \item Final Step: $i = s$ならば，$\mathsf{LOB}(s, \varnothing, \varnothing)$を出力する．
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+
+
 \section{Lemma~\ref{lob}の証明}
    
 \begin{proof}
@@ -2174,6 +2372,13 @@ $\mathsf{Compute}(T, \beta)$
         ここで$G_{k+1} = G_k$より，$G_{k+1}$の有向全域木の最大葉数は$G_k$のそれと等しい．したがって$v$を葉に含むような$G_k$の有向全域木の最大葉数と，$v$を茎に含むような$G_k$の有向全域木の最大葉数のうち，より大きい方を$G_{k+1}$の有向全域木の最大葉数とすることができる．仮定より，それぞれ$\mathsf{LOB}(i, A_{i+1} \cup \{v\}, B_{i+1}), \mathsf{LOB}(i, A_{i+1}, B_{i+1} \cup \{v\})$と表すことができるため，$\max \{\mathsf{LOB}(i, A_{i+1} \cup \{v\}, B_{i+1}), \mathsf{LOB}(i, A_{i+1}, B_{i+1} \cup \{v\})\}$は$G_{k+1}$の有向全域木の最大葉数と等しい．したがって定義\ref{def_lob}が成立．
     \end{itemize}
     以上より，$i = k+1$でも定義\ref{def_lob}が成立．数学的帰納法によりLemma~\ref{lob}が証明された．
+\end{proof}
+
+
+\section{Lemma~\ref{complexity_lob}の証明}
+    
+\begin{proof}
+    First Step, Final Stepは各々O(1)で計算できる．以下でExection Stepでの計算量を考える．各$X_i$に対し，$|X_i| \leq w+1$に注意すると，$A, B$の組合せは高々$2^{w+1}$通り存在する．またProposition~\ref{number_of_bag}より$0 \leq i \leq 2|V|+1$である．さらに$\mathsf{pred}(v)$の計算量が高々$O(w)$であることに注意すると，$\mathsf{LOB}(i, A_i, B_i)$の計算量は，$X_i$がintroduceならば$O(w)$であり，forgetならば$O(1)$である．以上より，$\mathsf{Compute}$の計算量は$O(w2^wn)$である．
 \end{proof}
 
 
