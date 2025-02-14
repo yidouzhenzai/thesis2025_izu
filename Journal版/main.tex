@@ -77,7 +77,7 @@ Springer Heidelberg, Tiergartenstr. 17, 69121 Heidelberg, Germany
 \url{http://www.springer.com/gp/computer-science/lncs} \and
 ABC Institute, Rupert-Karls-University Heidelberg, Heidelberg, Germany\\
 \email{\{abc,lncs\}@uni-heidelberg.de}}
-\end{comment}
+
 
 \author{Jun Kawahara\inst{1}\orcidID{0000-0001-7208-044X} \and
 Shinya Izu\inst{1}\orcidID{1111-2222-3333-4444}}
@@ -92,6 +92,16 @@ Springer Heidelberg, Tiergartenstr. 17, 69121 Heidelberg, Germany
 \url{http://www.springer.com/gp/computer-science/lncs} \and
 ABC Institute, Rupert-Karls-University Heidelberg, Heidelberg, Germany\\
 \email{\{abc,lncs\}@uni-heidelberg.de}}
+\end{comment}
+
+
+\author{Shinya Izu\inst{1} \and
+Jun Kawahara\inst{1}\orcidID{0000-0001-7208-044X}}
+%
+\authorrunning{Shinya Izu and Jun Kawahara}
+%
+\institute{Yoshida Honmachi, Sakyo-ku, Kyoto, 606--8501, Japan
+\email{\{izu.shinya.54w@st,jkawahara@i\}.kyoto-u.ac.jp}}
 
 %
 \maketitle              % typeset the header of the contribution
@@ -415,22 +425,18 @@ soon.
 
 The problem of determining the DAG-pathwidth for a general DAG is NP-hard, but an approximate width can be computed in polynomial time. In this chapter, we establish the relationship between DAG-path-decomposition and one-shot BP, and we demonstrate the existence of a polynomial-time algorithm that provides a DAG-path-decomposition with an approximation ratio of at most $O(\log ^{3/2} n)$ for a given DAG $G$ with $n$ vertices.
 
-First, we define the approximation ratio for minimization problems.
+First, we define the approximation ratio for minimization problems. Given an input $I$ to the problem, let $S_{\mathrm{alg}, I}$ be the output of the algorithm, $S_{\mathrm{opt}, I}$ be the optimal solution, and $f(S)$ be the objective function value. The \emph{approximation ratio} $r$ is then defined as follows:
+\begin{align*}
+    r = \sup_{I}\frac{f(S_{\mathrm{alg}, I})}{f(S_{\mathrm{opt}, I})}.
+\end{align*}
 
-\begin{definition}[Approximation Ratio]
-    Given an input $I$ to the problem, let $S_{\mathrm{alg}, I}$ be the output of the algorithm, $S_{\mathrm{opt}, I}$ be the optimal solution, and $f(S)$ be the objective function value. The approximation ratio $r$ is then defined as follows:
-    \begin{align*}
-        r = \sup_{I}\frac{f(S_{\mathrm{alg}, I})}{f(S_{\mathrm{opt}, I})}.
-    \end{align*}
-\end{definition}
-
-Furthermore, Per et al.~\cite{art20} have shown the existence of the following approximation algorithm for one-shot BP.
+Per et al.~\cite{art20} have shown the existence of the following approximation algorithm for one-shot BP.
 
 \begin{proposition}
-    Given a DAG $G$ with $n$ vertices, there exists an algorithm that outputs a strategy for one-shot BP whose pebbling number ($\mathrm{Peb}(G)$) is at most $O(\log ^{3/2} n)$ times the minimum value.
+    Given a DAG $G$ with $n$ vertices, there exists an algorithm that outputs a strategy for one-shot BP whose pebbling number is at most $O(\log ^{3/2} n)$ times the minimum value.
 \end{proposition}
 
-Using the above algorithm~\cite{art8}, we prove the following theorem.
+Using the above algorithm~\cite{art20}, we prove the following theorem.
 
 \begin{theorem}\label{approximation2}
     Given a DAG $G$ with $n$ vertices and DAG-pathwidth $pw$, there exists a polynomial-time algorithm that provides a nice DAG-path-decomposition with width at most $O(pw \cdot \log ^{3/2} n)$.
@@ -473,18 +479,12 @@ In this chapter, we propose an algorithm that, given a DAG $H$ with maximum outd
     Given an undirected graph $H$ with $n$ vertices and a non-negative integer $t$, there exists an $O(n)$ time algorithm that either provides evidence that the pathwidth of $H$ is greater than $t$ or returns a path decomposition with width at most $O(2^t)$.
 \end{proposition}
 
-Following this algorithm \cite{art8}, we construct an algorithm that, for a DAG $H$ with maximum outdegree $d$ and number of roots $l$, either provides evidence that the DAG-pathwidth of $H$ is greater than $t$ or returns a DAG-path-decomposition with width at most $O(ld^t)$. This algorithm utilizes the following homeomorphic embedding.
-
-\begin{definition}[homeomorphic Embedding]
-    A homeomorphic embedding of a directed graph $G_1 = (V_1, E_1)$ into another directed graph $G_2 = (V_2, E_2)$ is a mapping $f: V_1 \rightarrow V_2$ satisfying the following conditions:
+Following this algorithm \cite{art8}, we construct an algorithm that, for a DAG $H$ with maximum outdegree $d$ and number of roots $l$, either provides evidence that the DAG-pathwidth of $H$ is greater than $t$ or returns a DAG-path-decomposition with width at most $O(ld^t)$. This algorithm utilizes the \emph{homeomorphic embedding}. A homeomorphic embedding of a directed graph $G_1 = (V_1, E_1)$ into another directed graph $G_2 = (V_2, E_2)$ is a mapping $f: V_1 \rightarrow V_2$ satisfying the following conditions:
 \begin{enumerate}
     \item $f$ is an injective function.
     \item There exists a bijective mapping $g$ from $E_1$ to a set of vertex-disjoint paths in $G_2$ such that for any edge $e = (u, v) \in E_1$, the path $g(e)$ starts at $f(u)$ and ends at $f(v)$.
 \end{enumerate}
-Here, two paths are allowed to share only their endpoints.
-\end{definition}
-
-We refer to homeomorphic embeddings simply as embeddings. In this section, we establish the following theorem for general DAGs.
+Here, two paths are allowed to share only their endpoints. We refer to homeomorphic embeddings simply as embeddings. In this section, we establish the following theorem for general DAGs.
 
 \begin{theorem}\label{approximation3}
     Let $H$ be a DAG with maximum outdegree $d$ and number of roots $l$, and let $t$ be a non-negative integer. Then, exactly one of the following holds:
@@ -495,17 +495,7 @@ We refer to homeomorphic embeddings simply as embeddings. In this section, we es
     \end{enumerate}
 \end{theorem}
 
-To prove \textbf{Theorem~\ref{approximation3}}, we first define the notion of a complete directed tree.
-
-\begin{definition}
-    A directed tree $T=(V, E)$ is called a complete $d$-ary directed tree if it satisfies the following conditions:
-    \begin{enumerate}
-        \item Every non-leaf vertex has exactly $d$ children.
-        \item All root-to-leaf paths have the same length.
-    \end{enumerate}
-\end{definition}
-
-If $T$ is a complete $d$-ary directed tree, we define the height of $T$ as the length of any root-to-leaf path plus 1. If $T$ consists of only the root, then its height is defined as 1.
+To prove \textbf{Theorem~\ref{approximation3}}, we first define the notion of a complete directed tree. For an integer $d~(\geq 1)$, a \emph{complete $d$-ary directed tree} $T=(V, E)$ is a directed tree that every non-leaf vertex has exactly $d$ children and all root-to-leaf paths have the same length. If $T$ is a complete $d$-ary directed tree, we define the \emph{height} of $T$ as the length of any root-to-leaf path plus 1. If $T$ consists of only the root vertex, then its height is defined as 1. The DAG-pathwidth of a complete $d$-ary directed tree is given as follows: 
 
 \begin{lemma}\label{comp_tree}
     Let $T_{h, d}$ be a complete $d$-ary directed tree of height $h$ $(h, d > 1)$. Then, the DAG-pathwidth of $T_{h, d}$ is $h-1$.
@@ -526,7 +516,7 @@ If $T$ is a complete $d$-ary directed tree, we define the height of $T$ as the l
     
 \end{proof}
 
-To prove \textbf{Theorem~\ref{approximation3}}, we construct the parameterized algorithm. Given an input DAG $H = (V, E)$, we modify it to have a single root by adding a complete $d$-ary directed tree of height $\lceil \log_d l \rceil$ and connecting its leaves to each root of $H$. Let $H'$ be the resulting DAG. We also define $M_{t, d, l}$ as a complete $d$-ary directed tree of height $\lceil \log_d l \rceil +t+2$.
+We construct a parameterized algorithm that satisfies \textbf{Theorem~\ref{approximation3}} with reference to \cite{art8}. Given an input DAG $H = (V, E)$, we modify it to have a single root by adding a complete $d$-ary directed tree of height $\lceil \log_d l \rceil$ and connecting its leaves to each root of $H$. Let $H'$ be the resulting DAG. We also define $M_{t, d, l}$ as a complete $d$-ary directed tree of height $\lceil \log_d l \rceil +t+2$.
 
 The algorithm searches for an embedding of $M_{t, d, l}$ into $H'$. If such an embedding is found, it implies that the DAG-pathwidth of $H'$ is at least that of $M_{t, d, l}$. The vertices of $M_{t, d, l}$ are called tokens. The algorithm places tokens onto vertices of $H'$ preserving the tree structure. Once no further placement is possible, next placement is done after moving some tokens to other vertices. If all tokens of $M_{t, d, l}$ are used in the embedding, it indicates that an embedding from $M_{t, d, l}$ to $H'$ has been found. When a token $T$ is placed on a vertex of $H'$, $T$ is said to be \textit{tokened}, and when it is not placed on any vertex, it is said to be \textit{untokened}. Throughout the algorithm, each vertex of $H'$ can be placed a token at most once.
 
@@ -603,7 +593,7 @@ Initially, all vertices of $H'$ are assumed to be blue. When a token is placed o
 
 
 
-$\mathsf{GrowTokenTree}$ and $\mathsf{FindEmbedding}$ are presented in Algorithms \ref{growtokentree} and \ref{findEmbedding}, respectively. $\mathsf{GrowTokenTree}$ greedily places tokens of $M_{t, d, l}$ onto vertices of $H'$ while preserving the tree structure. A token can only be placed on a vertex whose predecessors already have tokens. This process continues until no more tokens can be placed, at which point the algorithm outputs the set of vertices in $H'$ placed tokens.
+$\mathsf{GrowTokenTree}$ and $\mathsf{FindEmbedding}$ are presented in Algorithms \ref{growtokentree} and \ref{findEmbedding}, respectively. $\mathsf{GrowTokenTree}$ (Algorithm \ref{growtokentree}) greedily places tokens of $M_{t, d, l}$ onto vertices of $H'$ while preserving the tree structure. A token can only be placed on a vertex whose predecessors already have tokens. This process continues until no more tokens can be placed, at which point the algorithm outputs the set of vertices in $H'$ placed tokens.
 
 
 
@@ -617,7 +607,7 @@ $\mathsf{GrowTokenTree}$ and $\mathsf{FindEmbedding}$ are presented in Algorithm
 }
 
 
-The algorithm $\mathsf{FindEmbedding}$ (Algorithm \ref{findEmbedding}) attempts to output a sequence of vertex sets $(X_1, X_2, \dots)$ that form a DAG-path-decomposition. Initially, a token $\lambda$ is placed on the single root of $H'$. Then, setting $i=1$, $\mathsf{GrowTokenTree}$ is executed, and the output is assigned to $X_1$. Subsequently, for each $i$, the following process is repeated. Assuming that $(X_1, X_2, \dots , X_i)$ has been constructed, if $X_i$ simultaneously uses all tokens of $M_{t, d, l}$, then it represents an embedding from $M_{t, d, l}$ to $H'$, which indicates the DAG-pathwidth of $H'$ is at least that of $M_{t, d, l}$. Moreover, if all vertices of $H'$ have turned red, each vertex of $H'$ has had exactly one token placed on it. In this case, the sequence $(X_1, X_2, \dots, X_i)$ forms a DAG-path-decomposition of $H'$, with proof provided later.
+$\mathsf{FindEmbedding}$ (Algorithm \ref{findEmbedding}) attempts to output a sequence of vertex sets $(X_1, X_2, \dots)$ that form a DAG-path-decomposition. Initially, a token $\lambda$ is placed on the single root of $H'$. Then, setting $i=1$, $\mathsf{GrowTokenTree}$ is executed, and the output is assigned to $X_1$. Subsequently, for each $i$, the following process is repeated. Assuming that $(X_1, X_2, \dots , X_i)$ has been constructed, if $X_i$ simultaneously uses all tokens of $M_{t, d, l}$, then it represents an embedding from $M_{t, d, l}$ to $H'$, which indicates the DAG-pathwidth of $H'$ is at least that of $M_{t, d, l}$. Moreover, if all vertices of $H'$ have turned red, each vertex of $H'$ has had exactly one token placed on it. In this case, the sequence $(X_1, X_2, \dots, X_i)$ forms a DAG-path-decomposition of $H'$, with proof provided later.
 
 In any other case—namely, if not all tokens of $M_{t, d, l}$ are simultaneously used and at least one vertex in $H'$ remains blue—there may be potential for further execution of $\mathsf{GrowTokenTree}$ by modifying the token placement. Therefore, we consider removing the token $T$ placed on a vertex $v \in V[H']$ that satisfies the following two conditions:
 
@@ -628,7 +618,10 @@ In any other case—namely, if not all tokens of $M_{t, d, l}$ are simultaneousl
 
 Condition (a) corresponds to a forget operation in the DAG-path-decomposition, and condition (b) ensures that the embedding remains valid. A token $T$ can be removed from $v$ only if both conditions are met. In this process, removing $T$ might disconnect the \textit{tokened} token set in $M_{t, d, l}$. To maintain connectivity, all tokens in the directed tree rooted at the \textit{tokened} child $T \cdot b$ are relocated to the corresponding positions in the directed tree rooted at $T$. This replacement must proceed from the tokens closest to the root to those farther away to ensure that the replacement target tokens are always \textit{untokened}. This operation generates tokens that switch from \textit{tokened} to \textit{untokened}, allowing $\mathsf{GrowTokenTree}$ to be executed again, with its output denoted as $X_{i+1}$. If no token satisfies both conditions (a) and (b), the algorithm returns the last output of $\mathsf{GrowTokenTree}$. This output represents evidence that the DAG-pathwidth of $H'$ is at least that of $M_{t, d, l}$, as will be demonstrated below.
 
-To prove \textbf{Theorem~\ref{approximation3}}, we first demonstrate the following lemma:
+This final process is the main difference from \cite{art8}. In \cite{art8}, there always exists a removable token $T$ until the algorithm terminates. In contrast, in this algorithm, there may be cases where such a token does not exist. This is because embedding of directed graphs is more difficult than that of undirected graphs, as it requires considering the directions of the edges.  
+
+
+We first demonstrate the following lemma:
 
 \begin{lemma}\label{lemma_embedding}
     The subgraph $G'$ induced by the \textit{tokened} token set in $M_{t, d, l}$ is connected, and an embedding from $G'$ to $H'$ exists.
