@@ -179,45 +179,35 @@ Finally, in Section 5, we design an algorithm that, given an integer $t$, and a 
 \section{Preliminaries}\label{chapter2}
 %In this Section, we introduce definitions and notations for graphs and directed graphs.
 
-\subsection{DAG}
-A \emph{DAG} (Directed Acyclic Graph) is a directed graph with no cycles. For a DAG $G = (V, E)$ and a vertex $v \in V$ , we define the \emph{predecessors} as $\mathsf{pred}(v) = \{ u \in V | (u, v) \in E\}$ and \emph{successors} as $\mathsf{suc}(v) = \{ w \in V | (v, w) \in E\}$ of $v$.
+%\subsection{DAG}
+%A \emph{DAG} (Directed Acyclic Graph) is a directed graph with no cycles. For a DAG $G = (V, E)$ and a vertex $v \in V$ , we define the \emph{predecessors} as $\mathsf{pred}(v) = \{ u \in V | (u, v) \in E\}$ and \emph{successors} as $\mathsf{suc}(v) = \{ w \in V | (v, w) \in E\}$ of $v$.
+
+A \emph{directed acyclic graph} (DAG) is a directed graph with no cycles. For a DAG $G = (V, E)$ and a vertex $v \in V$, we define the \emph{predecessors} as $\mathsf{pred}(v) = \{ u \in V \mid (u, v) \in E\}$ and \emph{successors} as $\mathsf{suc}(v) = \{ w \in V \mid (v, w) \in E\}$ of $v$.
 
 In particular, a \emph{directed tree} is a DAG that has a unique vertex $r$ with an indegree of 0, and the underlying graph forms a tree.
    
 
-\subsection{Various Path Decompositions and Pathwidth}
-We first define the \emph{path decomposition} and the \emph{pathwidth}~\cite{art1}. Let $G = (V, E)$ be an undirected graph. A \emph{path decomposition} of $G$ is a sequence $X = (X_1, X_2, \dots, X_s) ~(X_i \subseteq V)$ that satisfies the following three conditions:
+%\subsection{Various Path Decompositions and Pathwidth}
+
+%Then, we define the \emph{DAG-path-decomposition} and the \emph{DAG-pathwidth} \cite{art12}. Let $H = (V, E)$ be a directed graph. A \emph{DAG-path-decomposition} of $H$ is a sequence $X = (X_1, X_2, \dots, X_s) ~(X_i \subseteq V)$ that satisfies the following three conditions:
+We define the \emph{DAG-path-decomposition} and the \emph{DAG-pathwidth} \cite{art12}. Let $H = (V, E)$ be a directed graph. A \emph{DAG-path-decomposition} of $H$ is a sequence $X = (X_1, X_2, \dots, X_s)$ $(X_i \subseteq V)$ that satisfies the following three conditions (******* need to fix indent ******):
 \begin{enumerate}
-    \item $X_1 \cup X_2 \cup \dots \cup X_s = V$.
-    \item For any edge $(u, v) \in E$, there exists an $i \ (\geq 1)$ such that $u, v \in X_i$.
-    \item For any integers $i, j, k\ (1 \leq i \leq j \leq k \leq s)$, $X_i \cap X_k \subseteq X_j$, that is, for any vertex $v \in V$, $v$ induces exactly one non-empty path in $X$.
+    \item[(DPD1)] $X_1 \cup X_2 \cup \dots \cup X_s = V$.
+    \item[(DPD2)] For every directed edge $(u, v) \in E$, there exists $i$ such that $u, v \in X_i$ and $v \notin X_{i-1}$. \label{original_rule}
+    \item[(DPD3)] For any $i, j, k$ $(1 \leq i \leq j \leq k \leq s)$, $X_i \cap X_k \subseteq X_j$. %That is, for any vertex $v \in V$, $v$ induces exactly one non-empty directed path in $X$.
 \end{enumerate}
+In (DPD2), we interpret $X_0 = \emptyset$. Therefore, a directed edge $(u, w)$ satisfies (DPD2) if $u, v \in X_1$. The \emph{width} of $X$ is defined as $\underset{i}{\max} \{ |X_i| - 1 \}$. The \emph{DAG-pathwidth} of $G$ is the minimum width over all possible DAG-path-decompositions of $G$. Note that in \cite{art12}, (DPD2) is changed into the condition that there exists $i$ such that $u, v \in X_i$ and $u \notin X_{i-1}$. In this study, we adopt the above definition for the sake of algorithmic simplicity.
 
-For a path decomposition $X = (X_1, X_2, \dots, X_s)$ of $G$, each subset $X_i$ is called a \emph{bag}. The \emph{width} of $X$ is defined as $\underset{i}{\max} \{ |X_i| - 1 \}$. The \emph{pathwidth} of $G$ is the minimum width over all possible path decompositions of $G$. Computing the pathwidth of a general undirected graph is NP-hard \cite{art3}.
+%The \emph{DAG-pathwidth} of $H$ can also be defined in the same way as the pathwidth. Note that in \cite{art12}, condition~\ref{original_rule} is defined that $u, v \in X_1$ or there exists $i$ $(i \geq 2)$ such that $u, v \in X_i$ and $u \notin X_{i-1}$. In this study, we adopt the above definition for the sake of algorithmic simplicity.
 
-Next, we define the \emph{directed path decomposition} and the \emph{directed pathwidth} \cite{art9}. Let $D = (V, E)$ be a directed graph. A \emph{directed path decomposition} of $D$ is a sequence $X = (X_1, X_2, \dots, X_s) ~(X_i \subseteq V)$ that satisfies the following three conditions:
-\begin{enumerate}
-    \item $X_1 \cup X_2 \cup \dots \cup X_s = V$.
-    \item For any directed edge $(u, v) \in E$, there exist $i, j$ $(i \leq j)$ such that $u \in X_i$, $v \in X_j$.
-    \item For any $i, j, k\ (1 \leq i \leq j \leq k \leq s)$, $X_i \cap X_k \subseteq X_j$, that is, for any vertex $v \in V$, $v$ induces exactly one non-empty path in $X$.
-\end{enumerate}
+The difference between (undirected) path decomposition,
+directed path decomposition, and DAG-path-decomposition is the second rule. The second rule of path decomposition is ``for any edge $(u, v) \in E$, there exists an $i$ such that $u, v \in X_i$,''  while that of directed path decomposition is ``for any directed edge $(u, v) \in E$, there exist $i, j$ $(i \leq j)$ such that $u \in X_i$, $v \in X_j$.'' We show their entire definitions in Appendix~\ref{sec:defpd}.
 
-The \emph{directed pathwidth} of $D$ can also be defined in the same way as the pathwidth.
+The DAG-pathwidth is a parameter that indicates how closely the structure of a directed graph resembles a directed path. From (DPD3), any vertex $v$ is contained in consecutive bags. Additionally, (DPD2) and (DPD3) imply that for any edge $(u, v)$, $u$ and $v$ first appear together in a single bag or $u$ appears in a bag without $v$, followed by a bag containing both $u$ and $v$. Thus, a DAG-path-decomposition can be interpreted as an operation of adding vertices to bags according to a topological order of the graph.
 
-Then, we define the \emph{DAG-path-decomposition} and the \emph{DAG-pathwidth} \cite{art12}. Let $H = (V, E)$ be a directed graph. A \emph{DAG-path-decomposition} of $H$ is a sequence $X = (X_1, X_2, \dots, X_s) ~(X_i \subseteq V)$ that satisfies the following three conditions:
-\begin{enumerate}
-    \item $X_1 \cup X_2 \cup \dots \cup X_s = V$.
-    \item For every directed edge $(u, v) \in E$, $u, v \in X_1$ or there exists $i$ $(i \geq 2)$ such that $u, v \in X_i$ and $v \notin X_{i-1}$. \label{original_rule}.
-    \item For any $i, j, k$ $(1 \leq i \leq j \leq k \leq s)$, $X_i \cap X_k \subseteq X_j$. That is, for any vertex $v \in V$, $v$ induces exactly one non-empty directed path in $X$.
-\end{enumerate}
+%Computing the DAG-pathwidth for general directed graphs is NP-hard \cite{art12}. However, it can be shown that graphs with DAG-pathwidth 1 are exactly the \emph{directed caterpillar tree}, which is a directed tree such that removing vertices with indegree 1 and outdegree 0 leaves a single directed path. The proof is in the appendix.
 
-The \emph{DAG-pathwidth} of $H$ can also be defined in the same way as the pathwidth. Note that in \cite{art12}, condition~\ref{original_rule} is defined that $u, v \in X_1$ or there exists $i$ $(i \geq 2)$ such that $u, v \in X_i$ and $u \notin X_{i-1}$. In this study, we adopt the above definition for the sake of algorithmic simplicity.
-
-The DAG-pathwidth is a parameter that indicates how closely the structure of a directed graph resembles a directed path. From Rule 3 of the DAG-path-decomposition, any vertex $v$ is contained in a connected sequence of bags. Additionally, Rules 2 and 3 imply that for any edge $(u, v)$, $u$ and $v$ first appear together in a single bag or $u$ appears in a bag without $v$, followed by a bag containing both $u$ and $v$. Thus, a DAG-path-decomposition can be interpreted as an operation of adding vertices to bags according to a topological order of the graph.
-
-Computing the DAG-pathwidth for general directed graphs is NP-hard \cite{art12}. However, it can be shown that graphs with DAG-pathwidth 1 are exactly the \emph{directed caterpillar graph}, which is a directed tree such that removing vertices with indegree 1 and outdegree 0 leaves a single directed path. The proof is in the appendix.
-
-To facilitate dynamic programming, we define the \emph{nice DAG-path-decomposition} \cite{art12}. It is a DAG-path-decomposition $X = (X_1, X_2, \dots, X_s)$ of a directed graph $H = (V, E)$ that satisfies the following rules:
+To facilitate designing a dynamic programming-based algorithm, we define the \emph{nice DAG-path-decomposition} \cite{art12}, which is a DAG-path-decomposition $X = (X_1, X_2, \dots, X_s)$ of a directed graph $H = (V, E)$ that satisfies the following rules:
 \begin{enumerate}
     \item $X_1 = X_s = \emptyset$.
     \item For any $i$ $(2 \leq i \leq s - 1)$, one of the following holds:
@@ -227,24 +217,24 @@ To facilitate dynamic programming, we define the \emph{nice DAG-path-decompositi
     \end{itemize}
 \end{enumerate}
 
-If $H$ is a DAG, each strongly connected component $S$ consists of a single vertex. Thus, the introduce operation can be redefined that there exists a vertex $v \in V$ such that $\{v\} \cap X_i = \emptyset$ and $X_{i+1} = X_i \cup \{v\}$. It means, for any vertex, there exists exactly one introduce bag and one forget bag due to Rules 1 and 3 of the DAG-path-decomposition.
+If $H$ is a DAG, each strongly connected component $S$ consists of a single vertex. Thus, the introduce operation can be redefined that there exists a vertex $v \in V$ such that $\{v\} \cap X_i = \emptyset$ and $X_{i+1} = X_i \cup \{v\}$. It means, for any vertex, there exists exactly one introduce bag and one forget bag due to (DPD1) and (DPD3).
 
 The nice DAG-path-decomposition simplifies the design of dynamic programming algorithms, as each bag involves either introducing or forgetting a single vertex for DAGs. It is shown in \cite{art12} that a nice DAG-path-decomposition with the same width as a given DAG-path-decomposition can be constructed in polynomial time. Moreover, the number of bags is not more than $2|V[H]| + 1$. For DAGs, the number is exactly $2|V[H]| + 1$.
 
 
+% move to section 4
+%\subsection{one-shot Black Pebbling Game} %\label{def_Peb}
+%To compare with DAG-path-decomposition, we define the \emph{one-shot Black Pebbling game (one-shot BP)} \cite{art13}. Given a DAG $G = (V, E)$, a sequence of vertex sets (called a strategy) $P = (P_0, P_1, \dots, P_t)$ $(P_i \subseteq V)$ is constructed to satisfy the following rules:
 
-\subsection{one-shot Black Pebbling Game} %\label{def_Peb}
-To compare with DAG-path-decomposition, we define the \emph{one-shot Black Pebbling game (one-shot BP)} \cite{art13}. Given a DAG $G = (V, E)$, a sequence of vertex sets (called a strategy) $P = (P_0, P_1, \dots, P_t)$ $(P_i \subseteq V)$ is constructed to satisfy the following rules:
+%\begin{description}
+%    \item[Rule 1] $P_0 = \emptyset$
+%    \item[Rule 2] pebble: If no pebble is placed on $v \in V$ and all predecessors of $v$ have pebbles, a pebble may be placed on $v$. That is, if $v \notin P_{i-1}$ and for every $(u, v) \in E$, $u \in P_{i-1}$, then $P_i = P_{i-1} \cup \{v\}$.
+%    \item[Rule 3] unpebble: A pebble placed on $v$ can be removed at any time. That is, if $v \in P_{i-1}$, then $P_i = P_{i-1} \setminus \{v\}$.
+%    \item[Rule 4] Each vertex must have a pebble placed on it at least once.
+%    \item[Rule 5] Each vertex of the DAG $G$ is pebbled only once.
+%\end{description}
 
-\begin{description}
-    \item[Rule 1] $P_0 = \emptyset$
-    \item[Rule 2] pebble: If no pebble is placed on $v \in V$ and all predecessors of $v$ have pebbles, a pebble may be placed on $v$. That is, if $v \notin P_{i-1}$ and for every $(u, v) \in E$, $u \in P_{i-1}$, then $P_i = P_{i-1} \cup \{v\}$.
-    \item[Rule 3] unpebble: A pebble placed on $v$ can be removed at any time. That is, if $v \in P_{i-1}$, then $P_i = P_{i-1} \setminus \{v\}$.
-    \item[Rule 4] Each vertex must have a pebble placed on it at least once.
-    \item[Rule 5] Each vertex of the DAG $G$ is pebbled only once.
-\end{description}
-
-Pebble (Rule 2) represents the operation of placing a pebble on a vertex, and unpebble (Rule 3) represents the operation of removing a pebble from a vertex. Note that roots of the graph, which have no predecessors, can be pebbled at any time. Furthermore, the \emph{space} of $P$ is defined as $\underset{i}{\max} \{ |P_i| \}$. The \emph{pebbling number} of $G$ is the minimum space over all possible strategies of $G$. Computing the pebbling number is NP-hard \cite{art16}. In Section 4, we demonstrate that one-shot BP is equivalent to the problem of constructing a nice DAG-path-decomposition on DAGs.
+%Pebble (Rule 2) represents the operation of placing a pebble on a vertex, and unpebble (Rule 3) represents the operation of removing a pebble from a vertex. Note that roots of the graph, which have no predecessors, can be pebbled at any time. Furthermore, the \emph{space} of $P$ is defined as $\underset{i}{\max} \{ |P_i| \}$. The \emph{pebbling number} of $G$ is the minimum space over all possible strategies of $G$. Computing the pebbling number is NP-hard \cite{art16}. In Section 4, we demonstrate that one-shot BP is equivalent to the problem of constructing a nice DAG-path-decomposition on DAGs.
 \begin{comment}
     
 
@@ -839,7 +829,7 @@ A key challenge for future work is to further reduce the width $O(ld^k)$ of the 
 
 \section*{Acknowledgements}
 
-soon.
+This work was supported by JSPS KAKENHI Grant Numbers JP24H00690 and JP24H00697.
 
 
 
@@ -853,6 +843,16 @@ soon.
 
 
 
+%
+% ---- Bibliography ----
+%
+% BibTeX users should specify bibliography style 'splncs04'.
+% References will then be sorted and formatted in the correct style.
+%
+\nocite{*}
+\bibliographystyle{splncs04}
+\bibliography{mybibliography}
+%
 
 
 
@@ -1532,47 +1532,5 @@ Company X and owns stock in Company Y. Author C is a member of committee Z.
 \end{credits}
 
 \end{comment}
-
-
-
-
-
-
-
-%
-% ---- Bibliography ----
-%
-% BibTeX users should specify bibliography style 'splncs04'.
-% References will then be sorted and formatted in the correct style.
-%
-\nocite{*}
-\bibliographystyle{splncs04}
-\bibliography{mybibliography}
-%
-
-\begin{comment}
-\begin{thebibliography}{8}
-\bibitem{ref_article1}
-Author, F.: Article title. Journal \textbf{2}(5), 99--110 (2016)
-
-\bibitem{ref_lncs1}
-Author, F., Author, S.: Title of a proceedings paper. In: Editor,
-F., Editor, S. (eds.) CONFERENCE 2016, LNCS, vol. 9999, pp. 1--13.
-Springer, Heidelberg (2016). \doi{10.10007/1234567890}
-
-\bibitem{ref_book1}
-Author, F., Author, S., Author, T.: Book title. 2nd edn. Publisher,
-Location (1999)
-
-\bibitem{ref_proc1}
-Author, A.-B.: Contribution title. In: 9th International Proceedings
-on Proceedings, pp. 1--2. Publisher, Location (2010)
-
-\bibitem{ref_url1}
-LNCS Homepage, \url{http://www.springer.com/lncs}, last accessed 2023/10/25
-\end{thebibliography}
-\end{comment}
-
-
 
 \end{document}
