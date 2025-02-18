@@ -197,14 +197,16 @@ We define the \emph{DAG-path-decomposition} and the \emph{DAG-pathwidth} \cite{a
 \end{enumerate}
 In (DPD2), we interpret $X_0 = \emptyset$. Therefore, a directed edge $(u, w)$ satisfies (DPD2) if $u, v \in X_1$. The \emph{width} of $X$ is defined as $\underset{i}{\max} \{ |X_i| - 1 \}$. The \emph{DAG-pathwidth} of $G$ is the minimum width over all possible DAG-path-decompositions of $G$. Note that in \cite{art12}, (DPD2) is changed into the condition that there exists $i$ such that $u, v \in X_i$ and $u \notin X_{i-1}$. In this study, we adopt the above definition for the sake of algorithmic simplicity.
 
-
 %The \emph{DAG-pathwidth} of $H$ can also be defined in the same way as the pathwidth. Note that in \cite{art12}, condition~\ref{original_rule} is defined that $u, v \in X_1$ or there exists $i$ $(i \geq 2)$ such that $u, v \in X_i$ and $u \notin X_{i-1}$. In this study, we adopt the above definition for the sake of algorithmic simplicity.
 
-The DAG-pathwidth is a parameter that indicates how closely the structure of a directed graph resembles a directed path. From Rule 3 of the DAG-path-decomposition, any vertex $v$ is contained in a connected sequence of bags. Additionally, Rules 2 and 3 imply that for any edge $(u, v)$, $u$ and $v$ first appear together in a single bag or $u$ appears in a bag without $v$, followed by a bag containing both $u$ and $v$. Thus, a DAG-path-decomposition can be interpreted as an operation of adding vertices to bags according to a topological order of the graph.
+The difference between (undirected) path decomposition,
+directed path decomposition, and DAG-path-decomposition is the second rule. The second rule of path decomposition is ``for any edge $(u, v) \in E$, there exists an $i$ such that $u, v \in X_i$,''  while that of directed path decomposition is ``for any directed edge $(u, v) \in E$, there exist $i, j$ $(i \leq j)$ such that $u \in X_i$, $v \in X_j$.'' We show their entire definitions in Appendix~\ref{sec:defpd}.
 
-Computing the DAG-pathwidth for general directed graphs is NP-hard \cite{art12}. However, it can be shown that graphs with DAG-pathwidth 1 are exactly the \emph{directed caterpillar tree}, which is a directed tree such that removing vertices with indegree 1 and outdegree 0 leaves a single directed path. The proof is in the appendix.
+The DAG-pathwidth is a parameter that indicates how closely the structure of a directed graph resembles a directed path. From (DPD3), any vertex $v$ is contained in consecutive bags. Additionally, (DPD2) and (DPD3) imply that for any edge $(u, v)$, $u$ and $v$ first appear together in a single bag or $u$ appears in a bag without $v$, followed by a bag containing both $u$ and $v$. Thus, a DAG-path-decomposition can be interpreted as an operation of adding vertices to bags according to a topological order of the graph.
 
-To facilitate dynamic programming, we define the \emph{nice DAG-path-decomposition} \cite{art12}. It is a DAG-path-decomposition $X = (X_1, X_2, \dots, X_s)$ of a directed graph $H = (V, E)$ that satisfies the following rules:
+%Computing the DAG-pathwidth for general directed graphs is NP-hard \cite{art12}. However, it can be shown that graphs with DAG-pathwidth 1 are exactly the \emph{directed caterpillar tree}, which is a directed tree such that removing vertices with indegree 1 and outdegree 0 leaves a single directed path. The proof is in the appendix.
+
+To facilitate designing a dynamic programming-based algorithm, we define the \emph{nice DAG-path-decomposition} \cite{art12}, which is a DAG-path-decomposition $X = (X_1, X_2, \dots, X_s)$ of a directed graph $H = (V, E)$ that satisfies the following rules:
 \begin{enumerate}
     \item $X_1 = X_s = \emptyset$.
     \item For any $i$ $(2 \leq i \leq s - 1)$, one of the following holds:
@@ -214,7 +216,7 @@ To facilitate dynamic programming, we define the \emph{nice DAG-path-decompositi
     \end{itemize}
 \end{enumerate}
 
-If $H$ is a DAG, each strongly connected component $S$ consists of a single vertex. Thus, the introduce operation can be redefined that there exists a vertex $v \in V$ such that $\{v\} \cap X_i = \emptyset$ and $X_{i+1} = X_i \cup \{v\}$. It means, for any vertex, there exists exactly one introduce bag and one forget bag due to Rules 1 and 3 of the DAG-path-decomposition.
+If $H$ is a DAG, each strongly connected component $S$ consists of a single vertex. Thus, the introduce operation can be redefined that there exists a vertex $v \in V$ such that $\{v\} \cap X_i = \emptyset$ and $X_{i+1} = X_i \cup \{v\}$. It means, for any vertex, there exists exactly one introduce bag and one forget bag due to (DPD1) and (DPD3).
 
 The nice DAG-path-decomposition simplifies the design of dynamic programming algorithms, as each bag involves either introducing or forgetting a single vertex for DAGs. It is shown in \cite{art12} that a nice DAG-path-decomposition with the same width as a given DAG-path-decomposition can be constructed in polynomial time. Moreover, the number of bags is not more than $2|V[H]| + 1$. For DAGs, the number is exactly $2|V[H]| + 1$.
 
@@ -1128,9 +1130,9 @@ LNCS Homepage, \url{http://www.springer.com/lncs}, last accessed 2023/10/25
 
 \appendix
 
-\section{Definitions of path and tree decompositions}
+\section{Definitions of path and tree decompositions}\label{sec:defpd}
 
-We first define the \emph{path decomposition} and the \emph{pathwidth}~\cite{art1}. Let $G = (V, E)$ be an undirected graph. A \emph{path decomposition} of $G$ is a sequence $X = (X_1, X_2, \dots, X_s) ~(X_i \subseteq V)$ that satisfies the following three conditions:
+We define the \emph{path decomposition} and the \emph{pathwidth}~\cite{art1}. Let $G = (V, E)$ be an undirected graph. A \emph{path decomposition} of $G$ is a sequence $X = (X_1, X_2, \dots, X_s) ~(X_i \subseteq V)$ that satisfies the following three conditions:
 \begin{enumerate}
     \item $X_1 \cup X_2 \cup \dots \cup X_s = V$.
     \item For any edge $(u, v) \in E$, there exists an $i \ (\geq 1)$ such that $u, v \in X_i$.
