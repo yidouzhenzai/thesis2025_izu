@@ -178,39 +178,27 @@ Finally, in Section 5, we design an algorithm that, given an integer $t$, and a 
 \section{Preliminaries}
 %In this Section, we introduce definitions and notations for graphs and directed graphs.
 
-\subsection{DAG}
-A \emph{DAG} (Directed Acyclic Graph) is a directed graph with no cycles. For a DAG $G = (V, E)$ and a vertex $v \in V$ , we define the \emph{predecessors} as $\mathsf{pred}(v) = \{ u \in V | (u, v) \in E\}$ and \emph{successors} as $\mathsf{suc}(v) = \{ w \in V | (v, w) \in E\}$ of $v$.
+%\subsection{DAG}
+%A \emph{DAG} (Directed Acyclic Graph) is a directed graph with no cycles. For a DAG $G = (V, E)$ and a vertex $v \in V$ , we define the \emph{predecessors} as $\mathsf{pred}(v) = \{ u \in V | (u, v) \in E\}$ and \emph{successors} as $\mathsf{suc}(v) = \{ w \in V | (v, w) \in E\}$ of $v$.
+
+A \emph{directed acyclic graph} (DAG) is a directed graph with no cycles. For a DAG $G = (V, E)$ and a vertex $v \in V$, we define the \emph{predecessors} as $\mathsf{pred}(v) = \{ u \in V \mid (u, v) \in E\}$ and \emph{successors} as $\mathsf{suc}(v) = \{ w \in V \mid (v, w) \in E\}$ of $v$.
 
 In particular, a \emph{directed tree} is a DAG that has a unique vertex $r$ with an indegree of 0, and the underlying graph forms a tree.
    
 
-\subsection{Various Path Decompositions and Pathwidth}
-We first define the \emph{path decomposition} and the \emph{pathwidth}~\cite{art1}. Let $G = (V, E)$ be an undirected graph. A \emph{path decomposition} of $G$ is a sequence $X = (X_1, X_2, \dots, X_s) ~(X_i \subseteq V)$ that satisfies the following three conditions:
+%\subsection{Various Path Decompositions and Pathwidth}
+
+%Then, we define the \emph{DAG-path-decomposition} and the \emph{DAG-pathwidth} \cite{art12}. Let $H = (V, E)$ be a directed graph. A \emph{DAG-path-decomposition} of $H$ is a sequence $X = (X_1, X_2, \dots, X_s) ~(X_i \subseteq V)$ that satisfies the following three conditions:
+We define the \emph{DAG-path-decomposition} and the \emph{DAG-pathwidth} \cite{art12}. Let $H = (V, E)$ be a directed graph. A \emph{DAG-path-decomposition} of $H$ is a sequence $X = (X_1, X_2, \dots, X_s)$ $(X_i \subseteq V)$ that satisfies the following three conditions:
 \begin{enumerate}
-    \item $X_1 \cup X_2 \cup \dots \cup X_s = V$.
-    \item For any edge $(u, v) \in E$, there exists an $i \ (\geq 1)$ such that $u, v \in X_i$.
-    \item For any integers $i, j, k\ (1 \leq i \leq j \leq k \leq s)$, $X_i \cap X_k \subseteq X_j$, that is, for any vertex $v \in V$, $v$ induces exactly one non-empty path in $X$.
+    \item[(DPD1)] $X_1 \cup X_2 \cup \dots \cup X_s = V$.
+    \item[(DPD2)] For every directed edge $(u, v) \in E$, there exists $i$ such that $u, v \in X_i$ and $v \notin X_{i-1}$. \label{original_rule}
+    \item[(DPD3)] For any $i, j, k$ $(1 \leq i \leq j \leq k \leq s)$, $X_i \cap X_k \subseteq X_j$. %That is, for any vertex $v \in V$, $v$ induces exactly one non-empty directed path in $X$.
 \end{enumerate}
+In (DPD2), we interpret $X_0 = \emptyset$. Therefore, a directed edge $(u, w)$ satisfies (DPD2) if $u, v \in X_1$. The \emph{width} of $X$ is defined as $\underset{i}{\max} \{ |X_i| - 1 \}$. The \emph{DAG-pathwidth} of $G$ is the minimum width over all possible DAG-path-decompositions of $G$. Note that in \cite{art12}, (DPD2) is changed into the condition that there exists $i$ such that $u, v \in X_i$ and $u \notin X_{i-1}$. In this study, we adopt the above definition for the sake of algorithmic simplicity.
 
-For a path decomposition $X = (X_1, X_2, \dots, X_s)$ of $G$, each subset $X_i$ is called a \emph{bag}. The \emph{width} of $X$ is defined as $\underset{i}{\max} \{ |X_i| - 1 \}$. The \emph{pathwidth} of $G$ is the minimum width over all possible path decompositions of $G$. Computing the pathwidth of a general undirected graph is NP-hard \cite{art3}.
 
-Next, we define the \emph{directed path decomposition} and the \emph{directed pathwidth} \cite{art9}. Let $D = (V, E)$ be a directed graph. A \emph{directed path decomposition} of $D$ is a sequence $X = (X_1, X_2, \dots, X_s) ~(X_i \subseteq V)$ that satisfies the following three conditions:
-\begin{enumerate}
-    \item $X_1 \cup X_2 \cup \dots \cup X_s = V$.
-    \item For any directed edge $(u, v) \in E$, there exist $i, j$ $(i \leq j)$ such that $u \in X_i$, $v \in X_j$.
-    \item For any $i, j, k\ (1 \leq i \leq j \leq k \leq s)$, $X_i \cap X_k \subseteq X_j$, that is, for any vertex $v \in V$, $v$ induces exactly one non-empty path in $X$.
-\end{enumerate}
-
-The \emph{directed pathwidth} of $D$ can also be defined in the same way as the pathwidth.
-
-Then, we define the \emph{DAG-path-decomposition} and the \emph{DAG-pathwidth} \cite{art12}. Let $H = (V, E)$ be a directed graph. A \emph{DAG-path-decomposition} of $H$ is a sequence $X = (X_1, X_2, \dots, X_s) ~(X_i \subseteq V)$ that satisfies the following three conditions:
-\begin{enumerate}
-    \item $X_1 \cup X_2 \cup \dots \cup X_s = V$.
-    \item For every directed edge $(u, v) \in E$, $u, v \in X_1$ or there exists $i$ $(i \geq 2)$ such that $u, v \in X_i$ and $v \notin X_{i-1}$. \label{original_rule}.
-    \item For any $i, j, k$ $(1 \leq i \leq j \leq k \leq s)$, $X_i \cap X_k \subseteq X_j$. That is, for any vertex $v \in V$, $v$ induces exactly one non-empty directed path in $X$.
-\end{enumerate}
-
-The \emph{DAG-pathwidth} of $H$ can also be defined in the same way as the pathwidth. Note that in \cite{art12}, condition~\ref{original_rule} is defined that $u, v \in X_1$ or there exists $i$ $(i \geq 2)$ such that $u, v \in X_i$ and $u \notin X_{i-1}$. In this study, we adopt the above definition for the sake of algorithmic simplicity.
+%The \emph{DAG-pathwidth} of $H$ can also be defined in the same way as the pathwidth. Note that in \cite{art12}, condition~\ref{original_rule} is defined that $u, v \in X_1$ or there exists $i$ $(i \geq 2)$ such that $u, v \in X_i$ and $u \notin X_{i-1}$. In this study, we adopt the above definition for the sake of algorithmic simplicity.
 
 The DAG-pathwidth is a parameter that indicates how closely the structure of a directed graph resembles a directed path. From Rule 3 of the DAG-path-decomposition, any vertex $v$ is contained in a connected sequence of bags. Additionally, Rules 2 and 3 imply that for any edge $(u, v)$, $u$ and $v$ first appear together in a single bag or $u$ appears in a bag without $v$, followed by a bag containing both $u$ and $v$. Thus, a DAG-path-decomposition can be interpreted as an operation of adding vertices to bags according to a topological order of the graph.
 
@@ -1138,6 +1126,30 @@ LNCS Homepage, \url{http://www.springer.com/lncs}, last accessed 2023/10/25
 \end{thebibliography}
 \end{comment}
 
+\appendix
 
+\section{Definitions of path and tree decompositions}
+
+We first define the \emph{path decomposition} and the \emph{pathwidth}~\cite{art1}. Let $G = (V, E)$ be an undirected graph. A \emph{path decomposition} of $G$ is a sequence $X = (X_1, X_2, \dots, X_s) ~(X_i \subseteq V)$ that satisfies the following three conditions:
+\begin{enumerate}
+    \item $X_1 \cup X_2 \cup \dots \cup X_s = V$.
+    \item For any edge $(u, v) \in E$, there exists an $i \ (\geq 1)$ such that $u, v \in X_i$.
+    \item For any integers $i, j, k\ (1 \leq i \leq j \leq k \leq s)$, $X_i \cap X_k \subseteq X_j$, that is, for any vertex $v \in V$, $v$ induces exactly one non-empty path in $X$.
+\end{enumerate}
+
+For a path decomposition $X = (X_1, X_2, \dots, X_s)$ of $G$, each subset $X_i$ is called a \emph{bag}. The \emph{width} of $X$ is defined as $\underset{i}{\max} \{ |X_i| - 1 \}$. The \emph{pathwidth} of $G$ is the minimum width over all possible path decompositions of $G$. Computing the pathwidth of a general undirected graph is NP-hard \cite{art3}.
+
+Next, we define the \emph{directed path decomposition} and the \emph{directed pathwidth} \cite{art9}. Let $D = (V, E)$ be a directed graph. A \emph{directed path decomposition} of $D$ is a sequence $X = (X_1, X_2, \dots, X_s) ~(X_i \subseteq V)$ that satisfies the following three conditions:
+\begin{enumerate}
+    \item $X_1 \cup X_2 \cup \dots \cup X_s = V$.
+    \item For any directed edge $(u, v) \in E$, there exist $i, j$ $(i \leq j)$ such that $u \in X_i$, $v \in X_j$.
+    \item For any $i, j, k\ (1 \leq i \leq j \leq k \leq s)$, $X_i \cap X_k \subseteq X_j$, that is, for any vertex $v \in V$, $v$ induces exactly one non-empty path in $X$.
+\end{enumerate}
+
+The \emph{directed pathwidth} of $D$ can also be defined in the same way as the pathwidth.
+
+\section{Omitted proofs}
+
+Omitted proofs are shown here.
 
 \end{document}
