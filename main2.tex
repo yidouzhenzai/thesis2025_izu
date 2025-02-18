@@ -33,10 +33,9 @@
 \usepackage{algorithm}
 \usepackage{ifthen}
 \usepackage{enumitem}
-\usepackage[title]{appendix}
 \newboolean{Draft}
 \newboolean{Draft2}
-\setboolean{Draft}{false} %図を挿入するならtrue
+\setboolean{Draft}{true} %図を挿入するならtrue
 \setboolean{Draft2}{false} %付録を挿入するならtrue
 
 \begin{comment}
@@ -176,7 +175,7 @@ Finally, in Section 5, we design an algorithm that, given an integer $t$, and a 
 
 
 
-\section{Preliminaries}\label{chapter2}
+\section{Preliminaries}
 %In this Section, we introduce definitions and notations for graphs and directed graphs.
 
 \subsection{DAG}
@@ -215,7 +214,7 @@ The \emph{DAG-pathwidth} of $H$ can also be defined in the same way as the pathw
 
 The DAG-pathwidth is a parameter that indicates how closely the structure of a directed graph resembles a directed path. From Rule 3 of the DAG-path-decomposition, any vertex $v$ is contained in a connected sequence of bags. Additionally, Rules 2 and 3 imply that for any edge $(u, v)$, $u$ and $v$ first appear together in a single bag or $u$ appears in a bag without $v$, followed by a bag containing both $u$ and $v$. Thus, a DAG-path-decomposition can be interpreted as an operation of adding vertices to bags according to a topological order of the graph.
 
-Computing the DAG-pathwidth for general directed graphs is NP-hard \cite{art12}. However, it can be shown that graphs with DAG-pathwidth 1 are exactly the \emph{directed caterpillar graph}, which is a directed tree such that removing vertices with indegree 1 and outdegree 0 leaves a single directed path. The proof is in the appendix.
+Computing the DAG-pathwidth for general directed graphs is NP-hard \cite{art12}. However, it can be shown that graphs with DAG-pathwidth 1 are exactly the \emph{directed caterpillar tree}, which is a directed tree such that removing vertices with indegree 1 and outdegree 0 leaves a single directed path. The proof is in the appendix.
 
 To facilitate dynamic programming, we define the \emph{nice DAG-path-decomposition} \cite{art12}. It is a DAG-path-decomposition $X = (X_1, X_2, \dots, X_s)$ of a directed graph $H = (V, E)$ that satisfies the following rules:
 \begin{enumerate}
@@ -421,7 +420,7 @@ The pebbling number for one-shot BP can also be defined similarly. For general D
 
 
 
-\section{Algorithms for various NP-hard problems on DAGs based on DAG-pathwidth}\label{chapter3}
+\section{Algorithms for various NP-hard problems on DAGs based on DAG-pathwidth}
 
 \subsection{Advantages of DAG-path-decomposition Compared to Tree Decomposition}
 
@@ -437,13 +436,15 @@ The DEDS problem is the problem of determining the size of the mDEDS of \(G\).
 
 A related problem is the \emph{Directed Dominating Set Problem (DiDS problem)}.  
 This problem seeks the smallest subset \(S \subseteq V\) such that, for every \(v \in V\), either \(v \in S\) or there exists some \(u \in S\) where \((u, v) \in E\).  
-~\cite{art23}, ~\cite{art22} established the following result:  
+Hanaka et al.~\cite{art23} established the following result:  
 
-\begin{proposition}[time Complexity]
+\begin{proposition}[Computational Complexity]
     The DEDS problem remains NP-hard even for planar bounded degree DAGs.
 \end{proposition}
 
-\begin{proposition}[FPT algorithm with treewidth]
+Furthermore,~\cite{art22} proposed an FPT algorithm based on treewidth:  
+
+\begin{proposition}
     If the treewidth of the underlying graph of a DAG \(G\) is at most \(tw\), then there exists an FPT algorithm that solves the DEDS problem on \(G\) in \(4^{2tw^2} 8^{2tw} n^{O(1)}\) time.  
 \end{proposition}
 
@@ -489,7 +490,7 @@ Proofs of correctness are provided in the appendix.
 
 We first establish the existence of an FPT algorithm for the DiDS problem.  
 
-\begin{theorem}\label{theorem_dids}
+\begin{theorem}
     Given a DAG \(G\) and its nice DAG-path-decomposition of width \(w\), there exists an algorithm that solves the DiDS problem on \(G\) in \(O(2^w w n)\) time.  
 \end{theorem}
 
@@ -593,7 +594,7 @@ DEDS problem以外でも，DAGパス分解を用いることでDAG上でNP-hard�
 
 
 
-\section{$O(\log^{3/2} n)$-approximation algorithm for DAG-pathwidth}\label{chapter4}
+\section{$O(\log^{3/2} n)$-approximation algorithm for DAG-pathwidth}
 
 The problem of determining the DAG-pathwidth for a general DAG is NP-hard, but an approximate width can be computed in polynomial time. In this chapter, we establish the relationship between DAG-path-decomposition and one-shot BP, and we demonstrate the existence of a polynomial-time algorithm that provides a DAG-path-decomposition with an approximation ratio of at most $O(\log ^{3/2} n)$ for a given DAG $G$ with $n$ vertices.
 
@@ -614,12 +615,17 @@ Using the above algorithm~\cite{art20}, we prove the following theorem.
     Given a DAG $G$ with $n$ vertices and DAG-pathwidth $pw$, there exists a polynomial-time algorithm that provides a nice DAG-path-decomposition with width at most $O(pw \cdot \log ^{3/2} n)$.
 \end{theorem}
 
-To prove \textbf{Theorem~\ref{approximation2}}, it is sufficient to show the following Lemma. Proof of this Lemma is in the appendix.
+To prove \textbf{Theorem~\ref{approximation2}}, it is sufficient to show the following lemma.
 
 \begin{lemma}\label{lemma_approximation2}
     On a DAG, the construction of a strategy for one-shot BP and a nice DAG-path-decomposition are equivalent problems.
 \end{lemma}
 
+\begin{proof}
+    First, we show that if $X$ is a nice DAG-path-decomposition of a DAG $G$, then $X$ is also a strategy of one-shot BP. Let $X=(X_1, X_2, \dots, X_s)$ be a nice DAG-path-decomposition of $G$. Since $X_1 = \varnothing$ in a nice DAG-path-decomposition, it satisfies Rule 1 of one-shot BP. By Rules 1 and 3 of DAG-path-decomposition, every vertex is introduced exactly once, satisfying Rules 4 and 5 of one-shot BP. Furthermore, by the conditions of introduce and Rule 2 of DAG-path-decomposition, if $v \in V$ is introduced at $X_i$, then for any $(u, v) \in E$, it holds that $u \in X_{i-1}$. This satisfies Rule 2 of one-shot BP. Additionally, since each vertex is forgotten exactly once, the forget and unpebble operations are clearly equivalent, thus satisfying Rule 3 of one-shot BP. Therefore, the introduce and forget operations in $X$ correspond to the pebble and unpebble operations, respectively, proving that $X$ is a one-shot BP of $G$.
+
+    Next, we show that if $P$ is a one-shot BP of $G$, then $P$ is a nice DAG-path-decomposition of $G$. Let $P=(P_1, P_2, \dots, P_t)$ be a strategy of one-shot BP of $G$. Since $P_1 = \varnothing$, it satisfies the initial condition of a nice DAG-path-decomposition. Furthermore, each vertex $v \in V$ is pebbled and unpebbled exactly once in $P$, satisfying Rule 1 of DAG-path-decomposition. Additionally, if a vertex $v$ is pebbled and unpebbled at $P_i$ and $P_{k+1}$ $(1 \leq i \leq k \leq t-1)$, then by Rule 5 of one-shot BP, no vertex is pebbled more than once. Hence, for any $P_j$ $(i \leq j \leq k)$, it holds that $v \in P_j$. Applying this argument to all vertices in $V$, we conclude that Rule 3 of a nice DAG-path-decomposition is satisfied. Moreover, by the pebbling rule, if $v \notin P_{i-1}$ and $u \in P_{i-1}$ for any $(u, v) \in E$, then $P_i = P_{i-1} \cup \{v\}$. This implies that $u, v \in P_i$ and $v \notin P_{i-1}$, thereby satisfying Rule 2 of DAG-path-decomposition. It means the pebbling operation corresponds to the introduce operation. Furthermore, the unpebble operation clearly satisfies the forget condition of a nice DAG-path-decomposition. Thus, $P$ is a nice DAG-path-decomposition of $G$.
+\end{proof}
 
 
 
@@ -637,9 +643,10 @@ To prove \textbf{Theorem~\ref{approximation2}}, it is sufficient to show the fol
 
 
 
-\section{Algorithm to find DAG-path-decomposition with width at most $O(ld^t)$}\label{chapter5}
 
-In this chapter, we propose an algorithm that, given a DAG $H$ with maximum outdegree $d$ and number of roots $l$, along with a non-negative integer $t$, either outputs a DAG-path-decomposition with width at most $O(ld^t)$ or provides evidence that the DAG-pathwidth of $H$ is greater than $t$. This algorithm is constructed based on the path decomposition algorithm for undirected graphs~\cite{art8}. (Note that all the proofs of Lemma, Theorem, etc. in this chapter are shown in the appendix)
+\section{Algorithm to find DAG-path-decomposition with width at most $O(ld^t)$}
+
+In this chapter, we propose an algorithm that, given a DAG $H$ with maximum outdegree $d$ and number of roots $l$, along with a non-negative integer $t$, either outputs a DAG-path-decomposition with width at most $O(ld^t)$ or provides evidence that the DAG-pathwidth of $H$ is greater than $t$. This algorithm is constructed based on the path decomposition algorithm for undirected graphs~\cite{art8}.
 
 \begin{proposition}{~\cite{art8}}\label{pathwidth algorithm of undirected graph}
     Given an undirected graph $H$ with $n$ vertices and a non-negative integer $t$, there exists an $O(n)$ time algorithm that either provides evidence that the pathwidth of $H$ is greater than $t$ or returns a path decomposition with width at most $O(2^t)$.
@@ -666,6 +673,21 @@ To prove \textbf{Theorem~\ref{approximation3}}, we first define the notion of a 
 \begin{lemma}\label{comp_tree}
     Let $T_{h, d}$ be a complete $d$-ary directed tree of height $h$ $(h, d > 1)$. Then, the DAG-pathwidth of $T_{h, d}$ is $h-1$.
 \end{lemma}
+
+\begin{proof}
+    We prove this by mathematical induction on $h$. 
+    
+    For $h=2$, the DAG-pathwidth of $T_{2, d}$ is clearly 1, so the lemma holds. 
+    
+    Next, assuming that the lemma holds for some $h > 1$, there exists a DAG-path-decomposition $X_h$ of $T_{h, d}$ with DAG-pathwidth $h-1$. Here, note that $T_{h+1, d}$ is a graph obtained by connecting a single root $r$ to the roots of $d$ copies of $T_{h, d}$. We can construct a DAG-path-decomposition of $T_{h+1, d}$ with width $h$ as follows. First, for the $d$ DAG-path-decompositions $X_h$, connect the starting and ending bags of each decomposition sequentially to form a single long sequence of bags. Next, add $r$ to each bag in this sequence. Finally, prepend a bag containing only $r$ at the beginning of the sequence. The resulting sequence satisfies the three rules of a DAG-path-decomposition, making it a valid DAG-path-decomposition of $T_{h+1, d}$ with width $h$.
+    
+    Furthermore, no DAG-path-decomposition of $T_{h+1, d}$ with width less than $h$ exists. The reasons are shown below. $T_{h+1, d}$ contains $T_{h, d}$ as a substructure, so the DAG-pathwidth of $T_{h+1, d}$ cannot be smaller than $h-1$. Now, suppose there exists a DAG-path-decomposition of $T_{h+1, d}$ with width $h-1$. Since the $d$ copies of $T_{h, d}$ are mutually unreachable, each can independently form a DAG-path-decomposition, and the width does not need to exceed that of a parallel decomposition of the $d$ copies of $T_{h, d}$. Let $T'_{h, d}$ be the first decomposed tree among $d$ $T_{h, d}$. By Rule 2 of DAG-path-decomposition, any DAG-path-decomposition of $T_{h+1, d}$ must include the root $r$ in its first bag. However, the bag in the DAG-path-decomposition of $T'_{h, d}$ that has the maximum width of $h-1$ (denoted as $X'$) does not contain $r$. By Rule 3 of DAG-path-decomposition, $r$ does not reappear in any later bag, implying that the remaining $d-1$ copies of $T_{h, d}$ do not connect to $r$. This requires $d=1$, which contradicts the assumption that $d > 1$. 
+    
+    Even if all vertices connected to $r$ were included in a bag before $X'$, some vertices from outside $T'_{h, d}$ must necessarily be included in $X'$, which concludes the width greater than $h-1$. It leads to a contradiction.
+    
+    Thus, no DAG-path-decomposition of $T_{h+1, d}$ with width $h-1$ exists, and the optimal DAG-path-decomposition of $T_{h+1, d}$ has width $h$. Therefore, the lemma holds for $h+1$, and by induction, it holds for any $h, d \geq 2$.
+    
+\end{proof}
 
 We construct a parameterized algorithm that satisfies \textbf{Theorem~\ref{approximation3}} with reference to \cite{art8}. Given an input DAG $H = (V, E)$, we modify it to have a single root by adding a complete $d$-ary directed tree of height $\lceil \log_d l \rceil$ and connecting its leaves to each root of $H$. Let $H'$ be the resulting DAG. We also define $M_{t, d, l}$ as a complete $d$-ary directed tree of height $\lceil \log_d l \rceil +t+2$.
 
@@ -772,13 +794,17 @@ Condition (a) corresponds to a forget operation in the DAG-path-decomposition, a
 This final process is the main difference from \cite{art8}. In \cite{art8}, there always exists a removable token $T$ until the algorithm terminates. In contrast, in this algorithm, there may be cases where such a token does not exist. This is because embedding of directed graphs is more difficult than that of undirected graphs, as it requires considering the directions of the edges.  
 
 
-We first show the following lemma:
+We first demonstrate the following lemma:
 
 \begin{lemma}\label{lemma_embedding}
     The subgraph $G'$ induced by the \textit{tokened} token set in $M_{t, d, l}$ is connected, and an embedding from $G'$ to $H'$ exists.
 \end{lemma}
 
+\begin{proof}
+    First, we show that $G'$ is always connected. Token placement and replacement occur only in line 2 of $\mathsf{GrowTokenTree}$ or lines 6 and 8 of $\mathsf{FindEmbedding}$. The former explicitly ensures token placement maintains connectivity, and the latter replaces all tokens in the directed tree rooted at $T \cdot b$ with corresponding tokens in the directed tree rooted at $T$ immediately after removing $T$. This guarantees that connectivity is preserved after processing lines 6 and 8. Thus, $G'$ remains connected at all times.
 
+    Next, we show that an embedding from $G'$ to $H'$ exists. Since $\mathsf{GrowTokenTree}$ places a token $T$ on $u \in V[H']$ and its child $v$ receives token $T \cdot b$, the embedding condition is clearly satisfied. It suffices to verify that the embedding condition holds throughout lines 6 to 9 of $\mathsf{FindEmbedding}$. Assuming that the embedding condition is satisfied at line 5, if a token $T$ satisfying line 5 exists and has exactly one \textit{tokened} child $T \cdot b$, line 8 is executed. In line 8, $S$ represents an arbitrary-length string consisting of characters from $1$ to $d$, and the operation replaces all tokens in the directed tree rooted at $T \cdot b$ with corresponding tokens in the directed tree rooted at $T$ while maintaining tree-structural integrity. Since the replacement occurs from root-proximal tokens to distal ones, the target tokens are always \textit{untokened}. As $G'$ remains connected and $T$ has only $T \cdot b$ as its \textit{tokened} child, removing $T$ and replacing all tokens in the directed tree rooted at $T \cdot b$ with the corresponding tokens in the directed tree rooted at $T$ preserves the embedding condition. If $T$ has no \textit{tokened} children, only line 6 is executed, and line 8 is skipped, trivially maintaining the embedding condition. Thus, the embedding condition remains intact throughout the sequence of operations, proving the existence of an embedding from $G'$ to $H'$.
+\end{proof}
 
 
 The algorithm $\mathsf{FindEmbedding}$ terminates when one of the following conditions is met: (1) in line 4, $H'$ no longer contains any blue vertices; (2) in line 4, $|X_i| = |V[M_{t, d, l}]|$ holds; or (3) the process in line 11 is executed. The following lemmas demonstrate that the algorithm functions correctly in each of these cases.
@@ -787,10 +813,27 @@ The algorithm $\mathsf{FindEmbedding}$ terminates when one of the following cond
     If $\mathsf{FindEmbedding}$ terminates under condition (1), then there exists a DAG-path-decomposition of $H$ with width at most $ld^{t+3}-1$.
 \end{lemma}
 
+\begin{proof}
+    Suppose that in line 4 of $\mathsf{FindEmbedding}$, all vertices of $H'$ have turned red at step $i=s$, leading to termination. The sequence of vertex sets output by the algorithm, $X_{H'} = (X_1, X_2, \dots , X_s)$, constitutes a DAG-path-decomposition of $H'$. Since every vertex $v \in H'$ is red, it must be contained in at least one vertex set $X_i$, satisfying rule 1 of the DAG-path-decomposition. Moreover, each vertex $v$ changes color from blue to red exactly once, and tokens are removed from red vertices without being placed again, ensuring that the vertex sets $X_i$ form a connected path, satisfying rule 3.
+
+    For any edge $(u, v) \in E[H']$, suppose that $v$ changes from blue to red at $i=i_v~ (i_v \leq s)$. By the condition in line 5 of $\mathsf{FindEmbedding}$, a token placed on $u$ is not removed before step $i_v$. Additionally, by the condition in line 1 of $\mathsf{GrowTokenTree}$, all predecessor vertices of $v$ have tokens, implying that $u$ must also be included in $X_i$. Since $v$ is not in $X_{i_v-1}$, we conclude that $u, v \in X_{i_v}$ and $v \notin X_{i_v-1}$, satisfying rule 2. Therefore, $X_{H'}$ is a DAG-path-decomposition of $H'$.
+
+    Noting that $\lceil \log_d l \rceil < \log_d l +1$, the width of $X_{H'}$ is at most $|V[M_{t, d, l}]| = d^{\lceil \log_d l \rceil +t+2}-1 < ld^{t+3}-1$. Since $X_H = (X_1 \cap V[H], X_2 \cap V[H], \dots , X_s \cap V[H])$ satisfies the three rules of the DAG-path-decomposition for $H$, it follows that $X_H$ is a DAG-path-decomposition of $H$ with width at most $ld^{t+3}-1$. Thus, we obtain a DAG-path-decomposition of $H$ with width at most $ld^{t+3}-1$.
+\end{proof}
 
 \begin{lemma}\label{lemma_(2)}
     If $\mathsf{FindEmbedding}$ terminates under condition (2), then $H$ can be splited into two disjoint subgraphs $A$ and $B$ such that $V[A] \cup V[B] = V[H]$ and $V[A] \cap V[B] = \varnothing$. Moreover, in $H$, only edges from $A$ to $B$ exist, and the DAG-pathwidth of $A$ is greater than $t$ but at most $ld^{t+3}-1$.
 \end{lemma}
+
+\begin{proof}
+    Suppose that in line 4 of $\mathsf{FindEmbedding}$, at step $i=s$, the condition $|X_s| = |V[M_{t, d, l}]|$ holds, and let $A'$ be the subgraph of $H'$ induced by the vertex set $X_1 \cup X_2 \cup \dots \cup X_s$. Then, the sequence of vertex sets output by the algorithm, $X_{A'} = (X_1, X_2, \dots , X_s)$, forms a DAG-path-decomposition of $A'$. By definition of $A'$, rule 1 of the DAG-path-decomposition is clearly satisfied. Additionally, rules 2 and 3 are satisfied by the argument similar to \textbf{Lemma~\ref{lemma_(1)}}. Thus, $X_{A'}$ is a DAG-path-decomposition of $A'$.
+
+    Let $A$ be the subgraph of $H$ induced by $V[A'] \cap V[H]$ and $B$ be the subgraph of $H$ induced by $V[H] \backslash V[A]$. Since $A$ and $B$ are disjoint and rule 2 of the DAG-path-decomposition ensures that only edges from $A$ to $B$ exist. Defining $X_A = (X_1 \cap V[H], X_2 \cap V[H], \dots , X_s \cap V[H])$, this decomposition satisfies the 3 rules of the DAG-path-decomposition of $A$. Therefore, $X_A$ forms a DAG-path-decomposition of $A$ with width at most $ld^{t+3}-1$ by the argument similar to \textbf{Lemma~\ref{lemma_(1)}}.
+
+    Next, let $A'_M$ be the subgraph of $H'$ induced by the end bag $X_s$ in $X_{A'}$. Since at step $i=s$, all tokens in $M_{t, d, l}$ have been used in the embedding, \textbf{Lemma~\ref{lemma_embedding}} implies that $A'_M$ represents an embedding of $M_{t, d, l}$ into $H'$. Since $M_{t, d, l}$ has height $\lceil \log_d l \rceil +t+2$, and $A'$ contains $A'_M$, the subgraph induced by $V[A'] \backslash V[A]$ forms a complete directed $d$-ary tree of height at most $\lceil \log_d l \rceil$. Thus, $A$ contains a complete directed $d$-ary tree $T_A$ of height at least $(\lceil \log_d l \rceil +t+2) - (\lceil \log_d l \rceil) = t+2$, meaning that an embedding from $T_A$ to $A$ exists. 
+
+    By \textbf{Lemma~\ref{comp_tree}}, the DAG-pathwidth of $T_A$ is $t+1$, implying that the DAG-pathwidth of $A$ is at least $t+1$. Since $H$ contains $A$ as a subgraph, the DAG-pathwidth of $H$ must be greater than $t$. Consequently, the DAG-pathwidth of $A$ is greater than $t$ but at most $ld^{t+3}-1$.
+\end{proof}
 
 
 \ifthenelse{\boolean{Draft}}{
@@ -822,16 +865,71 @@ The outline of the proof is illustrated in Figure~\ref{fig:13}.
     At any time $i = k$, let $r_0$ be the vertex of $H'$ on which the root token $\lambda$ is placed. Then, all blue vertices in $H'$ must have $r_0$ as an ancestor.
 \end{lemma}
 
+\begin{proof}
+    We prove this by contradiction. Suppose at time $i = k$, there exists a blue vertex $v \in V[H']$ that does not have $r_0$ as an ancestor. Since $H'$ has a single root, there exists a common ancestor of $r_0$ and $v$. Let $r'_0$ be such a most recent common ancestor that does not have another common ancestor of $r_0$ and $v$ as its descendant. If multiple such vertices exist, choose one of them as $r'_0$. Notice that $v \neq r'_0$ because at time $i = k$, the root token $\lambda$ is placed at $r_0$, implying that its ancestor $r'_0$ must have had its token removed. Assuming $r'_0 = v$ contradicts the fact that $v$ is blue.
+    
+    Define $A_{r_0}$ as the set of children of $r'_0$ whose descendants include $r_0$, and let $A'_{r_0}$ be the set of other children of $r'_0$. Let $G_{A_{r_0}}$ be the subgraph induced by the descendants of the vertices in $A_{r_0}$ and $G_{A'_{r_0}}$ be the subgraph induced by the descendants of the vertices in $A'_{r_0}$ that are not in $G_{A_{r_0}}$. Additionally, let $G_{r_0}$ be the subgraph induced by the descendants of $r_0$. By assumption, $v \notin V[G_{r_0}]$, meaning $v \in V[G_{A_{r_0}}] \setminus V[G_{r_0}]$ or $v \in V[G_{A'_{r_0}}]$.
+    
+    Consider the first moment $i = l$ $(l \leq k)$ when a token $\lambda$ is placed on a vertex in $G_{A_{r_0}}$. At this moment, all vertices in $G_{A'_{r_0}}$ must have had their tokens removed. We justify this below. Any vertex in $H'$ is either (a) blue, (b) red with a token, or (c) red and a token is already removed. Since $v$ is blue at $i = l$, Line 5 of $\mathsf{FindEmbedding}$ requires that its parent must be (a) or (b). If the parent is (a), we continue checking its parent, which must also be (a) or (b). If all ancestors of $v$ are (a), at least one blue vertex exists in $A'_{r_0}$ at $i = l$, contradicting the conditions of Line 5. If at least one ancestor is (b), then, when an token $T_{r'_0}$ placed on $r'_0$ has been removed, $T_{r'_0}$ must have had at least two \textit{tokened} children, one in $G_{A'_{r_0}}$ and another elsewhere. Since $T_{r'_0}$ has been removed from $r'_0$ at $i = l$, this contradicts Line 5 of $\mathsf{FindEmbedding}$ which requires that a removed token has at most one \textit{tokened} child. Therefore, $v \notin V[G_{A'_{r_0}}]$ must hold. Given that $v \notin V[G_{A_{r_0}}]$ by assumption, it must hold that $v \in V[G_{A_{r_0}}] \setminus V[G_{r_0}]$. However, in this case, a common ancestor of $v$ and $r_0$ must be included in $A_{r_0}$, which contradicts the fact that there exists no common ancestor of $v$ and $r_0$ among the descendants of $r'_0$. Thus, the claim of \textbf{Lemma~\ref{lemma_(3)}} is proven.
+\end{proof}
+
 
 \begin{lemma}\label{lemma_(3)}
     If $\mathsf{FindEmbedding}$ terminates at (3), then the DAG-pathwidth of $H$ is greater than $t$.
 \end{lemma}
 
-Lemma~\ref{lemma_(1)}, \ref{lemma_(2)}, and \ref{lemma_(3)} indicate \textbf{Theorem~\ref{approximation3}}. The proof is in appendix.
+\begin{proof}
+    Suppose that Line 11 of $\mathsf{FindEmbedding}$ is executed at $i = k$. First, we prove that at $i = k$, there exists at least one root-to-leaf path $P = (\lambda \cdot m_1 \cdot m_2 \cdot \dots m_{\lceil \log_d l \rceil +t+1})$ in the \textit{tokened} token set on $M_{t, d, l}$. Therefore, we show a contradiction by assuming that such a path does not exist. Let $P'$ be the longest path in the \textit{tokened} token set rooted at $\lambda$, and let the height of $M_{t, d, l}$ be $h(M_{t, d, l}) = \lceil \log_d l \rceil +t+2$. By assumption, $|P'| \leq h(M_{t, d, l}) - 1$. Let $T'$ be the terminal token of $P'$, placed at vertex $u' \in V[H']$. From Line 1 of $\mathsf{GrowTokenTree}$, at least one of the following must hold:
+    
+    \begin{enumerate}
+        \item There exists a vertex $v' \in \mathsf{suc}(u')$ such that one of its parents $w^{(1)}$ is blue. \label{cond11}
+        \item $T'$ has no \textit{untokened} children. \label{cond22}
+    \end{enumerate}
+    
+    Note that we do not need to consider the case where $u'$ has no children, because in this case, we can remove the token placed on $u'$, preventing the state described in (3) from occurring. If condition \ref{cond22} holds, then $T'$ is either a leaf or all of $T'$'s children are \textit{tokened}. However, neither of these conditions can hold, because by assumption, the endpoint $T'$ of $P'$ is not a leaf, and if $T'$ has a \textit{tokened} child, it would contradict the fact that $P'$ is the longest path. Therefore, condition \ref{cond11} must hold. Let $r_0$ be the vertex where the root token $\lambda$ is placed. Let $G_{r_0}$ be the subgraph induced by the descendants of $r_0$ in $H'$, and let $V_h$ be the set of vertices in $G_{r_0}$ where tokens with height $h\ (1 \leq h \leq h(M_{t, d, l}))$ on the $M_{t, d, l}$ graph are placed . Also, let $\mathcal{V} = \bigcup_{1 \leq h \leq h(M_{t, d, l})} V_h$. By assumption, $u' \in V_{h'}\ (1 \leq h' \leq h(M_{t, d, l})-1)$. Furthermore, by \textbf{Lemma~\ref{blue_reachable}}, both the blue vertices $v', w^{(1)}$ are reachable from $r_0$, so they are contained in $G_{r_0}$. Additionally, considering the placement of tokens in $\mathsf{GrowTokenTree}$, we observe that the children of a blue vertex cannot be red, meaning that $v', w^{(1)}$ and their descendants are not in $\mathcal{V}$. Now, for $w^{(1)}$, one of the following must always hold:
 
-\begin{cor}\label{cor}
+\begin{enumerate}
+    \item All of $w^{(1)}$'s parents are in $\mathcal{V}$. \label{cond_a}
+    \item There exists at least one blue parent of $w^{(1)}$ that is not in $\mathcal{V}$. \label{cond_b}
+\end{enumerate}
+
+    Note that there are no red parents of $w^{(1)}$ that are not in $\mathcal{V}$. This is because, by a similar argument to \textbf{Lemma~\ref{blue_reachable}}, each of $w^{(1)}$'s parents must either be (a) blue or (b) red with a token. Thus, if any parent satisfies (a), condition \ref{cond_b} holds; otherwise, condition \ref{cond_a} holds. If condition \ref{cond_a} holds, a token should be placed on $w^{(1)}$. This is because each of $w^{(1)}$'s parents must be included in one of $V_1, V_2, \dots, V_{h'}$, and each parent has exactly $d$ children, the maximum outdegree in $H'$. Therefore, each parent must have at least one \textit{untokened} child, and this token can be placed on $w^{(1)}$. Thus, the condition \ref{cond_a} contradicts the assumption that $w^{(1)}$ is blue. Therefore, condition \ref{cond_b} must hold. 
+    
+    If condition \ref{cond_b} holds for $w^{(1)}$, let $w^{(2)}$ be one of blue parents of $w^{(1)}$ satisfying condition \ref{cond_b}. By similar reasoning, a blue parent $w^{(3)}$ of $w^{(2)}$ satisfying condition \ref{cond_b} must exist. Repeating this argument, since the number of vertices in $H'$ is finite, there must eventually be a blue vertex $w^{(n)}$ that satisfies condition \ref{cond_a}. Therefore, a contradiction arises, and there must be at least one path from the root to a leaf in the \textit{tokened} token set on $M_{t, d, l}$.
+    
+    Next, we will show that the DAG-pathwidth of $H$ is greater than $t$ using the path $P$. Since there are no tokens satisfying the condition of row 5 in $\mathsf{FindEmbedding}$ in (3), for each token $m_i \in P$ (where $\lambda$ is denoted by $m_0$), the vertex $v_i \in V[H']$ where the token $m_i$ is placed must satisfy at least one of the following:
+    
+    \begin{enumerate}
+        \item There exists a vertex $w_i \in \mathsf{suc}(v_i)$ such that $w_i$ and all its descendants are not in $\mathcal{V}$, and $w_i$ is blue. \label{cond1}
+        \item The token placed on $v_i$ has two or more \textit{tokened} children. \label{cond2}
+    \end{enumerate}
+    
+    Next, for each $v_i$, we will show that there exists a vertex $u_i$ such that in any DAG-path-decomposition of $H'$, each $u_i$ (for $0 \leq i \leq h(M_{t, d, l})-1$) must be included in some bag. First, consider the case where $v_i$ satisfies condition \ref{cond1}. In this case, $v_i$ cannot be forgotten in the DAG-path-decomposition of $H'$ until $m_{h(M_{t, d, l})-1}$ is placed at $v_{h(M_{t, d, l})-1}$. This is because $w_i$ and all of its descendants are not included in $\mathcal{V}$, and by taking note of the operation of $\mathsf{GrowTokenTree}$, a token is placed on $w_i$ only after the token $m_{h(M_{t, d, l})-1}$ is placed on $v_{h(M_{t, d, l})-1}$. Since $v_i$, which has $w_i$ as a predecessor, cannot remove $m_i$ before that, $v_i$ cannot be forgotten before the introduction of $v_{h(M_{t, d, l})-1}$ in the DAG-path-decomposition of $H'$. At this point, we set $u_i = v_i$. 
+    
+    Next, consider the case where $v_i$ does not satisfy condition \ref{cond1} but satisfies condition \ref{cond2}.  
+    $m_i$ has at least one \textit{tokened} child $m'_{i+1}$ other than $m_{i+1}$.  
+    Since the vertex on which $m'_{i+1}$ is placed also satisfies at least one of conditions \ref{cond1} or \ref{cond2}, by repeating the above argument, and noting that any \textit{tokened} leaf of $M_{t, d, l}$ must satisfy condition \ref{cond1}, there exists at least one descendant vertex of $v_i$ which is placed a descendant token of $m'_{i+1}$ and satisfies condition \ref{cond1}. Let such a vertex be $u_i$.  
+    
+    For the same reason as above, $u_i$ cannot be forgotten in the DAG-path-decomposition of $H'$ until $m_{h(M_{t, d, l})-1}$ is placed on $v_{h(M_{t, d, l})-1}$. Thus, for each $v_i$, we can construct a corresponding $u_i$.  
+    
+    In any DAG-path-decomposition $X'$ of $H'$, since each $u_i$ is included in the bag where $v_{h(M_{t, d, l})-1}$ is introduced, the width of $X'$ is at least $h(M_{t, d, l})-1$. Let $P_H$ be the sequence of tokens placed at vertices in $H$ from the sequence $P$. Since $|P \backslash P_H| \leq \lceil \log_d l \rceil$, we have $|P_H| = |P| - |P \backslash P_H| \geq (\lceil \log_d l \rceil + t + 2) - \lceil \log_d l \rceil = t + 2$. Thus, by the same reasoning, the width of any DAG-path-decomposition of $H$ is greater than $t$.
+    
+
+\end{proof}
+
+\textbf{Theorem~\ref{approximation3}} is shown below.
+
+\begin{proof}(\textbf{Theorem~\ref{approximation3}})\\
+    By inputting the DAG $H$ into $\mathsf{FindEmbedding}$, the algorithm will always terminate in one of the cases (1), (2), or (3). If it terminates in case (1), by \textbf{Lemma~\ref{lemma_(1)}}, \textbf{Theorem~\ref{approximation3}}(a) holds. If it terminates in case (2), by \textbf{Lemma~\ref{lemma_(2)}}, \textbf{Theorem~\ref{approximation3}}(b) holds. If it terminates in case (3), by \textbf{Lemma~\ref{lemma_(3)}} and setting $A = H$, \textbf{Theorem~\ref{approximation3}}(b) holds. Therefore, \textbf{Theorem~\ref{approximation3}} is proven.
+\end{proof}
+
+\begin{cor}
     Given a DAG $H$ with $l$ roots and maximum outdegree $d$, and an integer $t$, there exists an $O(n^2)$ time algorithm that either provides evidence that the DAG-pathwidth of $H$ is greater than $t$, or provides a DAG-path-decomposition of width at most $O(ld^t)$.
 \end{cor}
+
+\begin{proof}
+    By \textbf{Theorem~\ref{approximation3}}, $\mathsf{FindEmbedding}$ either outputs evidence that the DAG-pathwidth of $H$ is greater than $t$, or outputs a DAG-path-decomposition of width at most $O(ld^t)$. We now show that $\mathsf{FindEmbedding}$ terminates in polynomial time. In $\mathsf{GrowTokenTree}$, the condition check of line 1 takes at most $O(dn)$ time, and the while loop is repeated at most $|V[M_{t, d, l}]| = O(d^t)$ times. Also, due to the removal of $T$ in line 6 of $\mathsf{FindEmbedding}$, the vertices where $T$ was placed remain red, so this operation is performed at most $O(n)$ times. Therefore, the while loop in line 4 is also repeated at most $O(n)$ times. Furthermore, the while loop in line 10 clearly repeats at most $d^2$ times. Other steps are processed in $O(1)$ time. Thus, the algorithm terminates in $O(n^2)$ time if $d$ and $l$ are bounded by constants.
+\end{proof}
 
 
 
@@ -904,396 +1002,6 @@ A key challenge for future work is to further reduce the width $O(ld^k)$ of the 
 \section*{Acknowledgements}
 
 soon.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-DAG-path-decomposition
-DAG-path-width
-\textbf{.}
-
-\appendix
-\section{Proof of Chapter~\ref{chapter2}}
-
-\subsection{The DAG-pathwidth of a connected DAG is 1 if and only if it is the directed caterpillar graph}
-\begin{proof}
-    Assume that the number of vertices is 2 or more.
-    If there exists a vertex $v$ in $G$ with an in-degree of at least 2, then by Rule 2 of DAG-path-decomposition, any DAG-path-decomposition of $G$ must contain a bag that includes $v$ and all of its predecessor vertices. Thus, the DAG-path-width of $G$ is at least 2. Therefore, we consider only the case where $G$ has no vertex with in-degree 2 or greater, meaning that $G$ is a directed tree. First, we show that if $G$ is not directed caterpillar graph, then its DAG-path-width is at least 2. To do so, we consider cases based on the number of vertices in $G$. If $|V[G]| = 2$, then $G$ is clearly directed caterpillar graph. Similarly, when $|V[G]| = 3$ or $4$, $G$ is also directed caterpillar graph. The reason is as follows. Since $G$ is a directed tree, we select one of the longest paths in $G$ and denote its sequence of vertices as $P$. When $|V[G]| = 3$, then $|P| = 2$ or $|P| = 3$, both of which are clearly directed caterpillar graph. Similarly, when $|V[G]| = 4$, then $|P| = 2$, $|P| = 3$, or $|P| = 4$, all of which are also clearly directed caterpillar graph.
-    
-    Next, we consider the case where $G$ has at least 5 vertices. If $G$ is not directed caterpillar graph, then by definition, even after removing vertices of out-degree 0, $G$ still contains a branching. That is, there exists a vertex $v \in V[G]$ such that there are at least two vertex-disjoint paths of length 2 or greater starting from $v$. Let these paths be $P_1 = v, v_1, v_2, \dots$ and $P_2 = v, u_1, u_2, \dots$. By the rules of DAG-path-decomposition, any DAG-path-decomposition of $G$ must contain at least one bag that includes one of the following three vertex sets: $\{v, v_1, v_2\}$, $\{v, u_1, u_2\}$, or $\{v, v_1, u_1\}$. Therefore, the DAG-path-width is at least 2. Thus, by taking the contraposition, if DAG-path-width of $G$ is 1, then $G$ must be directed caterpillar graph by noting that the DAG-path-width is not smaller than 1 since $|V[G]| \geq 2$.
-    
-    Conversely, suppose $G$ is directed caterpillar graph. Each vertex $v$ in $G$ has leaf children $v_1, v_2, \dots, v_s$ with out-degree 0, and at most one non-leaf child with out-degree at least 1. If $v$ has no non-leaf child, we sequentially create bags $\{v, v_1\}, \{v, v_2\}, \dots, \{v, v_s\}$, thereby constructing a DAG-path-decomposition for $v$ and $\mathsf{suc}(v)$. If $v$ has a non-leaf child $u$, we sequentially create bags $\{v, v_1\}, \{v, v_2\}, \dots, \{v, v_s\}, \{v, u\}, \{u\}$, thus constructing a DAG-path-decomposition for $v$ and $\mathsf{suc}(v)$. Applying this process to all vertices, we obtain a DAG-path-decomposition of $G$ with width 1. Therefore, if $G$ is directed caterpillar graph, its DAG-path-width is 1.
-\end{proof}
-
-
-
-
-
-
-\section{Proofs of Chapter~\ref{chapter3}}
-
-\subsection{Lemma~\ref{DAG_path_decomposition(L(G))}}
-\begin{proof}
-    Suppose that a nice DAG-path-decomposition $X=(X_1, X_2, \dots, X_s)$ of a DAG $G$ with width $w$ is given. For each $i=1, 2, \dots, s$, define $X^L_i = \{(u, v) \in E[G]~|~v \in X_i \}$. Then, $X^L=(X^L_1, X^L_2, \dots, X^L_s)$ forms a DAG-path-decomposition of $L(G)$ with width at most $O(w^2)$. We prove this below. 
-    
-    First, $X^L$ satisfies Rule 1 of DAG-path-decomposition for $L(G)$. Since the DAG-path-decomposition $X$ of $G$ ensures that each vertex of $G$ appears in some bag by Rule 1, each edge of $G$ must also be contained in some bag $X^L_i$. 
-    
-    Furthermore, $X^L$ satisfies Rule 3 for $L(G)$. In $X$, Rule 3 ensures that the subgraph of $X$ induced by the bags containing any given vertex is a non-empty path. Similarly, in $X^L$, the subgraph induced by the bags containing any given edge of $G$ is also a non-empty path.
-    
-    Additionally, $X^L$ satisfies Rule 2 for $L(G)$. Consider a bag $X_k$ in $X$ that introduces a vertex $v$. By Rules 2 and 3 of DAG-path-decomposition, for any vertex $u \in \mathsf{pred}(v)$, it holds that $u, v \in X_k$ and $v \notin X_{k-1}, u \in X_{k-1}$. Let $e_v$ be any edge with head $v$, and let $e_u$ be any predecessor of $e_v$ in $L(G)$. Since $e_u$ has head $u$, the edge $(e_u, e_v)$ in $L(G)$ satisfies $e_u, e_v \in X^L_i$ and $e_v \notin X^L_{i-1}$. Extending this argument to all $v$, we conclude that $X^L$ satisfies Rule 2 for $L(G)$. 
-    
-    Thus, $X^L$ is a DAG-path-decomposition of $L(G)$. Letting the width of $X^L$ be $w^L$, we note that the maximum in-degree $\delta_{in}$ of $G$ is at most $w$. Therefore, $w^L \leq \delta_{in} w \leq w^2$ holds. 
-
-    Moreover, the complexity of constructing $X^L$ is at most $O(w^2n)$. This is because the number of bags in $X$ is $2|V[G]|+1$, and for each bag $X_i$, we only need to consider the predecessors of at most $w$ vertices it contains. Thus, the number of edges added to $X^L_i$ is at most $\delta_{in}w$. Consequently, the overall construction of $X^L$ takes at most $O(\delta_{in}wn) \leq O(w^2n)$ time.
-\end{proof}
-
-
-
-
-\subsection{Lemma~\ref{mDEDS_mDiDS}}
-\begin{proof}
-    First, we show that if $S$ is a DEDS of DAG $G$, then $S$ is also a DiDS of $L(G)$. If $S\in E[G]$ is a DEDS, for any edge $(v, w) \in E[G]$, either $(v, w) \in S$ holds or there exists some edge $(u, v) \in S$. In $L(G)$, for any vertex $(v, w) \in V[L(G)]$, either $(v, w) \in S$ holds or there exists some vertex $(u, v) \in S$. Thus, $S$ is a DiDS of $L(G)$. Similarly, if $S \in V[L(G)]$ is a DiDS of $L(G)$, then $S$ is a DEDS of $G$. Hence, the DEDS of $G$ and the DiDS of $L(G)$ correspond one-to-one. Therefore, the mDEDS of $G$ and the mDiDS of $L(G)$ are equal.
-\end{proof}
-
-
-\subsection{Theorem~\ref{DEDS_FPT}}
-\begin{proof}
-    By Lemma~\ref{mDEDS_mDiDS}, it suffices to compute the mDiDS of $L(G)$. By Lemma~\ref{DAG_path_decomposition(L(G))}, given a nice DAG-path-decomposition $X$ of $G$ with width $w$, we can construct a DAG-path-decomposition $X^L$ of $L(G)$ with width at most $O(w^2)$ and convert to nice DAG-path-decomposition $X^L_{nice}$ in polynomial time. Therefore, we can compute the mDiDS of $L(G)$ using the algorithm described in Theorem~\ref{theorem_dids}. Noting that $X^L_{nice}$ has width $O(w^2)$ and $O(n^2)$ bags, the time complexity of this computation is $O(2^{w^2}w^2n^2)$.
-\end{proof}
-
-
-
-\subsection{Algorithm to solve DiDS problem and the proof of Theorem~\ref{theorem_dids}}
-To construct an algorithm satisfying Theorem~\ref{theorem_dids}, we first define the function $\mathsf{DS}$. The function $\mathsf{DS}$ partitions each bag $X_i$ into two disjoint vertex sets $A_i, B_i \subseteq X_i ~(A_i \cup B_i = X_i, A_i \cap B_i = \varnothing)$. Then, among the directed dominating sets of the subgraph $G_i$ induced by $X_1 \cup X_2 \cup \dots \cup X_i$, it finds the smallest directed dominating set that includes all elements of $A_i$ and none of $B_i$. By computing this for all combinations of $A_i$ and $B_i$, we obtain the minimum dominating set for $G_i$. By considering all $i$, the minimum dominating set of the input graph $G$. The function $\mathsf{DS}$ is defined as follows:
-    %
-    \begin{equation}\label{def_ds}
-        \mathsf{DS}(i, A_i, B_i) = \min \left\{ |S_i| \left |
-        \begin{array}{l}
-            S_i \subseteq X_1 \cup X_2 \cup  \dots \cup X_i, \\
-            S_i \text{ is a DiDS of } G_i, \\
-            A_i \subseteq S_i, B_i \cap S_i = \varnothing
-        \end{array}
-        \right. \right\}.
-    \end{equation}
-    
-
-$\mathsf{DS}$ computes the size of the mDiDS of $G_i$. Below, we provide the recurrence formula for $\mathsf{DS}$, dividing cases based on whether $X_i$ introduces or forgets a vertex.
-
-\begin{align*}
-    \intertext{$\bullet$ When $X_i$ introduces $v \in V$:}
-    &\mathsf{DS}(i, A_i, B_i) = 
-    \begin{cases}
-        \mathsf{DS}(i-1, A_i \backslash \{v\}, B_i) + 1 & (v \in A_i) \\
-        \mathsf{DS}(i-1, A_i, B_i \backslash \{v\}) & (v \in B_i \text{ and } \mathsf{pred}(v) \cap A_i \neq \varnothing) \\
-        \infty & (\text{otherwise})
-    \end{cases}.
-    \intertext{$\bullet$ When $X_i$ forgets $v \in V$:}
-    &\mathsf{DS}(i, A_i, B_i) = \min \{\mathsf{DS}(i-1, A_i \cup \{v\}, B_i), \mathsf{DS}(i-1, A_i, B_i \cup \{v\})\}.
-\end{align*}
-
-Using $\mathsf{DS}$, we define the algorithm $\mathsf{Compute}(P)$, which outputs the size of the mDiDS of $G$ when given a nice DAG path decomposition $P$ of $G$.
-
-\begin{enumerate}
-    \item First Step: Set $\mathsf{DS}(0, \varnothing, \varnothing) = 0$.
-    \item Execution Step: For each $X_i$ $(i=1, 2, ..., s)$ in $P$, compute $\mathsf{DS}(i, A_i, B_i)$ for all combinations of $A_i$ and $B_i$.
-    \item Final Step: If $i = s$, output $\mathsf{DS}(s, \varnothing, \varnothing)$.
-\end{enumerate}
-
-To demonstrate Theorem~\ref{theorem_dids}, it is sufficient to prove the following two Lemmas.
-
-\begin{lemma}\label{dids}
-    $\mathsf{Compute}$ returns the size of the mDiDS of $G$.
-\end{lemma}
-
-\begin{proof}
-    It suffices to show that for each $i$, $\mathsf{DS}(i, A_i, B_i)$ satisfies the definition (\ref{def_ds}) of $\mathsf{DS}$. We prove this by induction on $i$.
-    
-    Base Case ($i=0$): Clearly, definition (\ref{def_ds}) holds.
-    
-    Inductive Step ($i=k \rightarrow i=k+1$): Assume that $\mathsf{DS}(i, A_i, B_i)$ satisfies definition (\ref{def_ds}) for $i=k$. We consider cases where $X_{k+1}$ introduces or forgets $v \in V$.
-    
-    \begin{itemize}
-        \item Case 1: $X_{k+1}$ introduces $v$
-        
-        If $v \in A_{k+1}$, then by rule 2 of DAG path decomposition, $v$ does not dominate any vertex in $G_{k+1}$. Thus, $\mathsf{DS}(k+1, A_{k+1}, B_{k+1})$ is equal to $\mathsf{DS}(k, A_{k+1} \backslash \{v\}, B_{k+1}) + 1$. By induction, this satisfies definition (\ref{def_ds}).
-        
-        If $v \in B_{k+1}$ and $\mathsf{pred}(v) \cap A_{k+1} \neq \varnothing$, then some vertex $u \in A_{k+1}$ dominates $v$. Thus, $\mathsf{DS}(k+1, A_{k+1}, B_{k+1}) = \mathsf{DS}(k, A_{k+1}, B_{k+1} \backslash \{v\})$, which also satisfies definition (\ref{def_ds}) by induction.
-        
-        Otherwise, if $v \in B_{k+1}$ and $\mathsf{pred}(v) \cap A_{k+1} = \varnothing$, no vertex in $A_{k+1}$ dominates $v$. Hence, no valid mDiDS exists, and we set $\mathsf{DS}(k+1, A_{k+1}, B_{k+1}) = \infty$.
-        
-        \item Case 2: $X_{k+1}$ forgets $v$
-        
-        Since $G_{k+1} = G_k$, the mDiDS of $G_{k+1}$ is equal to the mDiDS of $G_k$. Thus, it is given by
-        \begin{align*}
-            \min \{\mathsf{DS}(k, A_{k+1} \cup \{v\}, B_{k+1}), \mathsf{DS}(k, A_{k+1}, B_{k+1} \cup \{v\})\},
-        \end{align*}
-        which satisfies definition (\ref{def_ds}).
-    \end{itemize}
-    Thus, by induction, Lemma~\ref{dids} is proven.
-\end{proof}
-
-\begin{lemma}
-    Given a DAG $G$ with $n$ vertices and a DAG path decomposition $P$ of width $w$, $\mathsf{Compute}(P)$ runs in $O(2^w w n)$ time.
-\end{lemma}
-
-\begin{proof}
-    Since $|X_i| \leq w+1$, the number of combinations of $A, B$ is at most $2^{w+1}$. The number of bags is $2|V|+1$. Checking $\mathsf{pred}(v) \cap A_i \neq \varnothing$ takes at most $O(w)$ time. Thus, the overall complexity is $O(2^w w n)$.
-\end{proof}
-
-
-
-
-
-
-
-
-\subsection{Algorithm to solve MaxLOB problem and the proof of Theorem~\ref{alg_lob}}
-
-In this case, the input graph is assumed to be a DAG with a single root, denoted as $r$. In this case, there must exist a directed spanning tree with the maximum number of leaves in $G$. It is sufficient to prove the following lemma to demonstrate this.
-
-\begin{lemma}\label{lemma_spanning}
-    For a connected DAG $G$, having exactly one vertex $r$ with in-degree 0 is both necessary and sufficient for $G$ to have a directed spanning tree.
-\end{lemma}
-
-\begin{proof}
-    If there are two or more vertices with in-degree 0 in $G$, it is evident that no directed spanning tree can exist. Conversely, if there exists exactly one vertex $r$ with in-degree 0, we arrange the vertices of $G$ in a topological order starting with $r$, denoted as $r, v_1, v_2, \dots, v_{n-1}$. Since $G$ is a connected DAG, each vertex $v_i\ (i=1, 2, \dots, n-1)$ other than $r$ must have at least one parent in the set $\{r, v_1, v_2, \dots, v_{i-1}\}$. For each vertex $v_i$, there exists a path $P_i$ from $r$ to $v_i$. When considering the union of all such paths, if the result is a directed tree, then it is a directed spanning tree. If there is a cycle, we can remove it by replacing part of the paths with cycles. This can be done for all cycles, transforming the union of all paths into a directed tree, which will be a directed spanning tree.
-\end{proof}
-
-We now define the function $\mathsf{LOB}$. The function $\mathsf{LOB}$ partitions each bag $X_i$ into two disjoint vertex sets $A_i, B_i \subseteq X_i$ such that $A_i \cap B_i = \varnothing$. It then finds the directed spanning tree of $G_i$ induced by $X_1 \cup X_2 \cup \dots \cup X_i$ in which $A_i$ forms the leaf set and $B_i$ does not form the leaf set, with the maximum number of leaves. By calculating this for all combinations of $A_i$ and $B_i$, the maximum number of leaves directed spanning tree for $G_i$ is obtained. By performing this calculation for all $i$, the maximum number of leaves directed spanning tree for the input graph $G$ is obtained.
-
-\begin{definition}[$\mathsf{LOB}$]
-    Let the nice DAG path decomposition of DAG $G = (V, E)$ be $P = (X_1, X_2, \dots, X_s)$. For each $i$ $(i=1, 2, \dots, s)$, let vertex sets $A_i, B_i \subseteq V$ satisfy $A_i \cup B_i = X_i$ and $A_i \cap B_i = \varnothing$. Let $G_i$ be the subgraph of $G$ induced by the vertex set $X_1 \cup X_2 \cup \dots \cup X_i$. The function $\mathsf{LOB}$ is defined as follows, where the leaf set of a directed tree $T$ is denoted as $\mathsf{Leaf}(T)$:
-
-    \begin{equation}\label{def_lob}
-        \mathsf{LOB}(i, A_i, B_i) = \max \left\{ |\mathsf{Leaf}(T_i)| \left |
-        \begin{array}{l}
-            T_i = (V[T_i], E[T_i]) \text{ is a directed spanning tree of } G_i \text{ rooted at } r, \\
-            V[T_i] = V[G_i], E[T_i] \subseteq E[G_i], \\
-            A_i \subseteq \mathsf{Leaf}(T_i), B_i \subseteq V[T_i] \backslash \mathsf{Leaf}(T_i)
-        \end{array}
-        \right. \right\}.
-    \end{equation}
-\end{definition}
-
-The function $\mathsf{LOB}$ computes the MaxLOB for $G_i$. Below, we provide the recurrence relation for $\mathsf{LOB}$, dividing the cases based on whether $X_i$ introduces or forgets a vertex.
-
-\begin{align}
-    \intertext{$\bullet$ When $X_i$ introduces $v \in V$:}
-    &\mathsf{LOB}(i, A_i, B_i) = \label{intro_lob}
-    \begin{cases}
-        \mathsf{LOB}(i-1, A_i \backslash \{v\}, B_i) + 1 &(v \in A_i \text{ and } \mathsf{pred}(v) \cap B_i \neq \varnothing) \\
-        \mathsf{LOB}(i-1, A_i, B_i \backslash \{v\}) &(v \in B_i \text{ and } \mathsf{pred}(v) \cap B_i \neq \varnothing) \\
-        -\infty &(otherwise)
-    \end{cases}.
-    \intertext{$\bullet$ When $X_i$ forgets $v \in V$:}
-    &\mathsf{LOB}(i, A_i, B_i) = \label{forget_lob}
-    \max \{\mathsf{LOB}(i-1, A_i \cup \{v\}, B_i), \mathsf{LOB}(i-1, A_i, B_i \cup \{v\})\}.
-\end{align}
-
-Using $\mathsf{LOB}$, we define the algorithm $\mathsf{Compute}$ to output the solution of MaxLOB for $G$ when given a nice DAG path decomposition $P$ of $G$.
-
-$\mathsf{Compute}(P)$
-
-\begin{enumerate}
-    \item First Step: If $V_r = \{r\}$, output 1 as the solution. Otherwise, set $\mathsf{LOB}(1, \{r\}, \varnothing) = -\infty, \mathsf{LOB}(1, \varnothing, \{r\}) = 0$.
-    \item Execution Step: For each $X_i$ $(i=1, 2, ..., s)$ in $P$, compute $\mathsf{LOB}(i, A_i, B_i)$ for all combinations of $A_i$ and $B_i$.
-    \item Final Step: If $i = s$, output $\mathsf{LOB}(s, \varnothing, \varnothing)$.
-\end{enumerate}
-
-\begin{lemma}\label{lob}
-    $\mathsf{Compute}$ outputs the solution to MaxLOB for $G$.
-\end{lemma}
-
-\begin{proof}
-    From the First Step of $\mathsf{Compute}$, if $G$ consists only of root $r$, it outputs 1, which is the solution to MaxLOB. Next, consider the case where $G$ contains vertices other than $r$. The proof of Lemma~\ref{lob} follows by showing that $\mathsf{LOB}(i, A_i, B_i)$ satisfies the definition of $\mathsf{LOB}$ for each $i$. This is done by induction on $i$. For convenience, we refer to non-leaf vertices of a tree as stems.\\
-    When $i=1$, the First Step of $\mathsf{Compute}$ gives $\mathsf{LOB}(1, \{r\}, \varnothing) = -\infty$ and $\mathsf{LOB}(1, \varnothing, \{r\}) = 0$. Since $r$ cannot be a leaf, it clearly satisfies the definition \ref{def_lob}.\\
-    For $i=k$, assume that $\mathsf{LOB}(i, A_i, B_i)$ satisfies definition \ref{def_lob}. We consider the cases where $X_{k+1}$ introduces or forgets $v \in V$.
-    \begin{itemize}
-        \item Case 1: When $X_{k+1}$ introduces $v \in V$
-        \\
-        If $v \in A_{k+1}$, by rule 2 of the DAG path decomposition, $\mathsf{pred}(v) \subseteq (A_{k+1} \cup B_{k+1})$. Since $B_{k+1}$ represents the stems of the directed spanning tree, $v$ can only be considered a leaf if there exists a stem vertex $u \in \mathsf{pred}(v) \cap B_{k+1}$. By assumption, in $G_k$, we have $\mathsf{LOB}(k, A_{k+1} \setminus \{v\}, B_{k+1})$ as valid.
-        
-        If $v \in B_{k+1}$ and there exists an $u \in \mathsf{pred}(v) \cap A_{k+1}$, we can include $v$ in the leaf set. The definition of $\mathsf{LOB}$ holds in this case as well.
-
-        Otherwise, if $v \in B_{k+1}$ and $\mathsf{pred}(v) \cap A_{k+1} = \varnothing$, no valid directed spanning tree exists with $v$ as a leaf, so $\mathsf{LOB}(k+1, A_{k+1}, B_{k+1}) = -\infty$.
-
-        \item Case 2: When $X_{k+1}$ forgets $v \in V$
-        \\
-        Since $G_{k+1} = G_k$, the MaxLOB of $G_{k+1}$ equals the MaxLOB of $G_k$. Thus, we have the recurrence:
-        \[
-        \mathsf{LOB}(k+1, A_{k+1}, B_{k+1}) = \max \left\{ \mathsf{LOB}(k, A_{k+1} \cup \{v\}, B_{k+1}), \mathsf{LOB}(k, A_{k+1}, B_{k+1} \cup \{v\}) \right\},
-        \]
-        which satisfies the definition of $\mathsf{LOB}$.
-    \end{itemize}
-    Thus, by induction, Lemma~\ref{lob} is proven.
-\end{proof}
-
-\begin{lemma}\label{complexity_lob}
-    Let $G$ be a DAG with $n$ vertices. Given the DAG path decomposition $P$ of $G$ with width $w$, the algorithm $\mathsf{Compute}(P)$ outputs the result in $O(2^w w n)$ time.
-\end{lemma}
-    
-\begin{proof}
-    The First Step and Final Step can each be computed in $O(1)$ time. We now analyze the time complexity for the Execution Step. For each $X_i$, note that $|X_i| \leq w+1$, so the number of combinations of $A$ and $B$ is at most $2^{w+1}$. Additionally, by Proposition~\ref{number_of_bag}, we have $0 \leq i \leq 2|V|+1$. Furthermore, since the computation of $\mathsf{pred}(v)$ takes at most $O(w)$ time, the time complexity of computing $\mathsf{LOB}(i, A_i, B_i)$ is $O(w)$ if $X_i$ introduces a vertex and $O(1)$ if $X_i$ forgets a vertex. Therefore, the overall time complexity of $\mathsf{Compute}$ is $O(w 2^w n)$.
-\end{proof}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\section{Proof of Chapter~\ref{chapter4}}
-
-\subsection{Lemma~\ref{lemma_approximation2}}
-\begin{proof}
-    First, we show that if $X$ is a nice DAG-path-decomposition of a DAG $G$, then $X$ is also a strategy of one-shot BP. Let $X=(X_1, X_2, \dots, X_s)$ be a nice DAG-path-decomposition of $G$. Since $X_1 = \varnothing$ in a nice DAG-path-decomposition, it satisfies Rule 1 of one-shot BP. By Rules 1 and 3 of DAG-path-decomposition, every vertex is introduced exactly once, satisfying Rules 4 and 5 of one-shot BP. Furthermore, by the conditions of introduce and Rule 2 of DAG-path-decomposition, if $v \in V$ is introduced at $X_i$, then for any $(u, v) \in E$, it holds that $u \in X_{i-1}$. This satisfies Rule 2 of one-shot BP. Additionally, since each vertex is forgotten exactly once, the forget and unpebble operations are clearly equivalent, thus satisfying Rule 3 of one-shot BP. Therefore, the introduce and forget operations in $X$ correspond to the pebble and unpebble operations, respectively, proving that $X$ is a one-shot BP of $G$.
-
-    Next, we show that if $P$ is a one-shot BP of $G$, then $P$ is a nice DAG-path-decomposition of $G$. Let $P=(P_1, P_2, \dots, P_t)$ be a strategy of one-shot BP of $G$. Since $P_1 = \varnothing$, it satisfies the initial condition of a nice DAG-path-decomposition. Furthermore, each vertex $v \in V$ is pebbled and unpebbled exactly once in $P$, satisfying Rule 1 of DAG-path-decomposition. Additionally, if a vertex $v$ is pebbled and unpebbled at $P_i$ and $P_{k+1}$ $(1 \leq i \leq k \leq t-1)$, then by Rule 5 of one-shot BP, no vertex is pebbled more than once. Hence, for any $P_j$ $(i \leq j \leq k)$, it holds that $v \in P_j$. Applying this argument to all vertices in $V$, we conclude that Rule 3 of a nice DAG-path-decomposition is satisfied. Moreover, by the pebbling rule, if $v \notin P_{i-1}$ and $u \in P_{i-1}$ for any $(u, v) \in E$, then $P_i = P_{i-1} \cup \{v\}$. This implies that $u, v \in P_i$ and $v \notin P_{i-1}$, thereby satisfying Rule 2 of DAG-path-decomposition. It means the pebbling operation corresponds to the introduce operation. Furthermore, the unpebble operation clearly satisfies the forget condition of a nice DAG-path-decomposition. Thus, $P$ is a nice DAG-path-decomposition of $G$.
-\end{proof}
-
-
-\section{Proofs of Chapter~\ref{chapter5}}
-
-\subsection{Lemma~\ref{comp_tree}}
-\begin{proof}
-    We prove this by mathematical induction on $h$. 
-    
-    For $h=2$, the DAG-pathwidth of $T_{2, d}$ is clearly 1, so the lemma holds. 
-    
-    Next, assuming that the lemma holds for some $h > 1$, there exists a DAG-path-decomposition $X_h$ of $T_{h, d}$ with DAG-pathwidth $h-1$. Here, note that $T_{h+1, d}$ is a graph obtained by connecting a single root $r$ to the roots of $d$ copies of $T_{h, d}$. We can construct a DAG-path-decomposition of $T_{h+1, d}$ with width $h$ as follows. First, for the $d$ DAG-path-decompositions $X_h$, connect the starting and ending bags of each decomposition sequentially to form a single long sequence of bags. Next, add $r$ to each bag in this sequence. Finally, prepend a bag containing only $r$ at the beginning of the sequence. The resulting sequence satisfies the three rules of a DAG-path-decomposition, making it a valid DAG-path-decomposition of $T_{h+1, d}$ with width $h$.
-    
-    Furthermore, no DAG-path-decomposition of $T_{h+1, d}$ with width less than $h$ exists. The reasons are shown below. $T_{h+1, d}$ contains $T_{h, d}$ as a substructure, so the DAG-pathwidth of $T_{h+1, d}$ cannot be smaller than $h-1$. Now, suppose there exists a DAG-path-decomposition of $T_{h+1, d}$ with width $h-1$. Since the $d$ copies of $T_{h, d}$ are mutually unreachable, each can independently form a DAG-path-decomposition, and the width does not need to exceed that of a parallel decomposition of the $d$ copies of $T_{h, d}$. Let $T'_{h, d}$ be the first decomposed tree among $d$ $T_{h, d}$. By Rule 2 of DAG-path-decomposition, any DAG-path-decomposition of $T_{h+1, d}$ must include the root $r$ in its first bag. However, the bag in the DAG-path-decomposition of $T'_{h, d}$ that has the maximum width of $h-1$ (denoted as $X'$) does not contain $r$. By Rule 3 of DAG-path-decomposition, $r$ does not reappear in any later bag, implying that the remaining $d-1$ copies of $T_{h, d}$ do not connect to $r$. This requires $d=1$, which contradicts the assumption that $d > 1$. 
-    
-    Even if all vertices connected to $r$ were included in a bag before $X'$, some vertices from outside $T'_{h, d}$ must necessarily be included in $X'$, which concludes the width greater than $h-1$. It leads to a contradiction.
-    
-    Thus, no DAG-path-decomposition of $T_{h+1, d}$ with width $h-1$ exists, and the optimal DAG-path-decomposition of $T_{h+1, d}$ has width $h$. Therefore, the lemma holds for $h+1$, and by induction, it holds for any $h, d \geq 2$.
-    
-\end{proof}
-
-
-\subsection{Lemma~\ref{lemma_embedding}}
-\begin{proof}
-    First, we show that $G'$ is always connected. Token placement and replacement occur only in line 2 of $\mathsf{GrowTokenTree}$ or lines 6 and 8 of $\mathsf{FindEmbedding}$. The former explicitly ensures token placement maintains connectivity, and the latter replaces all tokens in the directed tree rooted at $T \cdot b$ with corresponding tokens in the directed tree rooted at $T$ immediately after removing $T$. This guarantees that connectivity is preserved after processing lines 6 and 8. Thus, $G'$ remains connected at all times.
-
-    Next, we show that an embedding from $G'$ to $H'$ exists. Since $\mathsf{GrowTokenTree}$ places a token $T$ on $u \in V[H']$ and its child $v$ receives token $T \cdot b$, the embedding condition is clearly satisfied. It suffices to verify that the embedding condition holds throughout lines 6 to 9 of $\mathsf{FindEmbedding}$. Assuming that the embedding condition is satisfied at line 5, if a token $T$ satisfying line 5 exists and has exactly one \textit{tokened} child $T \cdot b$, line 8 is executed. In line 8, $S$ represents an arbitrary-length string consisting of characters from $1$ to $d$, and the operation replaces all tokens in the directed tree rooted at $T \cdot b$ with corresponding tokens in the directed tree rooted at $T$ while maintaining tree-structural integrity. Since the replacement occurs from root-proximal tokens to distal ones, the target tokens are always \textit{untokened}. As $G'$ remains connected and $T$ has only $T \cdot b$ as its \textit{tokened} child, removing $T$ and replacing all tokens in the directed tree rooted at $T \cdot b$ with the corresponding tokens in the directed tree rooted at $T$ preserves the embedding condition. If $T$ has no \textit{tokened} children, only line 6 is executed, and line 8 is skipped, trivially maintaining the embedding condition. Thus, the embedding condition remains intact throughout the sequence of operations, proving the existence of an embedding from $G'$ to $H'$.
-\end{proof}
-
-
-
-\subsection{Lemma~\ref{lemma_(1)}}
-\begin{proof}
-    Suppose that in line 4 of $\mathsf{FindEmbedding}$, all vertices of $H'$ have turned red at step $i=s$, leading to termination. The sequence of vertex sets output by the algorithm, $X_{H'} = (X_1, X_2, \dots , X_s)$, constitutes a DAG-path-decomposition of $H'$. Since every vertex $v \in H'$ is red, it must be contained in at least one vertex set $X_i$, satisfying rule 1 of the DAG-path-decomposition. Moreover, each vertex $v$ changes color from blue to red exactly once, and tokens are removed from red vertices without being placed again, ensuring that the vertex sets $X_i$ form a connected path, satisfying rule 3.
-
-    For any edge $(u, v) \in E[H']$, suppose that $v$ changes from blue to red at $i=i_v~ (i_v \leq s)$. By the condition in line 5 of $\mathsf{FindEmbedding}$, a token placed on $u$ is not removed before step $i_v$. Additionally, by the condition in line 1 of $\mathsf{GrowTokenTree}$, all predecessor vertices of $v$ have tokens, implying that $u$ must also be included in $X_i$. Since $v$ is not in $X_{i_v-1}$, we conclude that $u, v \in X_{i_v}$ and $v \notin X_{i_v-1}$, satisfying rule 2. Therefore, $X_{H'}$ is a DAG-path-decomposition of $H'$.
-
-    Noting that $\lceil \log_d l \rceil < \log_d l +1$, the width of $X_{H'}$ is at most $|V[M_{t, d, l}]| = d^{\lceil \log_d l \rceil +t+2}-1 < ld^{t+3}-1$. Since $X_H = (X_1 \cap V[H], X_2 \cap V[H], \dots , X_s \cap V[H])$ satisfies the three rules of the DAG-path-decomposition for $H$, it follows that $X_H$ is a DAG-path-decomposition of $H$ with width at most $ld^{t+3}-1$. Thus, we obtain a DAG-path-decomposition of $H$ with width at most $ld^{t+3}-1$.
-\end{proof}
-
-
-\subsection{Lemma~\ref{lemma_(2)}}
-\begin{proof}
-    Suppose that in line 4 of $\mathsf{FindEmbedding}$, at step $i=s$, the condition $|X_s| = |V[M_{t, d, l}]|$ holds, and let $A'$ be the subgraph of $H'$ induced by the vertex set $X_1 \cup X_2 \cup \dots \cup X_s$. Then, the sequence of vertex sets output by the algorithm, $X_{A'} = (X_1, X_2, \dots , X_s)$, forms a DAG-path-decomposition of $A'$. By definition of $A'$, rule 1 of the DAG-path-decomposition is clearly satisfied. Additionally, rules 2 and 3 are satisfied by the argument similar to \textbf{Lemma~\ref{lemma_(1)}}. Thus, $X_{A'}$ is a DAG-path-decomposition of $A'$.
-
-    Let $A$ be the subgraph of $H$ induced by $V[A'] \cap V[H]$ and $B$ be the subgraph of $H$ induced by $V[H] \backslash V[A]$. Since $A$ and $B$ are disjoint and rule 2 of the DAG-path-decomposition ensures that only edges from $A$ to $B$ exist. Defining $X_A = (X_1 \cap V[H], X_2 \cap V[H], \dots , X_s \cap V[H])$, this decomposition satisfies the 3 rules of the DAG-path-decomposition of $A$. Therefore, $X_A$ forms a DAG-path-decomposition of $A$ with width at most $ld^{t+3}-1$ by the argument similar to \textbf{Lemma~\ref{lemma_(1)}}.
-
-    Next, let $A'_M$ be the subgraph of $H'$ induced by the end bag $X_s$ in $X_{A'}$. Since at step $i=s$, all tokens in $M_{t, d, l}$ have been used in the embedding, \textbf{Lemma~\ref{lemma_embedding}} implies that $A'_M$ represents an embedding of $M_{t, d, l}$ into $H'$. Since $M_{t, d, l}$ has height $\lceil \log_d l \rceil +t+2$, and $A'$ contains $A'_M$, the subgraph induced by $V[A'] \backslash V[A]$ forms a complete directed $d$-ary tree of height at most $\lceil \log_d l \rceil$. Thus, $A$ contains a complete directed $d$-ary tree $T_A$ of height at least $(\lceil \log_d l \rceil +t+2) - (\lceil \log_d l \rceil) = t+2$, meaning that an embedding from $T_A$ to $A$ exists. 
-
-    By \textbf{Lemma~\ref{comp_tree}}, the DAG-pathwidth of $T_A$ is $t+1$, implying that the DAG-pathwidth of $A$ is at least $t+1$. Since $H$ contains $A$ as a subgraph, the DAG-pathwidth of $H$ must be greater than $t$. Consequently, the DAG-pathwidth of $A$ is greater than $t$ but at most $ld^{t+3}-1$.
-\end{proof}
-
-
-\subsection{Lemma~\ref{blue_reachable}}
-\begin{proof}
-    We prove this by contradiction. Suppose at time $i = k$, there exists a blue vertex $v \in V[H']$ that does not have $r_0$ as an ancestor. Since $H'$ has a single root, there exists a common ancestor of $r_0$ and $v$. Let $r'_0$ be such a most recent common ancestor that does not have another common ancestor of $r_0$ and $v$ as its descendant. If multiple such vertices exist, choose one of them as $r'_0$. Notice that $v \neq r'_0$ because at time $i = k$, the root token $\lambda$ is placed at $r_0$, implying that its ancestor $r'_0$ must have had its token removed. Assuming $r'_0 = v$ contradicts the fact that $v$ is blue.
-    
-    Define $A_{r_0}$ as the set of children of $r'_0$ whose descendants include $r_0$, and let $A'_{r_0}$ be the set of other children of $r'_0$. Let $G_{A_{r_0}}$ be the subgraph induced by the descendants of the vertices in $A_{r_0}$ and $G_{A'_{r_0}}$ be the subgraph induced by the descendants of the vertices in $A'_{r_0}$ that are not in $G_{A_{r_0}}$. Additionally, let $G_{r_0}$ be the subgraph induced by the descendants of $r_0$. By assumption, $v \notin V[G_{r_0}]$, meaning $v \in V[G_{A_{r_0}}] \setminus V[G_{r_0}]$ or $v \in V[G_{A'_{r_0}}]$.
-    
-    Consider the first moment $i = l$ $(l \leq k)$ when a token $\lambda$ is placed on a vertex in $G_{A_{r_0}}$. At this moment, all vertices in $G_{A'_{r_0}}$ must have had their tokens removed. We justify this below. Any vertex in $H'$ is either (a) blue, (b) red with a token, or (c) red and a token is already removed. Since $v$ is blue at $i = l$, Line 5 of $\mathsf{FindEmbedding}$ requires that its parent must be (a) or (b). If the parent is (a), we continue checking its parent, which must also be (a) or (b). If all ancestors of $v$ are (a), at least one blue vertex exists in $A'_{r_0}$ at $i = l$, contradicting the conditions of Line 5. If at least one ancestor is (b), then, when an token $T_{r'_0}$ placed on $r'_0$ has been removed, $T_{r'_0}$ must have had at least two \textit{tokened} children, one in $G_{A'_{r_0}}$ and another elsewhere. Since $T_{r'_0}$ has been removed from $r'_0$ at $i = l$, this contradicts Line 5 of $\mathsf{FindEmbedding}$ which requires that a removed token has at most one \textit{tokened} child. Therefore, $v \notin V[G_{A'_{r_0}}]$ must hold. Given that $v \notin V[G_{A_{r_0}}]$ by assumption, it must hold that $v \in V[G_{A_{r_0}}] \setminus V[G_{r_0}]$. However, in this case, a common ancestor of $v$ and $r_0$ must be included in $A_{r_0}$, which contradicts the fact that there exists no common ancestor of $v$ and $r_0$ among the descendants of $r'_0$. Thus, the claim of \textbf{Lemma~\ref{lemma_(3)}} is proven.
-\end{proof}
-
-
-
-\subsection{Lemma~\ref{lemma_(3)}}
-\begin{proof}
-    Suppose that Line 11 of $\mathsf{FindEmbedding}$ is executed at $i = k$. First, we prove that at $i = k$, there exists at least one root-to-leaf path $P = (\lambda \cdot m_1 \cdot m_2 \cdot \dots m_{\lceil \log_d l \rceil +t+1})$ in the \textit{tokened} token set on $M_{t, d, l}$. Therefore, we show a contradiction by assuming that such a path does not exist. Let $P'$ be the longest path in the \textit{tokened} token set rooted at $\lambda$, and let the height of $M_{t, d, l}$ be $h(M_{t, d, l}) = \lceil \log_d l \rceil +t+2$. By assumption, $|P'| \leq h(M_{t, d, l}) - 1$. Let $T'$ be the terminal token of $P'$, placed at vertex $u' \in V[H']$. From Line 1 of $\mathsf{GrowTokenTree}$, at least one of the following must hold:
-    
-    \begin{enumerate}
-        \item There exists a vertex $v' \in \mathsf{suc}(u')$ such that one of its parents $w^{(1)}$ is blue. \label{cond11}
-        \item $T'$ has no \textit{untokened} children. \label{cond22}
-    \end{enumerate}
-    
-    Note that we do not need to consider the case where $u'$ has no children, because in this case, we can remove the token placed on $u'$, preventing the state described in (3) from occurring. If condition \ref{cond22} holds, then $T'$ is either a leaf or all of $T'$'s children are \textit{tokened}. However, neither of these conditions can hold, because by assumption, the endpoint $T'$ of $P'$ is not a leaf, and if $T'$ has a \textit{tokened} child, it would contradict the fact that $P'$ is the longest path. Therefore, condition \ref{cond11} must hold. Let $r_0$ be the vertex where the root token $\lambda$ is placed. Let $G_{r_0}$ be the subgraph induced by the descendants of $r_0$ in $H'$, and let $V_h$ be the set of vertices in $G_{r_0}$ where tokens with height $h\ (1 \leq h \leq h(M_{t, d, l}))$ on the $M_{t, d, l}$ graph are placed . Also, let $\mathcal{V} = \bigcup_{1 \leq h \leq h(M_{t, d, l})} V_h$. By assumption, $u' \in V_{h'}\ (1 \leq h' \leq h(M_{t, d, l})-1)$. Furthermore, by \textbf{Lemma~\ref{blue_reachable}}, both the blue vertices $v', w^{(1)}$ are reachable from $r_0$, so they are contained in $G_{r_0}$. Additionally, considering the placement of tokens in $\mathsf{GrowTokenTree}$, we observe that the children of a blue vertex cannot be red, meaning that $v', w^{(1)}$ and their descendants are not in $\mathcal{V}$. Now, for $w^{(1)}$, one of the following must always hold:
-
-\begin{enumerate}
-    \item All of $w^{(1)}$'s parents are in $\mathcal{V}$. \label{cond_a}
-    \item There exists at least one blue parent of $w^{(1)}$ that is not in $\mathcal{V}$. \label{cond_b}
-\end{enumerate}
-
-    Note that there are no red parents of $w^{(1)}$ that are not in $\mathcal{V}$. This is because, by a similar argument to \textbf{Lemma~\ref{blue_reachable}}, each of $w^{(1)}$'s parents must either be (a) blue or (b) red with a token. Thus, if any parent satisfies (a), condition \ref{cond_b} holds; otherwise, condition \ref{cond_a} holds. If condition \ref{cond_a} holds, a token should be placed on $w^{(1)}$. This is because each of $w^{(1)}$'s parents must be included in one of $V_1, V_2, \dots, V_{h'}$, and each parent has exactly $d$ children, the maximum outdegree in $H'$. Therefore, each parent must have at least one \textit{untokened} child, and this token can be placed on $w^{(1)}$. Thus, the condition \ref{cond_a} contradicts the assumption that $w^{(1)}$ is blue. Therefore, condition \ref{cond_b} must hold. 
-    
-    If condition \ref{cond_b} holds for $w^{(1)}$, let $w^{(2)}$ be one of blue parents of $w^{(1)}$ satisfying condition \ref{cond_b}. By similar reasoning, a blue parent $w^{(3)}$ of $w^{(2)}$ satisfying condition \ref{cond_b} must exist. Repeating this argument, since the number of vertices in $H'$ is finite, there must eventually be a blue vertex $w^{(n)}$ that satisfies condition \ref{cond_a}. Therefore, a contradiction arises, and there must be at least one path from the root to a leaf in the \textit{tokened} token set on $M_{t, d, l}$.
-    
-    Next, we will show that the DAG-pathwidth of $H$ is greater than $t$ using the path $P$. Since there are no tokens satisfying the condition of row 5 in $\mathsf{FindEmbedding}$ in (3), for each token $m_i \in P$ (where $\lambda$ is denoted by $m_0$), the vertex $v_i \in V[H']$ where the token $m_i$ is placed must satisfy at least one of the following:
-    
-    \begin{enumerate}
-        \item There exists a vertex $w_i \in \mathsf{suc}(v_i)$ such that $w_i$ and all its descendants are not in $\mathcal{V}$, and $w_i$ is blue. \label{cond1}
-        \item The token placed on $v_i$ has two or more \textit{tokened} children. \label{cond2}
-    \end{enumerate}
-    
-    Next, for each $v_i$, we will show that there exists a vertex $u_i$ such that in any DAG-path-decomposition of $H'$, each $u_i$ (for $0 \leq i \leq h(M_{t, d, l})-1$) must be included in some bag. First, consider the case where $v_i$ satisfies condition \ref{cond1}. In this case, $v_i$ cannot be forgotten in the DAG-path-decomposition of $H'$ until $m_{h(M_{t, d, l})-1}$ is placed at $v_{h(M_{t, d, l})-1}$. This is because $w_i$ and all of its descendants are not included in $\mathcal{V}$, and by taking note of the operation of $\mathsf{GrowTokenTree}$, a token is placed on $w_i$ only after the token $m_{h(M_{t, d, l})-1}$ is placed on $v_{h(M_{t, d, l})-1}$. Since $v_i$, which has $w_i$ as a predecessor, cannot remove $m_i$ before that, $v_i$ cannot be forgotten before the introduction of $v_{h(M_{t, d, l})-1}$ in the DAG-path-decomposition of $H'$. At this point, we set $u_i = v_i$. 
-    
-    Next, consider the case where $v_i$ does not satisfy condition \ref{cond1} but satisfies condition \ref{cond2}.  
-    $m_i$ has at least one \textit{tokened} child $m'_{i+1}$ other than $m_{i+1}$.  
-    Since the vertex on which $m'_{i+1}$ is placed also satisfies at least one of conditions \ref{cond1} or \ref{cond2}, by repeating the above argument, and noting that any \textit{tokened} leaf of $M_{t, d, l}$ must satisfy condition \ref{cond1}, there exists at least one descendant vertex of $v_i$ which is placed a descendant token of $m'_{i+1}$ and satisfies condition \ref{cond1}. Let such a vertex be $u_i$.  
-    
-    For the same reason as above, $u_i$ cannot be forgotten in the DAG-path-decomposition of $H'$ until $m_{h(M_{t, d, l})-1}$ is placed on $v_{h(M_{t, d, l})-1}$. Thus, for each $v_i$, we can construct a corresponding $u_i$.  
-    
-    In any DAG-path-decomposition $X'$ of $H'$, since each $u_i$ is included in the bag where $v_{h(M_{t, d, l})-1}$ is introduced, the width of $X'$ is at least $h(M_{t, d, l})-1$. Let $P_H$ be the sequence of tokens placed at vertices in $H$ from the sequence $P$. Since $|P \backslash P_H| \leq \lceil \log_d l \rceil$, we have $|P_H| = |P| - |P \backslash P_H| \geq (\lceil \log_d l \rceil + t + 2) - \lceil \log_d l \rceil = t + 2$. Thus, by the same reasoning, the width of any DAG-path-decomposition of $H$ is greater than $t$.
-\end{proof}
-
-
-
-\subsection{Theorem~\ref{approximation3}}
-\begin{proof}
-    By inputting the DAG $H$ into $\mathsf{FindEmbedding}$, the algorithm will always terminate in one of the cases (1), (2), or (3). If it terminates in case (1), by \textbf{Lemma~\ref{lemma_(1)}}, \textbf{Theorem~\ref{approximation3}}(a) holds. If it terminates in case (2), by \textbf{Lemma~\ref{lemma_(2)}}, \textbf{Theorem~\ref{approximation3}}(b) holds. If it terminates in case (3), by \textbf{Lemma~\ref{lemma_(3)}} and setting $A = H$, \textbf{Theorem~\ref{approximation3}}(b) holds. Therefore, \textbf{Theorem~\ref{approximation3}} is proven.
-\end{proof}
-
-
-\subsection{Corollary~\ref{cor}}
-\begin{proof}
-    By \textbf{Theorem~\ref{approximation3}}, $\mathsf{FindEmbedding}$ either outputs evidence that the DAG-pathwidth of $H$ is greater than $t$, or outputs a DAG-path-decomposition of width at most $O(ld^t)$. We now show that $\mathsf{FindEmbedding}$ terminates in polynomial time. In $\mathsf{GrowTokenTree}$, the condition check of line 1 takes at most $O(dn)$ time, and the while loop is repeated at most $|V[M_{t, d, l}]| = O(d^t)$ times. Also, due to the removal of $T$ in line 6 of $\mathsf{FindEmbedding}$, the vertices where $T$ was placed remain red, so this operation is performed at most $O(n)$ times. Therefore, the while loop in line 4 is also repeated at most $O(n)$ times. Furthermore, the while loop in line 10 clearly repeats at most $d^2$ times. Other steps are processed in $O(1)$ time. Thus, the algorithm terminates in $O(n^2)$ time if $d$ and $l$ are bounded by constants.
-\end{proof}
-
-\section{Appendix2}
-
-\section{Appendix3}
-
-
-
-
-
-
 
 
 
