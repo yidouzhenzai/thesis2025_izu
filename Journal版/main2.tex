@@ -190,12 +190,12 @@ In particular, a \emph{directed tree} is a DAG that has a unique vertex $r$ with
 %\subsection{Various Path Decompositions and Pathwidth}
 
 %Then, we define the \emph{DAG-path-decomposition} and the \emph{DAG-pathwidth} \cite{art12}. Let $H = (V, E)$ be a directed graph. A \emph{DAG-path-decomposition} of $H$ is a sequence $X = (X_1, X_2, \dots, X_s) ~(X_i \subseteq V)$ that satisfies the following three conditions:
-We define the \emph{DAG-path-decomposition} and the \emph{DAG-pathwidth} \cite{art12}. Let $H = (V, E)$ be a directed graph. A \emph{DAG-path-decomposition} of $H$ is a sequence $X = (X_1, X_2, \dots, X_s)$ $(X_i \subseteq V)$ that satisfies the following three conditions (******* need to fix indent ******):
-\begin{enumerate}
+We define the \emph{DAG-path-decomposition} and the \emph{DAG-pathwidth} \cite{art12}. Let $H = (V, E)$ be a directed graph. A \emph{DAG-path-decomposition} of $H$ is a sequence $X = (X_1, X_2, \dots, X_s)$ $(X_i \subseteq V)$ that satisfies the following three conditions:
+\begin{description}
     \item[(DPD1)] $X_1 \cup X_2 \cup \dots \cup X_s = V$.
     \item[(DPD2)] For every directed edge $(u, v) \in E$, there exists $i$ such that $u, v \in X_i$ and $v \notin X_{i-1}$. \label{original_rule}
     \item[(DPD3)] For any $i, j, k$ $(1 \leq i \leq j \leq k \leq s)$, $X_i \cap X_k \subseteq X_j$. %That is, for any vertex $v \in V$, $v$ induces exactly one non-empty directed path in $X$.
-\end{enumerate}
+\end{description}
 In (DPD2), we interpret $X_0 = \emptyset$. Therefore, a directed edge $(u, w)$ satisfies (DPD2) if $u, v \in X_1$. The \emph{width} of $X$ is defined as $\underset{i}{\max} \{ |X_i| - 1 \}$. The \emph{DAG-pathwidth} of $G$ is the minimum width over all possible DAG-path-decompositions of $G$. Note that in \cite{art12}, (DPD2) is changed into the condition that there exists $i$ such that $u, v \in X_i$ and $u \notin X_{i-1}$. In this study, we adopt the above definition for the sake of algorithmic simplicity.
 
 %The \emph{DAG-pathwidth} of $H$ can also be defined in the same way as the pathwidth. Note that in \cite{art12}, condition~\ref{original_rule} is defined that $u, v \in X_1$ or there exists $i$ $(i \geq 2)$ such that $u, v \in X_i$ and $u \notin X_{i-1}$. In this study, we adopt the above definition for the sake of algorithmic simplicity.
@@ -519,31 +519,54 @@ Given a weighted directed graph \(G = (V, E)\), a root \(r \in V\), and a set of
 
 
 
-\section{$O(\log^{3/2} n)$-approximation algorithm for DAG-pathwidth}\label{chapter4}
+\section{$O(\log^{3/2} n)$-approximation algorithm for computing DAG-pathwidth via one-shot black pebbling}\label{chapter4}
 
-The problem of determining the DAG-pathwidth for a general DAG is NP-hard, but an approximate width can be computed in polynomial time. In this chapter, we establish the relationship between DAG-path-decomposition and one-shot BP, and we demonstrate the existence of a polynomial-time algorithm that provides a DAG-path-decomposition with an approximation ratio of at most $O(\log ^{3/2} n)$ for a given DAG $G$ with $n$ vertices.
+%The problem of determining the DAG-pathwidth for a general DAG is NP-hard, but an approximate width can be computed in polynomial time. In this chapter, we establish the relationship between DAG-path-decomposition and one-shot BP, and we demonstrate the existence of a polynomial-time algorithm that provides a DAG-path-decomposition with an approximation ratio of at most $O(\log ^{3/2} n)$ for a given DAG $G$ with $n$ vertices.
 
-First, we define the approximation ratio for minimization problems. Given an input $I$ to the problem, let $S_{\mathrm{alg}, I}$ be the output of the algorithm, $S_{\mathrm{opt}, I}$ be the optimal solution, and $f(S)$ be the objective function value. The \emph{approximation ratio} $r$ is then defined as follows:
-\begin{align*}
-    r = \sup_{I}\frac{f(S_{\mathrm{alg}, I})}{f(S_{\mathrm{opt}, I})}.
-\end{align*}
+The problem of determining the DAG-pathwidth for a general DAG is NP-hard~\cite{art12}.
+%, but an approximate width can be computed in polynomial time.
+In this section, we show the existence of a polynomial-time algorithm that provides a DAG-path-decomposition with an approximation ratio of $O(\log ^{3/2} n)$ for a given DAG $G$ with $n$ vertices, via \emph{one-shot Black Pebbling game (one-shot BP)}~\cite{art16}.
+The \emph{approximation ratio} of an algorithm $\mathcal{A}$ is defined as $\sup_{I}f(S_{\mathcal{A}, I})/f(S_{\mathrm{opt}, I})$, where $S_{\mathcal{A}, I}$ and $S_{\mathrm{opt}, I}$ are the outputs of $\mathcal{A}$ and the optimal algorithm for an input $I$, and $f(S)$ is the objective function value.
 
+%To compare with DAG-path-decomposition, we define the \emph{one-shot Black Pebbling game (one-shot BP)} \cite{art13}.
+In one-shot BP, given a DAG $G = (V, E)$, a sequence of vertex sets (called a strategy) $P = (P_0, P_1, \dots, P_t)$ $(P_i \subseteq V)$ is constructed to satisfy the following rules:
+%
+\begin{description}
+    \item[(BP1)] Initially, no pebble is placed on the vertices of $G$. %$P_0 = \emptyset$.
+    %\item[Rule 2] pebble: If no pebble is placed on $v \in V$ and all predecessors of $v$ have pebbles, a pebble may be placed on $v$. That is, if $v \notin P_{i-1}$ and for every $(u, v) \in E$, $u \in P_{i-1}$, then $P_i = P_{i-1} \cup \{v\}$.
+    \item[(BP2)] \emph{Pebble}: If no pebble is placed on $v \in V$ and all predecessors of $v$ have pebbles, the player may place a pebble on $v$. %That is, if $v \notin P_{i-1}$ and $v \in P_i$, $u \in P_{i-1}$ must hold for every $u \in V$ such that $(u, v) \in E$.
+    %\item[Rule 3] unpebble: A pebble placed on $v$ can be removed at any time. That is, if $v \in P_{i-1}$, then $P_i = P_{i-1} \setminus \{v\}$.
+    \item[(BP3)] \emph{Unpebble}: The player may remove a pebble placed on $v$ at any time. %That is, for $v \in P_{i-1}$, $v \notin P_i$ may hold.
+    \item[(BP4)] Each vertex of $G$ must have a pebble placed on it at least once.
+    \item[(BP5)] Each vertex of $G$ is pebbled only once.
+\end{description}
+
+(BP2) represents the operation of placing a pebble on a vertex, and (BP3) represents the operation of removing a pebble from a vertex. (BP1)--(BP4) form the \emph{black pebbling} game, while the addition of (BP5) to the black pebbling yields one-shot BP. Note that any root of the DAG, which have no predecessors, can be pebbled at any time. Furthermore, the \emph{space} of $P$ is defined as $\max_i \{ |P_i| \}$. The \emph{pebbling number} of $G$ is the minimum space over all possible strategies of $G$. Computing the pebbling number is NP-hard~\cite{art16}. %In Section 4, we demonstrate that one-shot BP is equivalent to the problem of constructing a nice DAG-path-decomposition on DAGs.
+%
+%First, we define the approximation ratio for minimization problems. Given an input $I$ to the problem, let $S_{\mathrm{alg}, I}$ be the output of the algorithm, $S_{\mathrm{opt}, I}$ be the optimal solution, and $f(S)$ be the objective function value. The \emph{approximation ratio} $r$ is then defined as follows:
+%\begin{align*}
+%    r = \sup_{I}\frac{f(S_{\mathrm{alg}, I})}{f(S_{\mathrm{opt}, I})}.
+%\end{align*}
+%
 Per et al.~\cite{art20} have shown the existence of the following approximation algorithm for one-shot BP.
-
-\begin{proposition}
+%
+\begin{proposition}[\cite{art20}]
     Given a DAG $G$ with $n$ vertices, there exists an algorithm that outputs a strategy for one-shot BP whose pebbling number is at most $O(\log ^{3/2} n)$ times the minimum value.
 \end{proposition}
 
 Using the above algorithm~\cite{art20}, we prove the following theorem.
 
 \begin{theorem}\label{approximation2}
-    Given a DAG $G$ with $n$ vertices and DAG-pathwidth $pw$, there exists a polynomial-time algorithm that provides a nice DAG-path-decomposition with width at most $O(pw \cdot \log ^{3/2} n)$.
+    %Given a DAG $G$ with $n$ vertices and DAG-pathwidth $pw$, there exists a polynomial-time algorithm that provides a nice DAG-path-decomposition with width $O(pw \cdot \log ^{3/2} n)$.
+    Given a DAG $G$ with $n$ vertices, if the DAG-pathwidth of $G$ is $pw$, there exists a polynomial-time algorithm that provides a nice DAG-path-decomposition with width $O(pw \cdot \log ^{3/2} n)$.
 \end{theorem}
 
-To prove \textbf{Theorem~\ref{approximation2}}, it is sufficient to show the following Lemma. Proof of this Lemma is in the appendix.
-
+%To prove \textbf{Theorem~\ref{approximation2}}, it is sufficient to show the following Lemma. Proof of this Lemma is in the appendix.
+To prove Theorem~\ref{approximation2}, it is sufficient to show the following lemma. The proof of this lemma is in the appendix.
+%
 \begin{lemma}\label{lemma_approximation2}
-    On a DAG, the construction of a strategy for one-shot BP and a nice DAG-path-decomposition are equivalent problems.
+    %On a DAG, the construction of a strategy for one-shot BP and a nice DAG-path-decomposition are equivalent problems.
+    On a DAG, the construction of a strategy for one-shot BP and that of a nice DAG-path-decomposition are equivalent.
 \end{lemma}
 
 
