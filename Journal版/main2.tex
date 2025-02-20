@@ -604,7 +604,7 @@ To prove Theorem~\ref{approximation2}, it is sufficient to show the following le
 
 
 
-\section{Algorithm to find DAG-path-decomposition with width at most $O(ld^t)$}\label{chapter5}
+\section{Algorithm to find DAG-path-decomposition with width $O(ld^t)$}\label{chapter5}
 
 %In this chapter, we propose an algorithm that, given a DAG $H$ with maximum outdegree $d$ and number of roots $l$, along with a non-negative integer $t$, either outputs a DAG-path-decomposition with width at most $O(ld^t)$ or provides evidence that the DAG-pathwidth of $H$ is greater than $t$. 
 %This algorithm is constructed based on the following undirected path decomposition algorithm~\cite{art8}. (Note that all the proofs of Lemma, Theorem, etc. in this chapter are shown in appendix)
@@ -633,6 +633,12 @@ Here, two paths are allowed to share only their endpoints. We refer to homeomorp
     
     \end{enumerate}
 \end{theorem}
+
+The following corollary, which is the main result in this section, is obtained from Theorem~\ref{approximation3}.
+
+\begin{cor}[proof in Appendix~\ref{appendix_D9}]\label{cor}
+    Given a DAG $H$ with $l$ roots and maximum outdegree $d$, and an integer $t$, there exists an $O(n^2)$ time algorithm that either provides evidence that the DAG-pathwidth of $H$ is greater than $t$, or provides a DAG-path-decomposition of width $O(ld^t)$.
+\end{cor}
 
 %To prove \textbf{Theorem~\ref{approximation3}}, we first define the notion of a complete directed tree. For an integer $d~(\geq 1)$, a \emph{complete $d$-ary directed tree} $T=(V, E)$ is a directed tree that every non-leaf vertex has exactly $d$ children and all root-to-leaf paths have the same length. If $T$ is a complete $d$-ary directed tree, we define the \emph{height} of $T$ as the length of any root-to-leaf path plus 1. If $T$ consists of only the root vertex, then its height is defined as 1. The DAG-pathwidth of a complete $d$-ary directed tree is given as follows: 
 
@@ -770,7 +776,7 @@ We first show the following lemma:
 
 
 
-The algorithm $\mathsf{FindEmbedding}$ terminates when one of the following conditions is met: (1) in line 4, $H'$ no longer contains any blue vertices; (2) in line 4, $|X_i| = |V[M_{t, d, l}]|$ holds; or (3) the process in line 11 is executed. The following lemmas demonstrate that the algorithm functions correctly in each of these cases.
+The algorithm $\mathsf{FindEmbedding}$ terminates when one of the following conditions is met: (1) in line 4, $H'$ no longer contains any blue vertices; (2) in line 4, $|X_i| = |V[M_{t, d, l}]|$ holds; or (3) the process in line 11 is executed. The following lemmas demonstrate that the algorithm terminates correctly in each of these cases.
 
 \begin{lemma}[proof in Appendix~\ref{appendix_D4}]\label{lemma_(1)}
     If $\mathsf{FindEmbedding}$ terminates under condition (1), then there exists a DAG-path-decomposition of $H$ with width at most $ld^{t+3}-1$.
@@ -778,7 +784,7 @@ The algorithm $\mathsf{FindEmbedding}$ terminates when one of the following cond
 
 
 \begin{lemma}[proof in Appendix~\ref{appendix_D5}]\label{lemma_(2)}
-    If $\mathsf{FindEmbedding}$ terminates under condition (2), then $H$ can be splited into two disjoint subgraphs $A$ and $B$ such that $V[A] \cup V[B] = V[H]$ and $V[A] \cap V[B] = \varnothing$. Moreover, in $H$, only edges from $A$ to $B$ exist, and the DAG-pathwidth of $A$ is greater than $t$ but at most $ld^{t+3}-1$.
+    If $\mathsf{FindEmbedding}$ terminates under condition (2), then $H$ can be splitted into two disjoint subgraphs $A$ and $B$ such that $V[A] \cup V[B] = V[H]$ and $V[A] \cap V[B] = \varnothing$. Moreover, in $H$, only edges from $A$ to $B$ exist, and the DAG-pathwidth of $A$ is greater than $t$ but at most $ld^{t+3}-1$.
 \end{lemma}
 
 
@@ -807,24 +813,15 @@ The algorithm $\mathsf{FindEmbedding}$ terminates when one of the following cond
 \end{comment}
 
 
-
-Before proving \textbf{Lemma~\ref{lemma_(3)}}, we show the following.  
-
-
-\begin{lemma}[proof in Appendix~\ref{appendix_D6}]\label{blue_reachable}
-    At any time $i = k$, let $r_0$ be the vertex of $H'$ on which the root token $\lambda$ is placed. Then, all blue vertices in $H'$ must have $r_0$ as an ancestor.
-\end{lemma}
-
-
 \begin{lemma}[proof in Appendix~\ref{appendix_D7}]\label{lemma_(3)}
     If $\mathsf{FindEmbedding}$ terminates at (3), then the DAG-pathwidth of $H$ is greater than $t$.
 \end{lemma}
 
-\textbf{Lemma~\ref{lemma_(1)}}, \textbf{\ref{lemma_(2)}}, and \textbf{\ref{lemma_(3)}} indicate \textbf{Theorem~\ref{approximation3}}. The proof is in appendix~\ref{appendix_D8}.
+%\textbf{Lemma~\ref{lemma_(1)}}, \textbf{\ref{lemma_(2)}}, and \textbf{\ref{lemma_(3)}} indicate \textbf{Theorem~\ref{approximation3}}. The proof is in appendix~\ref{appendix_D8}.
 
-\begin{cor}[proof in Appendix~\ref{appendix_D9}]\label{cor}
-    Given a DAG $H$ with $l$ roots and maximum outdegree $d$, and an integer $t$, there exists an $O(n^2)$ time algorithm that either provides evidence that the DAG-pathwidth of $H$ is greater than $t$, or provides a DAG-path-decomposition of width at most $O(ld^t)$.
-\end{cor}
+Lemmas~\ref{lemma_(1)}, \ref{lemma_(2)}, and \ref{lemma_(3)} imply Theorem~\ref{approximation3}. The proof is in appendix~\ref{appendix_D8}.
+
+
 
 
 
@@ -869,8 +866,8 @@ Before proving \textbf{Lemma~\ref{lemma_(3)}}, we show the following.
 
 In this study, we designed dynamic programming algorithms for solving various NP-hard problems on DAGs, using DAG-pathwidth as a parameter. Additionally, we demonstrated the existence of an $O(\log^{3/2} n)$-approximation algorithm for computing DAG-pathwidth, as well as a parameterized algorithm for constructing a DAG-path-decomposition with width $O(ld^k)$. The former is demonstrated by showing the equivalence between constructing DAG-path-decomposition and solving one-shot Black Pebbling game, while the latter leverages DAG embeddings. Notably, the latter algorithm is independent of the number of vertices in input graph and can also serve as an algorithm for estimating the one-shot Black Pebbling number.
 
-A key challenge for future work is to further reduce the width $O(ld^k)$ of the parameterized algorithm. In particular, since the maximum outdegree $d$ may grow up to the vertex count $n$, we aim to explore methods to bound $d$ by a constant.
-
+%A key challenge for future work is to further reduce the width $O(ld^k)$ of the parameterized algorithm. In particular, since the maximum outdegree $d$ may grow up to the vertex count $n$, we aim to explore methods to bound $d$ by a constant.
+A key challenge for future work is to further reduce the width $O(ld^k)$ of the parameterized algorithm. In particular, since the maximum outdegree $d$ could grow up to the number of vertices, we aim to explore methods to bound $d$ by a constant.
 
 
 
@@ -1508,8 +1505,14 @@ Furthermore, by a simple extension of the above algorithm, we can efficiently so
     By \textbf{Lemma~\ref{comp_tree}}, the DAG-pathwidth of $T_A$ is $t+1$, implying that the DAG-pathwidth of $A$ is at least $t+1$. Since $H$ contains $A$ as a subgraph, the DAG-pathwidth of $H$ must be greater than $t$. Consequently, the DAG-pathwidth of $A$ is greater than $t$ but at most $ld^{t+3}-1$.
 \end{proof}
 
+\subsection{\textbf{Lemma~\ref{lemma_(3)}}}\label{appendix_D7}
 
-\subsection{\textbf{Lemma~\ref{blue_reachable}}}\label{appendix_D6}
+Before proving Lemma~\ref{lemma_(3)}, we show the following.  
+
+\begin{lemma}\label{blue_reachable}
+    At any time $i = k$, let $r_0$ be the vertex of $H'$ on which the root token $\lambda$ is placed. Then, all blue vertices in $H'$ must have $r_0$ as an ancestor.
+\end{lemma}
+
 \begin{proof}
     We prove this by contradiction. Suppose at time $i = k$, there exists a blue vertex $v \in V[H']$ that does not have $r_0$ as an ancestor. Since $H'$ has a single root, there exists a common ancestor of $r_0$ and $v$. Let $r'_0$ be such a most recent common ancestor that does not have another common ancestor of $r_0$ and $v$ as its descendant. If multiple such vertices exist, choose one of them as $r'_0$. Notice that $v \neq r'_0$ because at time $i = k$, the root token $\lambda$ is placed at $r_0$, implying that its ancestor $r'_0$ must have had its token removed. Assuming $r'_0 = v$ contradicts the fact that $v$ is blue.
     
@@ -1518,9 +1521,8 @@ Furthermore, by a simple extension of the above algorithm, we can efficiently so
     Consider the first moment $i = l$ $(l \leq k)$ when a token $\lambda$ is placed on a vertex in $G_{A_{r_0}}$. At this moment, all vertices in $G_{A'_{r_0}}$ must have had their tokens removed. We justify this below. Any vertex in $H'$ is either (a) blue, (b) red with a token, or (c) red and a token is already removed. Since $v$ is blue at $i = l$, Line 5 of $\mathsf{FindEmbedding}$ requires that its parent must be (a) or (b). If the parent is (a), we continue checking its parent, which must also be (a) or (b). If all ancestors of $v$ are (a), at least one blue vertex exists in $A'_{r_0}$ at $i = l$, contradicting the conditions of Line 5. If at least one ancestor is (b), then, when an token $T_{r'_0}$ placed on $r'_0$ has been removed, $T_{r'_0}$ must have had at least two \textit{tokened} children, one in $G_{A'_{r_0}}$ and another elsewhere. Since $T_{r'_0}$ has been removed from $r'_0$ at $i = l$, this contradicts Line 5 of $\mathsf{FindEmbedding}$ which requires that a removed token has at most one \textit{tokened} child. Therefore, $v \notin V[G_{A'_{r_0}}]$ must hold. Given that $v \notin V[G_{A_{r_0}}]$ by assumption, it must hold that $v \in V[G_{A_{r_0}}] \setminus V[G_{r_0}]$. However, in this case, a common ancestor of $v$ and $r_0$ must be included in $A_{r_0}$, which contradicts the fact that there exists no common ancestor of $v$ and $r_0$ among the descendants of $r'_0$. Thus, the claim of \textbf{Lemma~\ref{lemma_(3)}} is proven.
 \end{proof}
 
+Now, we prove Lemma~\ref{lemma_(3)}.
 
-
-\subsection{\textbf{Lemma~\ref{lemma_(3)}}}\label{appendix_D7}
 \begin{proof}
     Suppose that Line 11 of $\mathsf{FindEmbedding}$ is executed at $i = k$. First, we prove that at $i = k$, there exists at least one root-to-leaf path $P = (\lambda \cdot m_1 \cdot m_2 \cdot \dots m_{\lceil \log_d l \rceil +t+1})$ in the \textit{tokened} token set on $M_{t, d, l}$. Therefore, we show a contradiction by assuming that such a path does not exist. Let $P'$ be the longest path in the \textit{tokened} token set rooted at $\lambda$, and let the height of $M_{t, d, l}$ be $h(M_{t, d, l}) = \lceil \log_d l \rceil +t+2$. By assumption, $|P'| \leq h(M_{t, d, l}) - 1$. Let $T'$ be the terminal token of $P'$, placed at vertex $u' \in V[H']$. From Line 1 of $\mathsf{GrowTokenTree}$, at least one of the following must hold:
     
