@@ -454,7 +454,7 @@ In contrast, DAG-path-decomposition includes information on edge directions, ena
 %Moreover, since the width of a DAG-path-decomposition cannot be smaller than the maximum in-degree, it is possible to efficiently construct a DAG-path-decomposition of the line graph, defined below, from the DAG-path-decomposition of the input graph.  
 %By treating edges as vertices, processing can be performed more intuitively.  
 %For these reasons, compared to treewidth-based approaches, DAG-path-decomposition reduces the number of required variables and simplifies algorithm design.  
-Together with the technique of converting a line graph, described below, DAG-path-decomposition reduces the number of variables required for algorithmic design, leading to a simplified and intuitive algorithm. 
+Together with the technique of converting the DAG into a line graph, described below, DAG-path-decomposition reduces the number of variables required for algorithmic design, leading to a simplified and intuitive algorithm. 
 
 In this subsection, we prove the following theorem:  
 
@@ -582,7 +582,7 @@ Using the above algorithm~\cite{art20}, we prove the following theorem.
 %To prove \textbf{Theorem~\ref{approximation2}}, it is sufficient to show the following Lemma. Proof of this Lemma is in the appendix.
 To prove Theorem~\ref{approximation2}, it is sufficient to show the following lemma. The proof of this lemma is in the appendix.
 %
-\begin{lemma}[proof in appendix~\ref{appendix_C1}]\label{lemma_approximation2}
+\begin{lemma}[proof in Appendix~\ref{appendix_C1}]\label{lemma_approximation2}
     %On a DAG, the construction of a strategy for one-shot BP and a nice DAG-path-decomposition are equivalent problems.
     On a DAG, the construction of a strategy for one-shot BP and that of a nice DAG-path-decomposition are equivalent.
 \end{lemma}
@@ -606,21 +606,26 @@ To prove Theorem~\ref{approximation2}, it is sufficient to show the following le
 
 \section{Algorithm to find DAG-path-decomposition with width at most $O(ld^t)$}\label{chapter5}
 
-In this chapter, we propose an algorithm that, given a DAG $H$ with maximum outdegree $d$ and number of roots $l$, along with a non-negative integer $t$, either outputs a DAG-path-decomposition with width at most $O(ld^t)$ or provides evidence that the DAG-pathwidth of $H$ is greater than $t$. 
-This algorithm is constructed based on the following undirected path decomposition algorithm~\cite{art8}. (Note that all the proofs of Lemma, Theorem, etc. in this chapter are shown in appendix)
+%In this chapter, we propose an algorithm that, given a DAG $H$ with maximum outdegree $d$ and number of roots $l$, along with a non-negative integer $t$, either outputs a DAG-path-decomposition with width at most $O(ld^t)$ or provides evidence that the DAG-pathwidth of $H$ is greater than $t$. 
+%This algorithm is constructed based on the following undirected path decomposition algorithm~\cite{art8}. (Note that all the proofs of Lemma, Theorem, etc. in this chapter are shown in appendix)
 
-\begin{proposition}\label{pathwidth algorithm of undirected graph}
-    Given an undirected graph $H$ with $n$ vertices and a non-negative integer $t$, there exists an $O(n)$ time algorithm that either provides evidence that the pathwidth of $H$ is greater than $t$ or returns a path decomposition with width at most $O(2^t)$.
-\end{proposition}
+In this section, we propose an algorithm that, given a DAG $H$ with maximum outdegree $d$ and number of roots $l$, along with a non-negative integer $t$, either outputs a DAG-path-decomposition with width $O(ld^t)$ or provides evidence that the DAG-pathwidth of $H$ is greater than $t$. For undirected path decompositions, Cattell et al.~\cite{art8} showed that given an undirected graph $H$ with $n$ vertices and a non-negative integer $t$, there exists an $O(n)$ time algorithm that either provides evidence that the pathwidth of $H$ is greater than $t$ or returns a path decomposition with width $O(2^t)$.
 
-Following this algorithm \cite{art8}, we construct an algorithm that, for a DAG $H$ with maximum outdegree $d$ and number of roots $l$, either provides evidence that the DAG-pathwidth of $H$ is greater than $t$ or returns a DAG-path-decomposition with width at most $O(ld^t)$. This algorithm utilizes the \emph{homeomorphic embedding}. A homeomorphic embedding of a directed graph $G_1 = (V_1, E_1)$ into another directed graph $G_2 = (V_2, E_2)$ is a mapping $f: V_1 \rightarrow V_2$ satisfying the following conditions:
-\begin{enumerate}
-    \item $f$ is an injective function.
-    \item There exists a bijective mapping $g$ from $E_1$ to a set of vertex-disjoint paths in $G_2$ such that for any edge $e = (u, v) \in E_1$, the path $g(e)$ starts at $f(u)$ and ends at $f(v)$.
-\end{enumerate}
+%\begin{proposition}\label{pathwidth algorithm of undirected graph}
+%\begin{proposition}[\cite{art8}]
+    %Given an undirected graph $H$ with $n$ vertices and a non-negative integer $t$, there exists an $O(n)$ time algorithm that either provides evidence that the pathwidth of $H$ is greater than $t$ or returns a path decomposition with width at most $O(2^t)$.
+%\end{proposition}
+
+%Following this algorithm \cite{art8}, we construct an algorithm that, for a DAG $H$ with maximum outdegree $d$ and number of roots $l$, either provides evidence that the DAG-pathwidth of $H$ is greater than $t$ or returns a DAG-path-decomposition with width at most $O(ld^t)$. This algorithm utilizes the \emph{homeomorphic embedding}. A homeomorphic embedding of a directed graph $G_1 = (V_1, E_1)$ into another directed graph $G_2 = (V_2, E_2)$ is a mapping $f: V_1 \rightarrow V_2$ satisfying the following conditions: (i) $f$ is an injective function, and (ii) there exists a bijective mapping $g$ from $E_1$ to a set of vertex-disjoint paths in $G_2$ such that for any edge $e = (u, v) \in E_1$, the path $g(e)$ starts at $f(u)$ and ends at $f(v)$.
+Following their algorithm, we construct an algorithm that, for a DAG $H$ with maximum outdegree $d$ and number of roots $l$, either provides evidence that the DAG-pathwidth of $H$ is greater than $t$ or computes a DAG-path-decomposition with width $O(ld^t)$. This algorithm utilizes a \emph{homeomorphic embedding}. A homeomorphic embedding of a directed graph $G_1 = (V_1, E_1)$ into another directed graph $G_2 = (V_2, E_2)$ is a mapping $f: V_1 \rightarrow V_2$ satisfying the following conditions: (i) $f$ is an injective function, and (ii) there exists a bijective mapping $g$ from $E_1$ to a set of vertex-disjoint paths in $G_2$ such that for any edge $e = (u, v) \in E_1$, the path $g(e)$ starts at $f(u)$ and ends at $f(v)$.
+%\begin{enumerate}
+%    \item $f$ is an injective function.
+%    \item There exists a bijective mapping $g$ from $E_1$ to a set of vertex-disjoint paths in $G_2$ such that for any edge $e = (u, v) \in E_1$, the path $g(e)$ starts at $f(u)$ and ends at $f(v)$.
+%\end{enumerate}
 Here, two paths are allowed to share only their endpoints. We refer to homeomorphic embeddings simply as embeddings. In this section, we establish the following theorem for general DAGs.
+(Note that all the proofs of lemmas and theorems in this chapter are shown in the appendix.)
 
-\begin{theorem}[proof in appendix~\ref{appendix_D8}]\label{approximation3}
+\begin{theorem}[proof in Appendix~\ref{appendix_D8}]\label{approximation3}
     Let $H$ be a DAG with maximum outdegree $d$ and number of roots $l$, and let $t$ be a non-negative integer. Then, exactly one of the following holds:
     \begin{enumerate}
         \item[(a)] The DAG-pathwidth of $H$ is at most $ld^{t+3}-1$.
@@ -631,7 +636,7 @@ Here, two paths are allowed to share only their endpoints. We refer to homeomorp
 
 To prove \textbf{Theorem~\ref{approximation3}}, we first define the notion of a complete directed tree. For an integer $d~(\geq 1)$, a \emph{complete $d$-ary directed tree} $T=(V, E)$ is a directed tree that every non-leaf vertex has exactly $d$ children and all root-to-leaf paths have the same length. If $T$ is a complete $d$-ary directed tree, we define the \emph{height} of $T$ as the length of any root-to-leaf path plus 1. If $T$ consists of only the root vertex, then its height is defined as 1. The DAG-pathwidth of a complete $d$-ary directed tree is given as follows: 
 
-\begin{lemma}[proof in appendix~\ref{appendix_D2}]\label{comp_tree}
+\begin{lemma}[proof in Appendix~\ref{appendix_D2}]\label{comp_tree}
     Let $T_{h, d}$ be a complete $d$-ary directed tree of height $h$ $(h, d > 1)$. Then, the DAG-pathwidth of $T_{h, d}$ is $h-1$.
 \end{lemma}
 
@@ -744,7 +749,7 @@ This final process is the main difference from \cite{art8}. In \cite{art8}, ther
 
 We first show the following lemma:
 
-\begin{lemma}[proof in appendix~\ref{appendix_D3}]\label{lemma_embedding}
+\begin{lemma}[proof in Appendix~\ref{appendix_D3}]\label{lemma_embedding}
     The subgraph $G'$ induced by the \textit{tokened} token set in $M_{t, d, l}$ is connected, and an embedding from $G'$ to $H'$ exists.
 \end{lemma}
 
@@ -753,12 +758,12 @@ We first show the following lemma:
 
 The algorithm $\mathsf{FindEmbedding}$ terminates when one of the following conditions is met: (1) in line 4, $H'$ no longer contains any blue vertices; (2) in line 4, $|X_i| = |V[M_{t, d, l}]|$ holds; or (3) the process in line 11 is executed. The following lemmas demonstrate that the algorithm functions correctly in each of these cases.
 
-\begin{lemma}[proof in appendix~\ref{appendix_D4}]\label{lemma_(1)}
+\begin{lemma}[proof in Appendix~\ref{appendix_D4}]\label{lemma_(1)}
     If $\mathsf{FindEmbedding}$ terminates under condition (1), then there exists a DAG-path-decomposition of $H$ with width at most $ld^{t+3}-1$.
 \end{lemma}
 
 
-\begin{lemma}[proof in appendix~\ref{appendix_D5}]\label{lemma_(2)}
+\begin{lemma}[proof in Appendix~\ref{appendix_D5}]\label{lemma_(2)}
     If $\mathsf{FindEmbedding}$ terminates under condition (2), then $H$ can be splited into two disjoint subgraphs $A$ and $B$ such that $V[A] \cup V[B] = V[H]$ and $V[A] \cap V[B] = \varnothing$. Moreover, in $H$, only edges from $A$ to $B$ exist, and the DAG-pathwidth of $A$ is greater than $t$ but at most $ld^{t+3}-1$.
 \end{lemma}
 
@@ -792,18 +797,18 @@ The algorithm $\mathsf{FindEmbedding}$ terminates when one of the following cond
 Before proving \textbf{Lemma~\ref{lemma_(3)}}, we show the following.  
 
 
-\begin{lemma}[proof in appendix~\ref{appendix_D6}]\label{blue_reachable}
+\begin{lemma}[proof in Appendix~\ref{appendix_D6}]\label{blue_reachable}
     At any time $i = k$, let $r_0$ be the vertex of $H'$ on which the root token $\lambda$ is placed. Then, all blue vertices in $H'$ must have $r_0$ as an ancestor.
 \end{lemma}
 
 
-\begin{lemma}[proof in appendix~\ref{appendix_D7}]\label{lemma_(3)}
+\begin{lemma}[proof in Appendix~\ref{appendix_D7}]\label{lemma_(3)}
     If $\mathsf{FindEmbedding}$ terminates at (3), then the DAG-pathwidth of $H$ is greater than $t$.
 \end{lemma}
 
 \textbf{Lemma~\ref{lemma_(1)}}, \textbf{\ref{lemma_(2)}}, and \textbf{\ref{lemma_(3)}} indicate \textbf{Theorem~\ref{approximation3}}. The proof is in appendix~\ref{appendix_D8}.
 
-\begin{cor}[proof in appendix~\ref{appendix_D9}]\label{cor}
+\begin{cor}[proof in Appendix~\ref{appendix_D9}]\label{cor}
     Given a DAG $H$ with $l$ roots and maximum outdegree $d$, and an integer $t$, there exists an $O(n^2)$ time algorithm that either provides evidence that the DAG-pathwidth of $H$ is greater than $t$, or provides a DAG-path-decomposition of width at most $O(ld^t)$.
 \end{cor}
 
