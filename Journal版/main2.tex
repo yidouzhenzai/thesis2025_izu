@@ -789,15 +789,16 @@ We first show the following lemma:
 
 
 
-The algorithm $\mathsf{FindEmbedding}$ terminates when one of the following conditions is met: (1) in Line 4, $H'$ no longer contains any blue vertices; (2) in Line 4, $|X_i| = |V[M_{t, d, l}]|$ holds; or (3) the process in Line 11 is executed. The following lemmas demonstrate that the algorithm terminates correctly in each of these cases.
+%The algorithm $\mathsf{FindEmbedding}$ terminates when one of the following conditions is met: (1) in Line 4, $H'$ no longer contains any blue vertices; (2) in Line 4, $|X_i| = |V[M_{t, d, l}]|$ holds; or (3) the process in Line 11 is executed. The following lemmas demonstrate that the algorithm terminates correctly in each of these cases.
+The algorithm $\mathsf{FindEmbedding}$ outputs the following: (1) in Line 20, $(X_1,\ldots,\allowbreak{}X_i)$ as a DAG-path-decomposition with width $ld^{t+3}-1$; (2) in Line 17, $X_i$ as a witness of $pw > t$; or (3) in Line 11, $X_i$ as a witness of $pw > t$. The following lemmas demonstrate that the algorithm works correctly in each of these cases.
 
 \begin{lemma}[proof in Appendix~\ref{appendix_D4}]\label{lemma_(1)}
-    If $\mathsf{FindEmbedding}$ terminates under condition (1), then there exists a DAG-path-decomposition of $H$ with width at most $ld^{t+3}-1$.
+    If $\mathsf{FindEmbedding}$ outputs $(X_1,\ldots,\allowbreak{}X_i)$ under condition (1), then there exists a DAG-path-decomposition of $H$ with width at most $ld^{t+3}-1$.
 \end{lemma}
 
 
 \begin{lemma}[proof in Appendix~\ref{appendix_D5}]\label{lemma_(2)}
-    If $\mathsf{FindEmbedding}$ terminates under condition (2), then $H$ can be splitted into two disjoint subgraphs $A$ and $B$ such that $V[A] \cup V[B] = V[H]$ and $V[A] \cap V[B] = \varnothing$. Moreover, in $H$, only edges from $A$ to $B$ exist, and the DAG-pathwidth of $A$ is greater than $t$ but at most $ld^{t+3}-1$.
+    If $\mathsf{FindEmbedding}$ outputs $X_i$ under condition (2), then $H$ can be splitted into two disjoint subgraphs $A$ and $B$ such that $V[A] \cup V[B] = V[H]$ and $V[A] \cap V[B] = \varnothing$. Moreover, in $H$, only edges from $A$ to $B$ exist, and the DAG-pathwidth of $A$ is greater than $t$ but at most $ld^{t+3}-1$.
 \end{lemma}
 
 
@@ -827,7 +828,7 @@ The algorithm $\mathsf{FindEmbedding}$ terminates when one of the following cond
 
 
 \begin{lemma}[proof in Appendix~\ref{appendix_D7}]\label{lemma_(3)}
-    If $\mathsf{FindEmbedding}$ terminates at (3), then the DAG-pathwidth of $H$ is greater than $t$.
+    If $\mathsf{FindEmbedding}$ outputs $X_i$ under condition (3), then the DAG-pathwidth of $H$ is greater than $t$.
 \end{lemma}
 
 %\textbf{Lemma~\ref{lemma_(1)}}, \textbf{\ref{lemma_(2)}}, and \textbf{\ref{lemma_(3)}} indicate \textbf{Theorem~\ref{approximation3}}. The proof is in appendix~\ref{appendix_D8}.
@@ -1499,7 +1500,9 @@ Furthermore, by a simple extension of the above algorithm, we can efficiently so
 
 \subsection{\textbf{Lemma~\ref{lemma_(1)}}}\label{appendix_D4}
 \begin{proof}
-    Suppose that in Line 4 of $\mathsf{FindEmbedding}$, all vertices of $H'$ have turned red at step $i=s$, leading to termination. The sequence of vertex sets output by the algorithm, $X_{H'} = (X_1, X_2, \dots , X_s)$, constitutes a DAG-path-decomposition of $H'$. Since every vertex $v \in H'$ is red, it must be contained in at least one vertex set $X_i$, satisfying (DPD1). Moreover, each vertex $v$ changes color from blue to red exactly once, and tokens are removed from red vertices without being placed again, ensuring that the vertex sets $X_i$ form a connected path, satisfying (DPD3).
+    %Suppose that in Line 4 of $\mathsf{FindEmbedding}$, all vertices of $H'$ have turned red at step $i=s$, leading to termination.
+    Suppose that Line 20 of $\mathsf{FindEmbedding}$ is executed and all vertices of $H'$ have turned red at step $i=s$.
+    The sequence of vertex sets output by the algorithm, $X_{H'} = (X_1, X_2, \dots , X_s)$, constitutes a DAG-path-decomposition of $H'$. Since every vertex $v \in H'$ is red, it must be contained in at least one vertex set $X_i$, satisfying (DPD1). Moreover, each vertex $v$ changes color from blue to red exactly once, and tokens are removed from red vertices without being placed again, ensuring that the vertex sets $X_i$ form a connected path, satisfying (DPD3).
 
     For any edge $(u, v) \in E[H']$, suppose that $v$ changes from blue to red at $i=i_v~ (i_v \leq s)$. By the condition in Line 5 of $\mathsf{FindEmbedding}$, a token placed on $u$ is not removed before step $i_v$. Additionally, by the condition in Line 1 of $\mathsf{GrowTokenTree}$, all predecessor vertices of $v$ have tokens, implying that $u$ must also be included in $X_i$. Since $v$ is not in $X_{i_v-1}$, we conclude that $u, v \in X_{i_v}$ and $v \notin X_{i_v-1}$, satisfying (DPD2). Therefore, $X_{H'}$ is a DAG-path-decomposition of $H'$.
 
@@ -1509,7 +1512,9 @@ Furthermore, by a simple extension of the above algorithm, we can efficiently so
 
 \subsection{\textbf{Lemma~\ref{lemma_(2)}}}\label{appendix_D5}
 \begin{proof}
-    Suppose that in Line 4 of $\mathsf{FindEmbedding}$, at step $i=s$, the condition $|X_s| = |V[M_{t, d, l}]|$ holds, and let $A'$ be the subgraph of $H'$ induced by the vertex set $X_1 \cup X_2 \cup \dots \cup X_s$. Then, the sequence of vertex sets output by the algorithm, $X_{A'} = (X_1, X_2, \dots , X_s)$, forms a DAG-path-decomposition of $A'$. By definition of $A'$, (DPD1) is clearly satisfied. Additionally,(DPD2) and (DPD3) are satisfied by the argument similar to \textbf{Lemma~\ref{lemma_(1)}}. Thus, $X_{A'}$ is a DAG-path-decomposition of $A'$.
+    %Suppose that in Line 4 of $\mathsf{FindEmbedding}$, at step $i=s$, the condition $|X_s| = |V[M_{t, d, l}]|$ holds,
+    Suppose that Line 17 of $\mathsf{FindEmbedding}$ is executed at step $i=s$ (i.e., the condition $|X_s| = |V[M_{t, d, l}]|$ holds),
+    and let $A'$ be the subgraph of $H'$ induced by the vertex set $X_1 \cup X_2 \cup \dots \cup X_s$. Then, the sequence of vertex sets output by the algorithm, $X_{A'} = (X_1, X_2, \dots , X_s)$, forms a DAG-path-decomposition of $A'$. By definition of $A'$, (DPD1) is clearly satisfied. Additionally,(DPD2) and (DPD3) are satisfied by the argument similar to \textbf{Lemma~\ref{lemma_(1)}}. Thus, $X_{A'}$ is a DAG-path-decomposition of $A'$.
 
     Let $A$ be the subgraph of $H$ induced by $V[A'] \cap V[H]$ and $B$ be the subgraph of $H$ induced by $V[H] \backslash V[A]$. Since $A$ and $B$ are disjoint and (DPD2) ensures that only edges from $A$ to $B$ exist. Defining $X_A = (X_1 \cap V[H], X_2 \cap V[H], \dots , X_s \cap V[H])$, this decomposition satisfies the three rules of the DAG-path-decomposition of $A$. Therefore, $X_A$ forms a DAG-path-decomposition of $A$ with width at most $ld^{t+3}-1$ by the argument similar to \textbf{Lemma~\ref{lemma_(1)}}.
 
