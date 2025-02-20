@@ -113,16 +113,16 @@ Jun Kawahara\inst{1}\orcidID{0000-0001-7208-044X}}
 
 DAG (Directed Acyclic Graph)-pathwidth is a parameter that measures how closely a directed graph is to a directed path. This parameter is useful for designing parameterized algorithms to solve NP-hard problems even on DAGs.
 %This parameter provides a non-trivial width even for DAG, which is difficult to parameterize with directed pathwidth. 
-%
+
 In this paper, we first design parameterized algorithms with DAG-pathwidth for various NP-hard problems even on DAGs. Specifically, we design fixed-parameter tractable (FPT) algorithms for the \textsc{Directed Dominating Set Problem} and the \textsc{Max Leaf Outbranching Problem}. Given a DAG with $n$ vertices and a DAG-path-decomposition of width $w$, both problems can be solved exactly in $O(2^w w n)$ time. Similarly, we propose parameterized algorithms for the \textsc{Directed Steiner Tree Problem} and the \textsc{$k$-Disjoint Path Problem}. 
-%
+
 Next, we show the existence of a polynomial-time approximation algorithm for DAG-pathwidth that achieves an $O(\log^{3/2} n)$ approximation ratio by demonstrating the equivalence between constructing DAG-path-decomposition and solving one-shot Black Pebbling game. 
-%
+
 %It is known that computing the DAG-pathwidth is NP-hard, and, to our knowledge, no algorithm has been known for finding small DAG-pathwidth. In this paper, 
 We also design an algorithm that, given an integer $t$ and DAG $H$ with $l$ roots and at most $d$ outdegree, either computes a DAG-path-decomposition of $H$ with width $O(l d^t)$ or provides a witness that the DAG-pathwidth of $H$ is greater than $t$.
-%
+
 %For the Directed Steiner Tree Problem, where the terminal set size is $k$, we propose an FPT algorithm that computes an exact solution in $O(2^w (k + w)n + n^2)$ time. For the $k$-Disjoint Path Problem, we develop a parameterized algorithm that computes an exact solution in $O((k+1)^w (w^2 + k)n + n^2)$ time.
-%
+
 %Finally, we define a new parameter DAG-treewidth as a generalization of DAG-pathwidth. DAG-treewith is a parameter that measures how similar is the structure of a directed graph to that of a directed tree. We show that constructing an optimal DAG-tree-decomposition that minimizes DAG-treewidth is NP-hard. After that, we design an FPT algorithm for the Directed Dominating Set Problem in $O(2^w w^2 n)$ time, with the DAG-treewidth $w$ as a parameter.
 
 \keywords{Graph algorithm \and Computational complexity \and Directed acyclic
@@ -183,21 +183,21 @@ Finally, in Section 5, we design an algorithm that, given an integer $t$, and a 
 %\subsection{DAG}
 %A \emph{DAG} (Directed Acyclic Graph) is a directed graph with no cycles. For a DAG $G = (V, E)$ and a vertex $v \in V$ , we define the \emph{predecessors} as $\mathsf{pred}(v) = \{ u \in V | (u, v) \in E\}$ and \emph{successors} as $\mathsf{suc}(v) = \{ w \in V | (v, w) \in E\}$ of $v$.
 
-A \emph{directed acyclic graph} (DAG) is a directed graph with no cycles. For a DAG $G = (V, E)$ and a vertex $v \in V$, we define the \emph{predecessors} as $\mathsf{pred}(v) = \{ u \in V \mid (u, v) \in E\}$ and \emph{successors} as $\mathsf{suc}(v) = \{ w \in V \mid (v, w) \in E\}$ of $v$. The vertices with indegree 0 are called the \emph{roots}.
-A \emph{directed tree} is a DAG that has the unique root $r$, and for any vertex $v$, there is the unique directed path from $r$ to $v$.
-%In particular, a \emph{directed tree} is a DAG that has a unique vertex $r$ with an indegree of 0, and the underlying graph forms a tree.
+A \emph{directed acyclic graph} (DAG) is a directed graph with no cycles. For a DAG $G = (V, E)$ and a vertex $v \in V$, we define the \emph{predecessors} as $\mathsf{pred}(v) = \{ u \in V \mid (u, v) \in E\}$ and \emph{successors} as $\mathsf{suc}(v) = \{ w \in V \mid (v, w) \in E\}$ of $v$.
+
+In particular, a \emph{directed tree} is a DAG that has a unique vertex $r$ with an indegree of 0, and the underlying graph forms a tree.
    
 
 %\subsection{Various Path Decompositions and Pathwidth}
 
 %Then, we define the \emph{DAG-path-decomposition} and the \emph{DAG-pathwidth} \cite{art12}. Let $H = (V, E)$ be a directed graph. A \emph{DAG-path-decomposition} of $H$ is a sequence $X = (X_1, X_2, \dots, X_s) ~(X_i \subseteq V)$ that satisfies the following three conditions:
-We define the \emph{DAG-path-decomposition} and the \emph{DAG-pathwidth} \cite{art12}. Let $G = (V, E)$ be a directed graph. A \emph{DAG-path-decomposition} of $G$ is a sequence $X = (X_1, X_2, \dots, X_s)$ $(X_i \subseteq V)$ that satisfies the following three conditions:
+We define the \emph{DAG-path-decomposition} and the \emph{DAG-pathwidth} \cite{art12}. Let $H = (V, E)$ be a directed graph. A \emph{DAG-path-decomposition} of $H$ is a sequence $X = (X_1, X_2, \dots, X_s)$ $(X_i \subseteq V)$ that satisfies the following three conditions:
 \begin{description}
     \item[(DPD1)] $X_1 \cup X_2 \cup \dots \cup X_s = V$.
     \item[(DPD2)] For every directed edge $(u, v) \in E$, there exists $i$ such that $u, v \in X_i$ and $v \notin X_{i-1}$. \label{original_rule}
     \item[(DPD3)] For any $i, j, k$ $(1 \leq i \leq j \leq k \leq s)$, $X_i \cap X_k \subseteq X_j$. %That is, for any vertex $v \in V$, $v$ induces exactly one non-empty directed path in $X$.
 \end{description}
-In (DPD2), we interpret $X_0 = \emptyset$. Therefore, a directed edge $(u, v)$ satisfies (DPD2) if $u, v \in X_1$. The \emph{width} of $X$ is defined as $\max_i \{ |X_i| - 1 \}$. The \emph{DAG-pathwidth} of $G$ is the minimum width over all possible DAG-path-decompositions of $G$. Note that in \cite{art12}, (DPD2) is changed into the condition that there exists $i$ such that $u, v \in X_i$ and $u \notin X_{i-1}$. In this study, we adopt the above definition for the sake of algorithmic simplicity.
+In (DPD2), we interpret $X_0 = \emptyset$. Therefore, a directed edge $(u, w)$ satisfies (DPD2) if $u, v \in X_1$. The \emph{width} of $X$ is defined as $\underset{i}{\max} \{ |X_i| - 1 \}$. The \emph{DAG-pathwidth} of $G$ is the minimum width over all possible DAG-path-decompositions of $G$. Note that in \cite{art12}, (DPD2) is changed into the condition that there exists $i$ such that $u, v \in X_i$ and $u \notin X_{i-1}$. In this study, we adopt the above definition for the sake of algorithmic simplicity.
 
 %The \emph{DAG-pathwidth} of $H$ can also be defined in the same way as the pathwidth. Note that in \cite{art12}, condition~\ref{original_rule} is defined that $u, v \in X_1$ or there exists $i$ $(i \geq 2)$ such that $u, v \in X_i$ and $u \notin X_{i-1}$. In this study, we adopt the above definition for the sake of algorithmic simplicity.
 
@@ -414,6 +414,8 @@ The pebbling number for one-shot BP can also be defined similarly. For general D
 
 \section{Algorithms for various NP-hard problems on DAGs based on DAG-pathwidth}\label{chapter3}
 
+\subsection{Advantages of DAG-path-decomposition Compared to Tree Decomposition}
+
 %For NP-hard problems on a DAG, it is sometimes possible to construct a parameterized algorithm using the treewidth of the underlying graph.  
 %However, since tree decomposition does not retain information about edge directions, constructing an algorithm can become complex.  
 %On the other hand, DAG-path-decomposition retains edge direction information, making it generally easier to construct an algorithm compared to using tree decomposition.  
@@ -421,66 +423,17 @@ The pebbling number for one-shot BP can also be defined similarly. For general D
 For NP-hard problems on a DAG, it is sometimes possible to construct a parameterized algorithm using the treewidth of the underlying graph of the DAG.  
 However, the lack of edge direction information in tree decompositions might complicate algorithm construction. Conversely, DAG-path decompositions, which preserve edge direction, generally facilitate simpler algorithm design compared to approaches using tree decompositions.
 
-In this section, we design algorithms for various NP-hard problems on DAGs based on DAG-pathwidth.
-Section~\ref{sec:DiDS} demonstrates a typical technique based on DAG-path-decomposition by showing an algorithm for the \textsc{Directed Dominating Set Problem}. Section~\ref{sec:comp} compares standard tree decomposition with DAG-path-decomposition, focusing on the \textsc{Directed Edge Dominating Set Problem}. Finally, we propose algorithms for other NP-hard problems on DAGs in Section~\ref{sec:algother}.
-
-\subsection{Directed Dominating Set Problem}\label{sec:DiDS}
-
-Given a DAG $G = (V, E)$, the \textsc{Directed Dominating Set Problem} (DiDS problem) asks us to
-%This problem seeks the smallest subset \(S \subseteq V\) such that, for every \(v \in V\), either \(v \in S\) or there exists some \(u \in S\) where \((u, v) \in E\).  
-%~\cite{art23}, ~\cite{art22} established the following result:  
-find the smallest subset \(S \subseteq V\) such that, for every \(v \in V\), either \(v \in S\) or there exists some \(u \in S\) such that \((u, v) \in E\).
-
-Let us construct a DAG-path-decomposition-based algorithm. Suppose that we are given a nice DAG-path-decomposition $(X_1,\ldots,X_s)$. We first define the function $\mathsf{DS}$. The function $\mathsf{DS}$ partitions each bag $X_i$ into two disjoint vertex sets $A_i, B_i \subseteq X_i ~(A_i \cup B_i = X_i, A_i \cap B_i = \varnothing)$. Then, among the directed dominating sets of the subgraph $G_i$ of $G$ induced by $X_1 \cup X_2 \cup \dots \cup X_i$, it finds the smallest directed dominating set that includes all elements of $A_i$ and none of $B_i$. By computing this for all combinations of $A_i$ and $B_i$, we obtain the minimum dominating set for $G_i$. By considering all $i = 1,\ldots,s$, the minimum dominating set of the input graph $G$ is obtained. The function $\mathsf{DS}$ is defined as follows:
-    %
-    \begin{equation}\label{def_ds}
-        \mathsf{DS}(i, A_i, B_i) = \min \left\{ |S_i| \left |
-        %\begin{array}{l}
-        %    S_i \subseteq X_1 \cup X_2 \cup  \dots \cup X_i, \\
-        %    S_i \text{ is a DiDS of } G_i, \\
-        %    A_i \subseteq S_i, B_i \cap S_i = \varnothing
-        %\end{array}
-        %\right. \right\}.
-        \begin{array}{l}
-                S_i \subseteq X_1 \cup X_2 \cup  \dots \cup X_i, S_i \text{ is a DiDS of } G_i, \\
-                A_i \subseteq S_i, B_i \cap S_i = \emptyset
-        \end{array}
-        \right. \right\}.
-    \end{equation}
-
-$\mathsf{DS}$ computes the size of the minimum DiDS of $G_i$. We provide the recurrence formula for $\mathsf{DS}$. If $X_i$ introduces $v \in V$,
-%
-\begin{equation*}
-    \mathsf{DS}(i, A_i, B_i) = 
-    \begin{cases}
-        \mathsf{DS}(i-1, A_i \backslash \{v\}, B_i) + 1 & (v \in A_i) \\
-        \mathsf{DS}(i-1, A_i, B_i \backslash \{v\}) & (v \in B_i \text{ and } \mathsf{pred}(v) \cap A_i \neq \emptyset) \\
-        \infty & (\text{otherwise})
-    \end{cases}.
-\end{equation*}
-%
-Informally, $\mathsf{pred}(v) \cap A_i \neq \emptyset$ means that one of the predecessors of $v$ is in the dominating set, and thus $v$ is dominated. (DPD2) ensures that all the predecessors of $v$ must appear in some of bags $X_1,\ldots,X_{i-1}$ and in $X_i$, which facilitates the design of the algorithm.
-
-The case of forget and the correctness of the algorithm is shown in Appendix~\ref{appendix_B4}.
-%We establish the existence of an FPT algorithm for the DiDS problem. %The proof of following theorem is shown in the appendix.
-
-\begin{theorem}[proof in Appendix~\ref{appendix_B4}]\label{theorem_dids}
-    Given a DAG \(G\) and its nice DAG-path-decomposition of width \(w\), there exists an algorithm that solves the DiDS problem on \(G\) in \(O(2^w w n)\) time.  
-\end{theorem}
-
-
-\subsection{Advantages of DAG-path-decomposition Compared to Tree Decomposition}\label{sec:comp}
-
-
-
-In this subsection, we compare an algorithm using tree decomposition for the \textsc{Directed Edge Dominating Set Problem}~(DEDS problem)~\cite{art22} with an algorithm using DAG-path-decomposition and demonstrate the characteristics of DAG-path-decomposition.  
+In this section, we compare an algorithm using tree decomposition for the \textsc{Directed Edge Dominating Set Problem}~(DEDS problem)~\cite{art22} with an algorithm using DAG-path-decomposition and demonstrate the characteristics of DAG-path-decomposition.  
 
 %For a directed graph \(G = (V, E)\), a subset \(S \subseteq E\) is a \emph{Directed Edge Dominating Set (DEDS)} of \(G\) if, for any \((v, w) \in E\), either \((v, w) \in S\) holds or there exists some \((u, v) \in S\).  
 For a directed graph \(G = (V, E)\), a subset \(S \subseteq E\) is a \emph{Directed Edge Dominating Set (DEDS)} of \(G\) if, for any \((v, w) \in E\), either \((v, w) \in S\) holds or there exists some \(u \in V\) such that \((u, v) \in S\).  
 The \emph{minimum DEDS (mDEDS)} is the DEDS \(S\) with the smallest \(|S|\) among all DEDS.  
 The DEDS problem is the problem of determining the size of the mDEDS of \(G\).  
 
-The paper~\cite{art23} proved that the DEDS problem remains NP-hard even for planar bounded degree DAGs. The paper~\cite{art22} established the following result:
+A related problem is the \emph{Directed Dominating Set Problem (DiDS problem)}.  
+%This problem seeks the smallest subset \(S \subseteq V\) such that, for every \(v \in V\), either \(v \in S\) or there exists some \(u \in S\) where \((u, v) \in E\).  
+%~\cite{art23}, ~\cite{art22} established the following result:  
+This problem finds the smallest subset \(S \subseteq V\) such that, for every \(v \in V\), either \(v \in S\) or there exists some \(u \in S\) such that \((u, v) \in E\). The paper~\cite{art23} proved that the DEDS problem remains NP-hard even for planar bounded degree DAGs. The paper~\cite{art22} established the following result:
 
 %\begin{proposition}[time Complexity]
 %    The DEDS problem remains NP-hard even for planar bounded degree DAGs.
@@ -517,7 +470,7 @@ For a directed graph \(G = (V, E)\), its \emph{line graph} \(L(G) = (V_L, E_L)\)
 That is, the line graph of a directed graph is obtained by replacing the vertices and edges of the original graph while preserving edge directions.  
 
 %DAG-pathwidth-based algorithm reformulates the mDEDS problem as the problem of finding the mDiDS of the line graph and solves it using the DAG-path-decomposition of the line graph.  
-A DAG-pathwidth-based algorithm reformulates the mDEDS problem as the problem of finding the minimum DiDS of the line graph and solves it using the DAG-path-decomposition of the line graph.  
+A DAG-pathwidth-based algorithm reformulates the mDEDS problem as the problem of finding the mDiDS of the line graph and solves it using the DAG-path-decomposition of the line graph.  
 We first prove the following two lemmas, which immediately lead to \textbf{Theorem~\ref{DEDS_FPT}}.  
 
 \begin{lemma}[proof in Appendix~\ref{appendix_B1}]\label{DAG_path_decomposition(L(G))}
@@ -525,21 +478,27 @@ We first prove the following two lemmas, which immediately lead to \textbf{Theor
 \end{lemma}
 
 \begin{lemma}[proof in Appendix~\ref{appendix_B2}]\label{mDEDS_mDiDS}
-    For a DAG \(G\), the mDEDS of \(G\) and the minimum DiDS of \(L(G)\) are equal.  
+    For a DAG \(G\), the mDEDS of \(G\) and the mDiDS of \(L(G)\) are equal.  
 \end{lemma}
 
 Note that the standard treewidth of the line graph of a graph $G$ cannot be bounded by $tw^2$, where $tw$ is the treewidth of $G$. Instead, it can be bounded only by $(tw + 1) \Delta(G) - 1$, where $\Delta(G)$ is the maximum degree of $G$~\cite{art24}.
 
 
 
-\subsection{Design of Various Parameterized Algorithms Using DAG-path-decomposition}~\label{sec:algother}
+\subsection{Design of Various Parameterized Algorithms Using DAG-path-decomposition}
 
 Beyond the DEDS problem, DAG-path-decomposition enables the construction of simple parameterized algorithms for NP-hard problems on DAGs.  
 In this section, we design parameterized algorithms using DAG-path-decomposition for the following four problems, which are NP-hard even on DAGs~\cite{art17}.  
 %Proofs of correctness are provided in appendix.  
 Proofs of the theorems are provided in the appendix.  
 
-First, we present an FPT algorithm for the \textsc{Max Leaf Outbranching Problem} (MaxLOB).  
+We first establish the existence of an FPT algorithm for the DiDS problem. %The proof of following theorem is shown in the appendix.
+
+\begin{theorem}[proof in Appendix~\ref{appendix_B4}]\label{theorem_dids}
+    Given a DAG \(G\) and its nice DAG-path-decomposition of width \(w\), there exists an algorithm that solves the DiDS problem on \(G\) in \(O(2^w w n)\) time.  
+\end{theorem}
+
+Next, we present an FPT algorithm for the \textsc{Max Leaf Outbranching Problem} (MaxLOB).  
 %Given a directed graph \(G = (V, E)\) and a root \(r \in V\), the MaxLOB problem seeks the maximum number of leaves in a directed spanning tree rooted at \(r\). 
 Given a directed graph \(G = (V, E)\) and a root \(r \in V\) of $G$, the MaxLOB problem finds the maximum number of leaves in a directed spanning tree rooted at \(r\). 
 
@@ -664,7 +623,7 @@ Following their algorithm, we construct an algorithm that, for a DAG $H$ with ma
 %    \item There exists a bijective mapping $g$ from $E_1$ to a set of vertex-disjoint paths in $G_2$ such that for any edge $e = (u, v) \in E_1$, the path $g(e)$ starts at $f(u)$ and ends at $f(v)$.
 %\end{enumerate}
 Here, two paths are allowed to share only their endpoints. We refer to homeomorphic embeddings simply as embeddings. In this section, we establish the following theorem for general DAGs.
-(Note that all the proofs of lemmas and theorems in this section are shown in the appendix.)
+(Note that all the proofs of lemmas and theorems in this chapter are shown in the appendix.)
 
 \begin{theorem}[proof in Appendix~\ref{appendix_D8}]\label{approximation3}
     Let $H$ be a DAG with maximum outdegree $d$ and number of roots $l$, and let $t$ be a non-negative integer. Then, exactly one of the following holds:
@@ -737,7 +696,6 @@ Each vertex of $H'$ (not $M_{t, d, l}$) has a \emph{color}, red or blue. Initial
     \STATE Output $\{v \in V[H'] \mid v \text{ is placed a token}\}$.
 	\end{algorithmic}
 \end{algorithm}
-\vspace{-1.5cm}
 \end{figure}
 
 
@@ -769,7 +727,6 @@ Each vertex of $H'$ (not $M_{t, d, l}$) has a \emph{color}, red or blue. Initial
     \ENDIF
 	\end{algorithmic}
 \end{algorithm}
-\vspace{-1.5cm}
 \end{figure}
 
 
@@ -978,114 +935,35 @@ This work was supported by JSPS KAKENHI Grant Numbers JP24H00690 and JP24H00697.
 
 
 \appendix
+\section{Proof of Chapter~\ref{chapter2}}
 
-% comment out
-% \section{Proof of Chapter~\ref{chapter2}}
+\subsection{The necessary and sufficient condition for the DAG-pathwidth 1}\label{appendix_A1}
 
-% \subsection{The necessary and sufficient condition for the DAG-pathwidth 1}\label{appendix_A1}
+\begin{definition}[directed caterpillar graph]
+    A directed graph $G$ is said to be \textit{directed caterpillar graph} if it is a directed tree such that removing vertices with indegree 1 and outdegree 0 leaves a single directed path.
+\end{definition}
 
-% \begin{definition}[directed caterpillar graph]
-%     A directed graph $G$ is said to be \textit{directed caterpillar graph} if it is a directed tree such that removing vertices with indegree 1 and outdegree 0 leaves a single directed path.
-% \end{definition}
-
-% \begin{lemma} \label{caterpillar}
-%     For a connected directed graph $G$ with $n$ vertices $(n > 2)$, the DAG-pathwidth of $G$ is 1 if and only if $G$ is directed caterpillar graph.
-% \end{lemma}
-
-
-% \begin{proof}
-%     If $G$ contains a directed cycle $C \subseteq V$, then noticing $|C| \geq 2$, $n > 2$ and $G$ is connected, there necessarily exists a vertex $v \in V[G]$ such that either $(u, v) \in E[V]$ with $u \in C$, or $(v, u) \in E[V]$ with $u \in C$. In this case, by the introduce rule of the nice DAG-path-decomposition, any DAG-path-decomposition of $G$ must contain a bag that includes $C \cup \{v\}$. Observing that $|C \cup \{v\}| \geq 3$, the DAG-pathwidth of $G$ must be at least 2. Consequently, if $G$ contains a cycle, its DAG-pathwidth is at least 2. Therefore, in the following, we consider the case where $G$ does not contain a cycle, that is, DAG.
-
-%     If there exists a vertex $v$ in $G$ with an in-degree of at least 2, then by (DPD2), any DAG-path-decomposition of $G$ must contain a bag that includes $v$ and all of its predecessor vertices. Thus, the DAG-path-width of $G$ is at least 2. Therefore, we consider only the case where $G$ has no vertex with in-degree 2 or greater, meaning that $G$ is a directed tree. First, we show that if $G$ is not directed caterpillar graph, then its DAG-path-width is at least 2. To do so, we consider cases based on the number of vertices in $G$. If $|V[G]| = 2$, then $G$ is clearly directed caterpillar graph. Similarly, when $|V[G]| = 3$ or $4$, $G$ is also directed caterpillar graph. The reason is as follows. Since $G$ is a directed tree, we select one of the longest paths in $G$ and denote its sequence of vertices as $P$. When $|V[G]| = 3$, then $|P| = 2$ or $|P| = 3$, both of which are clearly directed caterpillar graph. Similarly, when $|V[G]| = 4$, then $|P| = 2$, $|P| = 3$, or $|P| = 4$, all of which are also clearly directed caterpillar graph.
-    
-%     Next, we consider the case where $G$ has at least 5 vertices. If $G$ is not directed caterpillar graph, then by definition, even after removing vertices of out-degree 0, $G$ still contains a branching. That is, there exists a vertex $v \in V[G]$ such that there are at least two vertex-disjoint paths of length 2 or greater starting from $v$. Let these paths be $P_1 = v, v_1, v_2, \dots$ and $P_2 = v, u_1, u_2, \dots$. By the rules of DAG-path-decomposition, any DAG-path-decomposition of $G$ must contain at least one bag that includes one of the following three vertex sets: $\{v, v_1, v_2\}$, $\{v, u_1, u_2\}$, or $\{v, v_1, u_1\}$. Therefore, the DAG-path-width is at least 2. Thus, by taking the contraposition, if DAG-path-width of $G$ is 1, then $G$ must be directed caterpillar graph by noting that the DAG-path-width is not smaller than 1 since $|V[G]| \geq 2$.
-    
-%     Conversely, suppose $G$ is directed caterpillar graph. Each vertex $v$ in $G$ has leaf children $v_1, v_2, \dots, v_s$ with out-degree 0, and at most one non-leaf child with out-degree at least 1. If $v$ has no non-leaf child, we sequentially create bags $\{v, v_1\}, \{v, v_2\}, \dots, \{v, v_s\}$, thereby constructing a DAG-path-decomposition for $v$ and $\mathsf{suc}(v)$. If $v$ has a non-leaf child $u$, we sequentially create bags $\{v, v_1\}, \{v, v_2\}, \dots, \{v, v_s\}, \{v, u\}, \{u\}$, thus constructing a DAG-path-decomposition for $v$ and $\mathsf{suc}(v)$. Applying this process to all vertices, we obtain a DAG-path-decomposition of $G$ with width 1. Therefore, if $G$ is directed caterpillar graph, its DAG-path-width is 1.
-% \end{proof}
-
-
-
-
-
-
-\section{Proofs of Section~\ref{chapter3}}
-
-\subsection{Algorithm to solve DiDS problem and the proof of \textbf{Theorem~\ref{theorem_dids}}}\label{appendix_B4}
-To construct an algorithm satisfying \textbf{Theorem~\ref{theorem_dids}}, we first define the function $\mathsf{DS}$. The function $\mathsf{DS}$ partitions each bag $X_i$ into two disjoint vertex sets $A_i, B_i \subseteq X_i ~(A_i \cup B_i = X_i, A_i \cap B_i = \varnothing)$. Then, among the directed dominating sets of the subgraph $G_i$ induced by $X_1 \cup X_2 \cup \dots \cup X_i$, it finds the smallest directed dominating set that includes all elements of $A_i$ and none of $B_i$. By computing this for all combinations of $A_i$ and $B_i$, we obtain the minimum dominating set for $G_i$. By considering all $i$, the minimum dominating set of the input graph $G$. The function $\mathsf{DS}$ is defined as follows:
-    %
-    \begin{equation}\label{def_ds}
-        \mathsf{DS}(i, A_i, B_i) = \min \left\{ |S_i| \left |
-        \begin{array}{l}
-            S_i \subseteq X_1 \cup X_2 \cup  \dots \cup X_i, \\
-            S_i \text{ is a DiDS of } G_i, \\
-            A_i \subseteq S_i, B_i \cap S_i = \varnothing
-        \end{array}
-        \right. \right\}.
-    \end{equation}
-    
-
-$\mathsf{DS}$ computes the size of the minimum DiDS of $G_i$. Below, we provide the recurrence formula for $\mathsf{DS}$, dividing cases based on whether $X_i$ introduces or forgets a vertex.
-
-\begin{align*}
-    \intertext{$\bullet$ When $X_i$ introduces $v \in V$:}
-    &\mathsf{DS}(i, A_i, B_i) = 
-    \begin{cases}
-        \mathsf{DS}(i-1, A_i \backslash \{v\}, B_i) + 1 & (v \in A_i) \\
-        \mathsf{DS}(i-1, A_i, B_i \backslash \{v\}) & (v \in B_i \text{ and } \mathsf{pred}(v) \cap A_i \neq \varnothing) \\
-        \infty & (\text{otherwise})
-    \end{cases}.
-    \intertext{$\bullet$ When $X_i$ forgets $v \in V$:}
-    &\mathsf{DS}(i, A_i, B_i) = \min \{\mathsf{DS}(i-1, A_i \cup \{v\}, B_i), \mathsf{DS}(i-1, A_i, B_i \cup \{v\})\}.
-\end{align*}
-
-Using $\mathsf{DS}$, we define the algorithm $\mathsf{Compute}(P)$, which outputs the size of the minimum DiDS of $G$ when given a nice DAG-path-decomposition $P$ of $G$.
-
-\begin{enumerate}
-    \item First Step: Set $\mathsf{DS}(0, \varnothing, \varnothing) = 0$.
-    \item Execution Step: For each $X_i$ $(i=1, 2, ..., s)$ in $P$, compute $\mathsf{DS}(i, A_i, B_i)$ for all combinations of $A_i$ and $B_i$.
-    \item Final Step: If $i = s$, output $\mathsf{DS}(s, \varnothing, \varnothing)$.
-\end{enumerate}
-
-To demonstrate \textbf{Theorem~\ref{theorem_dids}}, it is sufficient to prove the following two Lemmas.
-
-\begin{lemma}\label{dids}
-    $\mathsf{Compute}$ returns the size of the minimum DiDS of $G$.
+\begin{lemma} \label{caterpillar}
+    For a connected directed graph $G$ with $n$ vertices $(n > 2)$, the DAG-pathwidth of $G$ is 1 if and only if $G$ is directed caterpillar graph.
 \end{lemma}
 
-\begin{proof}
-    It suffices to show that for each $i$, $\mathsf{DS}(i, A_i, B_i)$ satisfies the definition (\ref{def_ds}) of $\mathsf{DS}$. We prove this by induction on $i$.
-    
-    Base Case ($i=0$): Clearly, definition (\ref{def_ds}) holds.
-    
-    Inductive Step ($i=k \rightarrow i=k+1$): Assume that $\mathsf{DS}(i, A_i, B_i)$ satisfies definition (\ref{def_ds}) for $i=k$. We consider cases where $X_{k+1}$ introduces or forgets $v \in V$.
-    
-    \begin{itemize}
-        \item Case 1: $X_{k+1}$ introduces $v$
-        
-        If $v \in A_{k+1}$, then by (DPD2), $v$ does not dominate any vertex in $G_{k+1}$. Thus, $\mathsf{DS}(k+1, A_{k+1}, B_{k+1})$ is equal to $\mathsf{DS}(k, A_{k+1} \backslash \{v\}, B_{k+1}) + 1$. By induction, this satisfies definition (\ref{def_ds}).
-        
-        If $v \in B_{k+1}$ and $\mathsf{pred}(v) \cap A_{k+1} \neq \varnothing$, then some vertex $u \in A_{k+1}$ dominates $v$. Thus, $\mathsf{DS}(k+1, A_{k+1}, B_{k+1}) = \mathsf{DS}(k, A_{k+1}, B_{k+1} \backslash \{v\})$, which also satisfies definition (\ref{def_ds}) by induction.
-        
-        Otherwise, if $v \in B_{k+1}$ and $\mathsf{pred}(v) \cap A_{k+1} = \varnothing$, no vertex in $A_{k+1}$ dominates $v$. Hence, no valid minimum DiDS exists, and we set $\mathsf{DS}(k+1, A_{k+1}, B_{k+1}) = \infty$.
-        
-        \item Case 2: $X_{k+1}$ forgets $v$
-        
-        Since $G_{k+1} = G_k$, the minimum DiDS of $G_{k+1}$ is equal to the minimum DiDS of $G_k$. Thus, it is given by
-        \begin{align*}
-            \min \{\mathsf{DS}(k, A_{k+1} \cup \{v\}, B_{k+1}), \mathsf{DS}(k, A_{k+1}, B_{k+1} \cup \{v\})\},
-        \end{align*}
-        which satisfies definition (\ref{def_ds}).
-    \end{itemize}
-    Thus, by induction, \textbf{Lemma~\ref{dids}} is proven.
-\end{proof}
-
-\begin{lemma}
-    Given a DAG $G$ with $n$ vertices and a DAG-path-decomposition $P$ of width $w$, $\mathsf{Compute}(P)$ runs in $O(2^w w n)$ time.
-\end{lemma}
 
 \begin{proof}
-    Since $|X_i| \leq w+1$, the number of combinations of $A, B$ is at most $2^{w+1}$. The number of bags is $2|V|+1$. Checking $\mathsf{pred}(v) \cap A_i \neq \varnothing$ takes $O(w)$ time. Thus, the overall complexity is $O(2^w w n)$.
+    If $G$ contains a directed cycle $C \subseteq V$, then noticing $|C| \geq 2$, $n > 2$ and $G$ is connected, there necessarily exists a vertex $v \in V[G]$ such that either $(u, v) \in E[V]$ with $u \in C$, or $(v, u) \in E[V]$ with $u \in C$. In this case, by the introduce rule of the nice DAG-path-decomposition, any DAG-path-decomposition of $G$ must contain a bag that includes $C \cup \{v\}$. Observing that $|C \cup \{v\}| \geq 3$, the DAG-pathwidth of $G$ must be at least 2. Consequently, if $G$ contains a cycle, its DAG-pathwidth is at least 2. Therefore, in the following, we consider the case where $G$ does not contain a cycle, that is, DAG.
+
+    If there exists a vertex $v$ in $G$ with an in-degree of at least 2, then by (DPD2), any DAG-path-decomposition of $G$ must contain a bag that includes $v$ and all of its predecessor vertices. Thus, the DAG-path-width of $G$ is at least 2. Therefore, we consider only the case where $G$ has no vertex with in-degree 2 or greater, meaning that $G$ is a directed tree. First, we show that if $G$ is not directed caterpillar graph, then its DAG-path-width is at least 2. To do so, we consider cases based on the number of vertices in $G$. If $|V[G]| = 2$, then $G$ is clearly directed caterpillar graph. Similarly, when $|V[G]| = 3$ or $4$, $G$ is also directed caterpillar graph. The reason is as follows. Since $G$ is a directed tree, we select one of the longest paths in $G$ and denote its sequence of vertices as $P$. When $|V[G]| = 3$, then $|P| = 2$ or $|P| = 3$, both of which are clearly directed caterpillar graph. Similarly, when $|V[G]| = 4$, then $|P| = 2$, $|P| = 3$, or $|P| = 4$, all of which are also clearly directed caterpillar graph.
+    
+    Next, we consider the case where $G$ has at least 5 vertices. If $G$ is not directed caterpillar graph, then by definition, even after removing vertices of out-degree 0, $G$ still contains a branching. That is, there exists a vertex $v \in V[G]$ such that there are at least two vertex-disjoint paths of length 2 or greater starting from $v$. Let these paths be $P_1 = v, v_1, v_2, \dots$ and $P_2 = v, u_1, u_2, \dots$. By the rules of DAG-path-decomposition, any DAG-path-decomposition of $G$ must contain at least one bag that includes one of the following three vertex sets: $\{v, v_1, v_2\}$, $\{v, u_1, u_2\}$, or $\{v, v_1, u_1\}$. Therefore, the DAG-path-width is at least 2. Thus, by taking the contraposition, if DAG-path-width of $G$ is 1, then $G$ must be directed caterpillar graph by noting that the DAG-path-width is not smaller than 1 since $|V[G]| \geq 2$.
+    
+    Conversely, suppose $G$ is directed caterpillar graph. Each vertex $v$ in $G$ has leaf children $v_1, v_2, \dots, v_s$ with out-degree 0, and at most one non-leaf child with out-degree at least 1. If $v$ has no non-leaf child, we sequentially create bags $\{v, v_1\}, \{v, v_2\}, \dots, \{v, v_s\}$, thereby constructing a DAG-path-decomposition for $v$ and $\mathsf{suc}(v)$. If $v$ has a non-leaf child $u$, we sequentially create bags $\{v, v_1\}, \{v, v_2\}, \dots, \{v, v_s\}, \{v, u\}, \{u\}$, thus constructing a DAG-path-decomposition for $v$ and $\mathsf{suc}(v)$. Applying this process to all vertices, we obtain a DAG-path-decomposition of $G$ with width 1. Therefore, if $G$ is directed caterpillar graph, its DAG-path-width is 1.
 \end{proof}
+
+
+
+
+
+
+\section{Proofs of Chapter~\ref{chapter3}}
 
 \subsection{\textbf{Lemma~\ref{DAG_path_decomposition(L(G))}}}\label{appendix_B1}
 \begin{proof}
@@ -1107,18 +985,93 @@ To demonstrate \textbf{Theorem~\ref{theorem_dids}}, it is sufficient to prove th
 
 \subsection{\textbf{Lemma~\ref{mDEDS_mDiDS}}}\label{appendix_B2}
 \begin{proof}
-    First, we show that if $S$ is a DEDS of DAG $G$, then $S$ is also a DiDS of $L(G)$. If $S\in E[G]$ is a DEDS, for any edge $(v, w) \in E[G]$, either $(v, w) \in S$ holds or there exists some edge $(u, v) \in S$. In $L(G)$, for any vertex $(v, w) \in V[L(G)]$, either $(v, w) \in S$ holds or there exists some vertex $(u, v) \in S$. Thus, $S$ is a DiDS of $L(G)$. Similarly, if $S \in V[L(G)]$ is a DiDS of $L(G)$, then $S$ is a DEDS of $G$. Hence, the DEDS of $G$ and the DiDS of $L(G)$ correspond one-to-one. Therefore, the mDEDS of $G$ and the minimum DiDS of $L(G)$ are equal.
+    First, we show that if $S$ is a DEDS of DAG $G$, then $S$ is also a DiDS of $L(G)$. If $S\in E[G]$ is a DEDS, for any edge $(v, w) \in E[G]$, either $(v, w) \in S$ holds or there exists some edge $(u, v) \in S$. In $L(G)$, for any vertex $(v, w) \in V[L(G)]$, either $(v, w) \in S$ holds or there exists some vertex $(u, v) \in S$. Thus, $S$ is a DiDS of $L(G)$. Similarly, if $S \in V[L(G)]$ is a DiDS of $L(G)$, then $S$ is a DEDS of $G$. Hence, the DEDS of $G$ and the DiDS of $L(G)$ correspond one-to-one. Therefore, the mDEDS of $G$ and the mDiDS of $L(G)$ are equal.
 \end{proof}
 
 
 \subsection{\textbf{Theorem~\ref{DEDS_FPT}}}\label{appendix_B3}
 \begin{proof}
-    By \textbf{Lemma~\ref{mDEDS_mDiDS}}, it suffices to compute the minimum DiDS of $L(G)$. By \textbf{Lemma~\ref{DAG_path_decomposition(L(G))}}, given a nice DAG-path-decomposition $X$ of $G$ with width $w$, we can construct a DAG-path-decomposition $X^L$ of $L(G)$ with width at most $w^2$ and convert to nice DAG-path-decomposition $X^L_{nice}$ in polynomial time. Therefore, we can compute the minimum DiDS of $L(G)$ using the algorithm described in \textbf{Theorem~\ref{theorem_dids}}. Noting that $X^L_{nice}$ has width $O(w^2)$ and $O(n^2)$ bags, the time complexity of this computation is $O(2^{w^2}w^2n^2)$.
+    By \textbf{Lemma~\ref{mDEDS_mDiDS}}, it suffices to compute the mDiDS of $L(G)$. By \textbf{Lemma~\ref{DAG_path_decomposition(L(G))}}, given a nice DAG-path-decomposition $X$ of $G$ with width $w$, we can construct a DAG-path-decomposition $X^L$ of $L(G)$ with width at most $w^2$ and convert to nice DAG-path-decomposition $X^L_{nice}$ in polynomial time. Therefore, we can compute the mDiDS of $L(G)$ using the algorithm described in \textbf{Theorem~\ref{theorem_dids}}. Noting that $X^L_{nice}$ has width $O(w^2)$ and $O(n^2)$ bags, the time complexity of this computation is $O(2^{w^2}w^2n^2)$.
 \end{proof}
 
 
 
+\subsection{Algorithm to solve DiDS problem and the proof of \textbf{Theorem~\ref{theorem_dids}}}\label{appendix_B4}
+To construct an algorithm satisfying \textbf{Theorem~\ref{theorem_dids}}, we first define the function $\mathsf{DS}$. The function $\mathsf{DS}$ partitions each bag $X_i$ into two disjoint vertex sets $A_i, B_i \subseteq X_i ~(A_i \cup B_i = X_i, A_i \cap B_i = \varnothing)$. Then, among the directed dominating sets of the subgraph $G_i$ induced by $X_1 \cup X_2 \cup \dots \cup X_i$, it finds the smallest directed dominating set that includes all elements of $A_i$ and none of $B_i$. By computing this for all combinations of $A_i$ and $B_i$, we obtain the minimum dominating set for $G_i$. By considering all $i$, the minimum dominating set of the input graph $G$. The function $\mathsf{DS}$ is defined as follows:
+    %
+    \begin{equation}\label{def_ds}
+        \mathsf{DS}(i, A_i, B_i) = \min \left\{ |S_i| \left |
+        \begin{array}{l}
+            S_i \subseteq X_1 \cup X_2 \cup  \dots \cup X_i, \\
+            S_i \text{ is a DiDS of } G_i, \\
+            A_i \subseteq S_i, B_i \cap S_i = \varnothing
+        \end{array}
+        \right. \right\}.
+    \end{equation}
+    
 
+$\mathsf{DS}$ computes the size of the mDiDS of $G_i$. Below, we provide the recurrence formula for $\mathsf{DS}$, dividing cases based on whether $X_i$ introduces or forgets a vertex.
+
+\begin{align*}
+    \intertext{$\bullet$ When $X_i$ introduces $v \in V$:}
+    &\mathsf{DS}(i, A_i, B_i) = 
+    \begin{cases}
+        \mathsf{DS}(i-1, A_i \backslash \{v\}, B_i) + 1 & (v \in A_i) \\
+        \mathsf{DS}(i-1, A_i, B_i \backslash \{v\}) & (v \in B_i \text{ and } \mathsf{pred}(v) \cap A_i \neq \varnothing) \\
+        \infty & (\text{otherwise})
+    \end{cases}.
+    \intertext{$\bullet$ When $X_i$ forgets $v \in V$:}
+    &\mathsf{DS}(i, A_i, B_i) = \min \{\mathsf{DS}(i-1, A_i \cup \{v\}, B_i), \mathsf{DS}(i-1, A_i, B_i \cup \{v\})\}.
+\end{align*}
+
+Using $\mathsf{DS}$, we define the algorithm $\mathsf{Compute}(P)$, which outputs the size of the mDiDS of $G$ when given a nice DAG-path-decomposition $P$ of $G$.
+
+\begin{enumerate}
+    \item First Step: Set $\mathsf{DS}(0, \varnothing, \varnothing) = 0$.
+    \item Execution Step: For each $X_i$ $(i=1, 2, ..., s)$ in $P$, compute $\mathsf{DS}(i, A_i, B_i)$ for all combinations of $A_i$ and $B_i$.
+    \item Final Step: If $i = s$, output $\mathsf{DS}(s, \varnothing, \varnothing)$.
+\end{enumerate}
+
+To demonstrate \textbf{Theorem~\ref{theorem_dids}}, it is sufficient to prove the following two Lemmas.
+
+\begin{lemma}\label{dids}
+    $\mathsf{Compute}$ returns the size of the mDiDS of $G$.
+\end{lemma}
+
+\begin{proof}
+    It suffices to show that for each $i$, $\mathsf{DS}(i, A_i, B_i)$ satisfies the definition (\ref{def_ds}) of $\mathsf{DS}$. We prove this by induction on $i$.
+    
+    Base Case ($i=0$): Clearly, definition (\ref{def_ds}) holds.
+    
+    Inductive Step ($i=k \rightarrow i=k+1$): Assume that $\mathsf{DS}(i, A_i, B_i)$ satisfies definition (\ref{def_ds}) for $i=k$. We consider cases where $X_{k+1}$ introduces or forgets $v \in V$.
+    
+    \begin{itemize}
+        \item Case 1: $X_{k+1}$ introduces $v$
+        
+        If $v \in A_{k+1}$, then by (DPD2), $v$ does not dominate any vertex in $G_{k+1}$. Thus, $\mathsf{DS}(k+1, A_{k+1}, B_{k+1})$ is equal to $\mathsf{DS}(k, A_{k+1} \backslash \{v\}, B_{k+1}) + 1$. By induction, this satisfies definition (\ref{def_ds}).
+        
+        If $v \in B_{k+1}$ and $\mathsf{pred}(v) \cap A_{k+1} \neq \varnothing$, then some vertex $u \in A_{k+1}$ dominates $v$. Thus, $\mathsf{DS}(k+1, A_{k+1}, B_{k+1}) = \mathsf{DS}(k, A_{k+1}, B_{k+1} \backslash \{v\})$, which also satisfies definition (\ref{def_ds}) by induction.
+        
+        Otherwise, if $v \in B_{k+1}$ and $\mathsf{pred}(v) \cap A_{k+1} = \varnothing$, no vertex in $A_{k+1}$ dominates $v$. Hence, no valid mDiDS exists, and we set $\mathsf{DS}(k+1, A_{k+1}, B_{k+1}) = \infty$.
+        
+        \item Case 2: $X_{k+1}$ forgets $v$
+        
+        Since $G_{k+1} = G_k$, the mDiDS of $G_{k+1}$ is equal to the mDiDS of $G_k$. Thus, it is given by
+        \begin{align*}
+            \min \{\mathsf{DS}(k, A_{k+1} \cup \{v\}, B_{k+1}), \mathsf{DS}(k, A_{k+1}, B_{k+1} \cup \{v\})\},
+        \end{align*}
+        which satisfies definition (\ref{def_ds}).
+    \end{itemize}
+    Thus, by induction, \textbf{Lemma~\ref{dids}} is proven.
+\end{proof}
+
+\begin{lemma}
+    Given a DAG $G$ with $n$ vertices and a DAG-path-decomposition $P$ of width $w$, $\mathsf{Compute}(P)$ runs in $O(2^w w n)$ time.
+\end{lemma}
+
+\begin{proof}
+    Since $|X_i| \leq w+1$, the number of combinations of $A, B$ is at most $2^{w+1}$. The number of bags is $2|V|+1$. Checking $\mathsf{pred}(v) \cap A_i \neq \varnothing$ takes $O(w)$ time. Thus, the overall complexity is $O(2^w w n)$.
+\end{proof}
 
 
 
@@ -1142,7 +1095,7 @@ The input graph is assumed to be a DAG with a single root $r$. In this case, the
 
 \end{proof}
 
-To construct an algorithm satisfying \textbf{Theorem~\ref{theorem_lob}}, we define the function $\mathsf{LOB}$. Let the nice DAG-path-decomposition of DAG $G = (V, E)$ be $P = (X_1, X_2, \\ \dots, X_s)$. For each $i$ $(i=1, 2, \dots, s)$, let vertex sets $A_i, B_i \subseteq V$ satisfy $A_i \cup B_i = X_i$ and $A_i \cap B_i = \varnothing$. Let $G_i$ be the subgraph of $G$ induced by the vertex set $X_1 \cup X_2 \cup \dots \cup X_i$.
+To construct an algorithm satisfying \textbf{Theorem~\ref{theorem_lob}}, we define the function $\mathsf{LOB}$. Let the nice DAG-path-decomposition of DAG $G = (V, E)$ be $P = (X_1, X_2, \dots, X_s)$. For each $i$ $(i=1, 2, \dots, s)$, let vertex sets $A_i, B_i \subseteq V$ satisfy $A_i \cup B_i = X_i$ and $A_i \cap B_i = \varnothing$. Let $G_i$ be the subgraph of $G$ induced by the vertex set $X_1 \cup X_2 \cup \dots \cup X_i$.
 This algorithm finds all directed spanning trees of $G_i$ in which $A_i$ forms the leaf set and $B_i$ does not form the leaf set. By calculating this for all combinations of $A_i$ and $B_i$, the maximum number of leaves directed spanning tree for $G_i$ is obtained. By performing this calculation for all $i$, the maximum number of leaves directed spanning tree for the input graph $G$ is obtained. $\mathsf{LOB}$ is defined as follows, where the leaf set of a directed tree $T$ is denoted as $\mathsf{Leaf}(T)$:
 
 \begin{equation}\label{def_lob}
@@ -1175,7 +1128,7 @@ Using $\mathsf{LOB}$, we define the algorithm $\mathsf{Compute}(P)$ to output th
 
 
 \begin{enumerate}
-    \item First Step: If $V_r = \{r\}$, output 1 as the solution. Otherwise, set \\$\mathsf{LOB}(1, \{r\}, \varnothing) = -\infty, ~\mathsf{LOB}(1, \varnothing, \{r\}) = 0$.
+    \item First Step: If $V_r = \{r\}$, output 1 as the solution. Otherwise, set $\mathsf{LOB}(1, \{r\}, \varnothing) = -\infty, \mathsf{LOB}(1, \varnothing, \{r\}) = 0$.
     \item Execution Step: For each $X_i$ $(i=1, 2, ..., s)$ in $P$, compute $\mathsf{LOB}(i, A_i, B_i)$ for all combinations of $A_i$ and $B_i$.
     \item Final Step: If $i = s$, output $\mathsf{LOB}(s, \varnothing, \varnothing)$.
 \end{enumerate}
@@ -1188,7 +1141,7 @@ To demonstrate \textbf{Theorem~\ref{theorem_lob}}, it is sufficient to prove the
 
 \begin{proof}
     From the First Step of $\mathsf{Compute}$, if $G$ consists only of root $r$, it outputs 1. It is the solution to MaxLOB. Next, consider the case where $G$ contains vertices other than $r$. The proof of \textbf{Lemma~\ref{lob}} follows by showing that $\mathsf{LOB}(i, A_i, B_i)$ satisfies the definition (\ref{def_lob}) of $\mathsf{LOB}$ for each $i$. This is done by induction on $i$. For convenience, we refer to non-leaf vertices of a tree as stems.\\
-    When $i=1$, the First Step of $\mathsf{Compute}$ gives $\mathsf{LOB}(1, \{r\}, \varnothing) = -\infty$ and \\ $\mathsf{LOB}(1, \varnothing, \{r\}) = 0$. Since $r$ cannot be a leaf, it clearly satisfies the definition (\ref{def_lob}).\\
+    When $i=1$, the First Step of $\mathsf{Compute}$ gives $\mathsf{LOB}(1, \{r\}, \varnothing) = -\infty$ and $\mathsf{LOB}(1, \varnothing, \{r\}) = 0$. Since $r$ cannot be a leaf, it clearly satisfies the definition (\ref{def_lob}).\\
     For $i=k$, assume that $\mathsf{LOB}(i, A_i, B_i)$ satisfies definition (\ref{def_lob}). We consider the cases where $X_{k+1}$ introduces or forgets $v \in V$.
     \begin{itemize}
         \item Case 1: $X_{k+1}$ introduces $v \in V$
@@ -1215,8 +1168,7 @@ To demonstrate \textbf{Theorem~\ref{theorem_lob}}, it is sufficient to prove the
 \end{lemma}
     
 \begin{proof}
-    %The First Step and Final Step can each be computed in $O(1)$ time. We now analyze the time complexity for the Execution Step. For each $X_i$, note that $|X_i| \leq w+1$, so the number of combinations of $A$ and $B$ is at most $2^{w+1}$. Additionally, by \textbf{Proposition~\ref{number_of_bag}}, we have $0 \leq i \leq 2|V|+1$. Furthermore, since the computation of $\mathsf{pred}(v)$ takes $O(w)$ time, the time complexity of computing $\mathsf{LOB}(i, A_i, B_i)$ is $O(w)$ if $X_i$ introduces a vertex and $O(1)$ if $X_i$ forgets a vertex. Therefore, the overall time complexity of $\mathsf{Compute}$ is $O(w 2^w n)$.
-    The First Step and Final Step can each be computed in $O(1)$ time. We now analyze the time complexity for the Execution Step. For each $X_i$, note that $|X_i| \leq w+1$, so the number of combinations of $A$ and $B$ is at most $2^{w+1}$. Additionally, we have $0 \leq i \leq 2|V|+1$. Furthermore, since the computation of $\mathsf{pred}(v)$ takes $O(w)$ time, the time complexity of computing $\mathsf{LOB}(i, A_i, B_i)$ is $O(w)$ if $X_i$ introduces a vertex and $O(1)$ if $X_i$ forgets a vertex. Therefore, the overall time complexity of $\mathsf{Compute}$ is $O(w 2^w n)$.
+    The First Step and Final Step can each be computed in $O(1)$ time. We now analyze the time complexity for the Execution Step. For each $X_i$, note that $|X_i| \leq w+1$, so the number of combinations of $A$ and $B$ is at most $2^{w+1}$. Additionally, by \textbf{Proposition~\ref{number_of_bag}}, we have $0 \leq i \leq 2|V|+1$. Furthermore, since the computation of $\mathsf{pred}(v)$ takes $O(w)$ time, the time complexity of computing $\mathsf{LOB}(i, A_i, B_i)$ is $O(w)$ if $X_i$ introduces a vertex and $O(1)$ if $X_i$ forgets a vertex. Therefore, the overall time complexity of $\mathsf{Compute}$ is $O(w 2^w n)$.
 \end{proof}
 
 
@@ -1322,8 +1274,7 @@ To demonstrate \textbf{Theorem~\ref{theorem_disjoint_path}}, it is sufficient to
 \end{lemma}
 
 \begin{proof}
-    %In preprocessing, it can be determined in $O(1)$ time whether $G$ consists of a single vertex. Also, removing all edges entering each $t \in T$ takes $O(n^2)$ time. The First Step and Final Step can each be computed in $O(1)$ time. Below, we analyze the time complexity of the Execution Step. For each $X_i$, notice that $|X_i| \leq w+1$. The number of combinations of $A^1_i, A^2_i, \dots, A^k_i, B_i$ is at most $(k+1)^{w+1}$. Furthermore, by \textbf{Proposition~\ref{number_of_bag}}, we know that $0 \leq i \leq 2|V|+1$. Additionally, since the calculation of $\mathsf{pred}(v)$ and $\mathsf{suc}(v)$ takes $O(w)$ time, the time complexity of $\mathsf{Cal}(i, \mathscr{A}_i, B_i)$ is $O(w^2)$ when $X_i$ is an "introduce" operation, and $O(k)$ when it is a "forget" operation. Therefore, the total time complexity of $\mathsf{Compute}$ is $O((k+1)^w(w^2+k)n+n^2)$.
-    In preprocessing, it can be determined in $O(1)$ time whether $G$ consists of a single vertex. Also, removing all edges entering each $t \in T$ takes $O(n^2)$ time. The First Step and Final Step can each be computed in $O(1)$ time. Below, we analyze the time complexity of the Execution Step. For each $X_i$, notice that $|X_i| \leq w+1$. The number of combinations of $A^1_i, A^2_i, \dots, A^k_i, B_i$ is at most $(k+1)^{w+1}$. Furthermore, we know that $0 \leq i \leq 2|V|+1$. Additionally, since the calculation of $\mathsf{pred}(v)$ and $\mathsf{suc}(v)$ takes $O(w)$ time, the time complexity of $\mathsf{Cal}(i, \mathscr{A}_i, B_i)$ is $O(w^2)$ when $X_i$ is an "introduce" operation, and $O(k)$ when it is a "forget" operation. Therefore, the total time complexity of $\mathsf{Compute}$ is $O((k+1)^w(w^2+k)n+n^2)$.
+    In preprocessing, it can be determined in $O(1)$ time whether $G$ consists of a single vertex. Also, removing all edges entering each $t \in T$ takes $O(n^2)$ time. The First Step and Final Step can each be computed in $O(1)$ time. Below, we analyze the time complexity of the Execution Step. For each $X_i$, notice that $|X_i| \leq w+1$. The number of combinations of $A^1_i, A^2_i, \dots, A^k_i, B_i$ is at most $(k+1)^{w+1}$. Furthermore, by \textbf{Proposition~\ref{number_of_bag}}, we know that $0 \leq i \leq 2|V|+1$. Additionally, since the calculation of $\mathsf{pred}(v)$ and $\mathsf{suc}(v)$ takes $O(w)$ time, the time complexity of $\mathsf{Cal}(i, \mathscr{A}_i, B_i)$ is $O(w^2)$ when $X_i$ is an "introduce" operation, and $O(k)$ when it is a "forget" operation. Therefore, the total time complexity of $\mathsf{Compute}$ is $O((k+1)^w(w^2+k)n+n^2)$.
 \end{proof}
 
 By modifying the above algorithm, we can construct algorithms for solving related problems, such as the edge-disjoint path problem.
@@ -1411,8 +1362,7 @@ Thus, for $i = k+1$, both equations (\ref{ST_intro}) and (\ref{ST_forget}) repre
 \end{lemma}
 
 \begin{proof}
-    %In preprocessing, the calculation of the set of vertices reachable from $r$ takes $O(n^2)$ time. The First Step and Final Step can each be computed in $O(1)$ time. Now, let’s analyze the time complexity of the Execution Step. For each $X_i$, notice that $|X_i| \leq w + 1$, so the number of combinations of $A_i$ and $B_i$ is at most $2^{w+1}$. Also, by \textbf{Proposition~\ref{number_of_bag}}, $0 \leq i \leq 2|V|+1$. Additionally, when introducing a vertex $v \in V$ in $X_i$, the computation of $\mathsf{pred}(v) \cap A_i \neq \varnothing$ and $\min$, as well as the check for $v \in R \cup \{r\}$, each takes $O(w)$, $O(w)$, and $O(k)$ time, respectively. Therefore, if $X_i$ introduces a vertex, the time complexity of calculating $\mathsf{ST}(i; A_i, B_i)$ is $O(k+w)$, and if $X_i$ forgets a vertex, the time complexity is $O(1)$. Hence, the time complexity of the Execution Step is $O(2^w(k+w)n)$. Thus, the overall time complexity of $\mathsf{Compute}$ is $O(2^w(k+w)n + n^2)$.
-    In preprocessing, the calculation of the set of vertices reachable from $r$ takes $O(n^2)$ time. The First Step and Final Step can each be computed in $O(1)$ time. Now, let’s analyze the time complexity of the Execution Step. For each $X_i$, notice that $|X_i| \leq w + 1$, so the number of combinations of $A_i$ and $B_i$ is at most $2^{w+1}$. Also, $0 \leq i \leq 2|V|+1$. Additionally, when introducing a vertex $v \in V$ in $X_i$, the computation of $\mathsf{pred}(v) \cap A_i \neq \varnothing$ and $\min$, as well as the check for $v \in R \cup \{r\}$, each takes $O(w)$, $O(w)$, and $O(k)$ time, respectively. Therefore, if $X_i$ introduces a vertex, the time complexity of calculating $\mathsf{ST}(i; A_i, B_i)$ is $O(k+w)$, and if $X_i$ forgets a vertex, the time complexity is $O(1)$. Hence, the time complexity of the Execution Step is $O(2^w(k+w)n)$. Thus, the overall time complexity of $\mathsf{Compute}$ is $O(2^w(k+w)n + n^2)$.
+    In preprocessing, the calculation of the set of vertices reachable from $r$ takes $O(n^2)$ time. The First Step and Final Step can each be computed in $O(1)$ time. Now, let’s analyze the time complexity of the Execution Step. For each $X_i$, notice that $|X_i| \leq w + 1$, so the number of combinations of $A_i$ and $B_i$ is at most $2^{w+1}$. Also, by \textbf{Proposition~\ref{number_of_bag}}, $0 \leq i \leq 2|V|+1$. Additionally, when introducing a vertex $v \in V$ in $X_i$, the computation of $\mathsf{pred}(v) \cap A_i \neq \varnothing$ and $\min$, as well as the check for $v \in R \cup \{r\}$, each takes $O(w)$, $O(w)$, and $O(k)$ time, respectively. Therefore, if $X_i$ introduces a vertex, the time complexity of calculating $\mathsf{ST}(i; A_i, B_i)$ is $O(k+w)$, and if $X_i$ forgets a vertex, the time complexity is $O(1)$. Hence, the time complexity of the Execution Step is $O(2^w(k+w)n)$. Thus, the overall time complexity of $\mathsf{Compute}$ is $O(2^w(k+w)n + n^2)$.
 \end{proof}
 
 Furthermore, by a simple extension of the above algorithm, we can efficiently solve the vertex-weighted directed Steiner tree problem.
@@ -1449,7 +1399,7 @@ Furthermore, by a simple extension of the above algorithm, we can efficiently so
 
 
 
-\section{Proof of Section~\ref{chapter4}}
+\section{Proof of Chapter~\ref{chapter4}}
 
 \subsection{\textbf{Lemma~\ref{lemma_approximation2}}}\label{appendix_C1}
 \begin{proof}
@@ -1459,7 +1409,7 @@ Furthermore, by a simple extension of the above algorithm, we can efficiently so
 \end{proof}
 
 
-\section{Figures and Proofs of Section~\ref{chapter5}}
+\section{Figures and Proofs of Chapter~\ref{chapter5}}
 
 \subsection{Figure~\ref{fig:10}, \ref{fig:11}, \ref{fig:12}, \ref{fig:13}, \ref{fig:14}}\label{location_figures}
 
@@ -1741,9 +1691,5 @@ Company X and owns stock in Company Y. Author C is a member of committee Z.
 \end{credits}
 
 \end{comment}
-
-\section{Eligibility for the student award}
-
-The first author was a student until March 2025, and this research was conducted during the first author's student tenure. The first author performed the majority of this research.
 
 \end{document}
