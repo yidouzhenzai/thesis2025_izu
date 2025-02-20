@@ -159,7 +159,7 @@ Based on the above, our contributions are as follows:
     %\item Proposing approximation algorithms for DAG-path-decomposition and parameterized algorithms to construct decompositions with small width.  
     \item We propose approximation algorithms for DAG-path-decomposition and parameterized algorithms to construct decompositions with small width.  
     %\item Extending DAG-pathwidth to DAG treewidth, a parameter measuring the similarity of a directed graph to a directed tree.  
-    \item We newly extend DAG-pathwidth to DAG-treewidth, a parameter measuring the similarity of a directed graph to a directed tree.  
+    %\item We newly extend DAG-pathwidth to DAG-treewidth, a parameter measuring the similarity of a directed graph to a directed tree.  
 \end{enumerate}
 
 %In Section 3, we design FPT algorithms for the \textsc{Directed Dominating Set Problem} and the \textsc{Max Leaf Outbranching Problem} on DAGs in $O(2^w wn)$ time, given a DAG with $n$ vertices and a DAG-path-decomposition of width $w$. We also design an FPT algorithm for the \textsc{Directed Steiner Tree Problem}, which runs in $O(2^w(k + w)n + n^2)$ time when the size of the terminal set is $k$. Additionally, we propose a parameterized algorithm for the \textsc{$k$-Disjoint Path Problem}, which runs in $O((k + 1)^w(w^2 + k)n + n^2)$ time. At the end of Section 3, we show the advantages of DAG-pathwidth compared to treewidth using the \textsc{Directed Edge Dominating Set Problem}. While the proposed algorithms are designed for DAGs, they can also be applied to general directed graphs by performing a strongly connected component. In Section 4, we show the existence of a $O(\log^{3/2} n)$-approximation algorithm for DAG-pathwidth on DAGs by demonstrating the equivalence between the one-shot Black Pebbling Problem and the problem of computing the DAG-pathwidth. 
@@ -202,7 +202,7 @@ In (DPD2), we interpret $X_0 = \emptyset$. Therefore, a directed edge $(u, w)$ s
 %The \emph{DAG-pathwidth} of $H$ can also be defined in the same way as the pathwidth. Note that in \cite{art12}, condition~\ref{original_rule} is defined that $u, v \in X_1$ or there exists $i$ $(i \geq 2)$ such that $u, v \in X_i$ and $u \notin X_{i-1}$. In this study, we adopt the above definition for the sake of algorithmic simplicity.
 
 The difference between (undirected) path decomposition,
-directed path decomposition, and DAG-path-decomposition is the second rule. The second rule of path decomposition is ``for any edge $(u, v) \in E$, there exists an $i$ such that $u, v \in X_i$,''  while that of directed path decomposition is ``for any directed edge $(u, v) \in E$, there exist $i, j$ $(i \leq j)$ such that $u \in X_i$, $v \in X_j$.'' We show their entire definitions in Appendix~\ref{sec:defpd}.
+directed path decomposition, and DAG-path-decomposition is the second rule. The second rule of path decomposition is ``for any edge $(u, v) \in E$, there exists an $i$ such that $u, v \in X_i$,''  while that of directed path decomposition is ``for any directed edge $(u, v) \in E$, there exist $i, j$ $(i \leq j)$ such that $u \in X_i$, $v \in X_j$.'' %We show their entire definitions in Appendix~\ref{sec:defpd}.
 
 The DAG-pathwidth is a parameter that indicates how closely the structure of a directed graph resembles a directed path. From (DPD3), any vertex $v$ is contained in consecutive bags. Additionally, (DPD2) and (DPD3) imply that for any edge $(u, v)$, $u$ and $v$ first appear together in a single bag or $u$ appears in a bag without $v$, followed by a bag containing both $u$ and $v$. Thus, a DAG-path-decomposition can be interpreted as an operation of adding vertices to bags according to a topological order of the graph.
 
@@ -416,54 +416,68 @@ The pebbling number for one-shot BP can also be defined similarly. For general D
 
 \subsection{Advantages of DAG-path-decomposition Compared to Tree Decomposition}
 
-For NP-hard problems on a DAG, it is sometimes possible to construct a parameterized algorithm using the treewidth of the underlying graph.  
-However, since tree decomposition does not retain information about edge directions, constructing an algorithm can become complex.  
-On the other hand, DAG-path-decomposition retains edge direction information, making it generally easier to construct an algorithm compared to using tree decomposition.  
+%For NP-hard problems on a DAG, it is sometimes possible to construct a parameterized algorithm using the treewidth of the underlying graph.  
+%However, since tree decomposition does not retain information about edge directions, constructing an algorithm can become complex.  
+%On the other hand, DAG-path-decomposition retains edge direction information, making it generally easier to construct an algorithm compared to using tree decomposition.  
+
+For NP-hard problems on a DAG, it is sometimes possible to construct a parameterized algorithm using the treewidth of the underlying graph of the DAG.  
+However, the lack of edge direction information in tree decompositions might complicate algorithm construction. Conversely, DAG-path decompositions, which preserve edge direction, generally facilitate simpler algorithm design compared to approaches using tree decompositions.
 
 In this section, we compare an algorithm using tree decomposition for the \textsc{Directed Edge Dominating Set Problem}~(DEDS problem)~\cite{art22} with an algorithm using DAG-path-decomposition and demonstrate the characteristics of DAG-path-decomposition.  
 
-For a directed graph \(G = (V, E)\), a subset \(S \subseteq E\) is a \emph{Directed Edge Dominating Set (DEDS)} of \(G\) if, for any \((v, w) \in E\), either \((v, w) \in S\) holds or there exists some \((u, v) \in S\).  
+%For a directed graph \(G = (V, E)\), a subset \(S \subseteq E\) is a \emph{Directed Edge Dominating Set (DEDS)} of \(G\) if, for any \((v, w) \in E\), either \((v, w) \in S\) holds or there exists some \((u, v) \in S\).  
+For a directed graph \(G = (V, E)\), a subset \(S \subseteq E\) is a \emph{Directed Edge Dominating Set (DEDS)} of \(G\) if, for any \((v, w) \in E\), either \((v, w) \in S\) holds or there exists some \(u \in V\) such that \((u, v) \in S\).  
 The \emph{minimum DEDS (mDEDS)} is the DEDS \(S\) with the smallest \(|S|\) among all DEDS.  
 The DEDS problem is the problem of determining the size of the mDEDS of \(G\).  
 
 A related problem is the \emph{Directed Dominating Set Problem (DiDS problem)}.  
-This problem seeks the smallest subset \(S \subseteq V\) such that, for every \(v \in V\), either \(v \in S\) or there exists some \(u \in S\) where \((u, v) \in E\).  
-~\cite{art23}, ~\cite{art22} established the following result:  
+%This problem seeks the smallest subset \(S \subseteq V\) such that, for every \(v \in V\), either \(v \in S\) or there exists some \(u \in S\) where \((u, v) \in E\).  
+%~\cite{art23}, ~\cite{art22} established the following result:  
+This problem finds the smallest subset \(S \subseteq V\) such that, for every \(v \in V\), either \(v \in S\) or there exists some \(u \in S\) such that \((u, v) \in E\). The paper~\cite{art23} proved that the DEDS problem remains NP-hard even for planar bounded degree DAGs. The paper~\cite{art22} established the following result:
 
-\begin{proposition}[time Complexity]
-    The DEDS problem remains NP-hard even for planar bounded degree DAGs.
-\end{proposition}
+%\begin{proposition}[time Complexity]
+%    The DEDS problem remains NP-hard even for planar bounded degree DAGs.
+%\end{proposition}
 
-\begin{proposition}[FPT algorithm with treewidth]
+%\begin{proposition}[FPT algorithm with treewidth]
+\begin{proposition}[\cite{art22}]
     If the treewidth of the underlying graph of a DAG \(G\) is at most \(tw\), then there exists an FPT algorithm that solves the DEDS problem on \(G\) in \(4^{2tw^2} 8^{2tw} n^{O(1)}\) time.  
 \end{proposition}
 
-The above algorithm maintains the following information for dynamic programming. For each bag \(B_t\) in the tree decomposition, it stores the set of edges \(A \subseteq E(B_t)\) that form a solution, a function \(f\) representing the shortest distance from each vertex \(v \in B_t\) to the solution set, and a function \(s_f\) indicating whether the solution is valid.  
-This algorithm can be used on general directed graphs and is applicable to more generalized problems.  
+In a standard tree decomposition, for an edge $(u, w) \in E$, $w$ might appears in a bag before $u$, which complicates the design of a tree dcomposition-based algorithm, as evidenced by the intricate structure of the algorithm in~\cite{art22}.
+%
+%The above algorithm maintains the following information for dynamic programming. For each bag \(B_t\) in the tree decomposition, it stores the set of edges \(A \subseteq E(B_t)\) that form a solution, a function \(f\) representing the shortest distance from each vertex \(v \in B_t\) to the solution set, and a function \(s_f\) indicating whether the solution is valid.  
+%This algorithm can be used on general directed graphs and is applicable to more generalized problems.  
+%
+%In contrast, DAG-path-decomposition includes information on edge directions, allowing for a sequential investigation of edge dominance relationships from the root.  
+In contrast, DAG-path-decomposition includes information on edge directions, enabling the sequential investigation of edge dominance relationships from the roots of the DAG.  
+%Moreover, since the width of a DAG-path-decomposition cannot be smaller than the maximum in-degree, it is possible to efficiently construct a DAG-path-decomposition of the line graph, defined below, from the DAG-path-decomposition of the input graph.  
+%By treating edges as vertices, processing can be performed more intuitively.  
+%For these reasons, compared to treewidth-based approaches, DAG-path-decomposition reduces the number of required variables and simplifies algorithm design.  
+Together with the technique of converting a line graph, described below, DAG-path-decomposition reduces the number of variables required for algorithmic design, leading to a simplified and intuitive algorithm. 
 
-In contrast, DAG-path-decomposition includes information on edge directions, allowing for a sequential investigation of edge dominance relationships from the root.  
-Moreover, since the width of a DAG-path-decomposition cannot be smaller than the maximum in-degree, it is possible to efficiently construct a DAG-path-decomposition of the line graph, defined below, from the DAG-path-decomposition of the input graph.  
-By treating edges as vertices, processing can be performed more intuitively.  
-For these reasons, compared to treewidth-based approaches, DAG-path-decomposition reduces the number of required variables and simplifies algorithm design.  
-In this section, we prove the following theorem:  
+In this subsection, we prove the following theorem:  
 
-\begin{theorem}[proof in appendix~\ref{appendix_B3}]\label{DEDS_FPT}
+\begin{theorem}[proof in Appendix~\ref{appendix_B3}]\label{DEDS_FPT}
     Given a DAG \(G\) and its nice DAG-path-decomposition of width \(w\), there exists an algorithm that solves the DEDS problem on \(G\) in \(O(2^{w^2} w^2 n^2)\) time.  
 \end{theorem}
+%
+Note that since we can regard a DAG-path-decomposition as a tree decomposition, the DAG-pathwidth of a graph is at least the treewidth of the graph. Therefore, we cannot directly compare \(O(2^{w^2} w^2 n^2)\) and \(4^{2tw^2} 8^{2tw} n^{O(1)}\).
 
 Before constructing the above algorithm, we define the \emph{line graph} of a directed graph.  
 For a directed graph \(G = (V, E)\), its \emph{line graph} \(L(G) = (V_L, E_L)\) is defined as follows:  
 \(V_L = \{e \mid e \in E\}\) and \(E_L = \{(e_1, e_2) \mid e_1 = (u, v) \in E, e_2 = (v, w) \in E\}\).  
 That is, the line graph of a directed graph is obtained by replacing the vertices and edges of the original graph while preserving edge directions.  
 
-DAG-pathwidth-based algorithm reformulates the mDEDS problem as the problem of finding the mDiDS of the line graph and solves it using the DAG-path-decomposition of the line graph.  
+%DAG-pathwidth-based algorithm reformulates the mDEDS problem as the problem of finding the mDiDS of the line graph and solves it using the DAG-path-decomposition of the line graph.  
+A DAG-pathwidth-based algorithm reformulates the mDEDS problem as the problem of finding the mDiDS of the line graph and solves it using the DAG-path-decomposition of the line graph.  
 We first prove the following two lemmas, which immediately lead to \textbf{Theorem~\ref{DEDS_FPT}}.  
 
-\begin{lemma}[proof in appendix~\ref{appendix_B1}]\label{DAG_path_decomposition(L(G))}
+\begin{lemma}[proof in Appendix~\ref{appendix_B1}]\label{DAG_path_decomposition(L(G))}
     Given a DAG \(G\) with \(n\) vertices and its nice DAG-path-decomposition of width \(w\), a nice DAG-path-decomposition of \(L(G)\) with width at most \(w^2\) can be constructed in \(O(w^2 n)\) time.  
 \end{lemma}
 
-\begin{lemma}[proof in appendix~\ref{appendix_B2}]\label{mDEDS_mDiDS}
+\begin{lemma}[proof in Appendix~\ref{appendix_B2}]\label{mDEDS_mDiDS}
     For a DAG \(G\), the mDEDS of \(G\) and the mDiDS of \(L(G)\) are equal.  
 \end{lemma}
 
@@ -475,33 +489,37 @@ We first prove the following two lemmas, which immediately lead to \textbf{Theor
 
 Beyond the DEDS problem, DAG-path-decomposition enables the construction of simple parameterized algorithms for NP-hard problems on DAGs.  
 In this section, we design parameterized algorithms using DAG-path-decomposition for the following four problems, which are NP-hard even on DAGs~\cite{art17}.  
-Proofs of correctness are provided in appendix.  
+%Proofs of correctness are provided in appendix.  
+Proofs of the theorems are provided in the appendix.  
 
-We first establish the existence of an FPT algorithm for the DiDS problem. The proof of following theorem is shown in the appendix.
+We first establish the existence of an FPT algorithm for the DiDS problem. %The proof of following theorem is shown in the appendix.
 
-\begin{theorem}[proof in appendix~\ref{appendix_B4}]\label{theorem_dids}
+\begin{theorem}[proof in Appendix~\ref{appendix_B4}]\label{theorem_dids}
     Given a DAG \(G\) and its nice DAG-path-decomposition of width \(w\), there exists an algorithm that solves the DiDS problem on \(G\) in \(O(2^w w n)\) time.  
 \end{theorem}
 
-Next, we present an FPT algorithm for the \emph{Max Leaf Outbranching Problem (MaxLOB)}.  
-Given a directed graph \(G = (V, E)\) and a root \(r \in V\), the MaxLOB problem seeks the maximum number of leaves in a directed spanning tree rooted at \(r\). 
+Next, we present an FPT algorithm for the \textsc{Max Leaf Outbranching Problem} (MaxLOB).  
+%Given a directed graph \(G = (V, E)\) and a root \(r \in V\), the MaxLOB problem seeks the maximum number of leaves in a directed spanning tree rooted at \(r\). 
+Given a directed graph \(G = (V, E)\) and a root \(r \in V\) of $G$, the MaxLOB problem finds the maximum number of leaves in a directed spanning tree rooted at \(r\). 
 
-\begin{theorem}[proof in appendix~\ref{appendix_B5}]\label{theorem_lob}
+\begin{theorem}[proof in Appendix~\ref{appendix_B5}]\label{theorem_lob}
     Given a DAG \(G\) and its nice DAG-path-decomposition of width \(w\), there exists an algorithm that solves the MaxLOB problem on \(G\) in \(O(2^w w n)\) time.  
 \end{theorem}
 
-We also design a parameterized algorithm for the \emph{Disjoint Path Problem}, defined as follows:  
-Given a directed graph \(G = (V, E)\) and \(k\) vertex pairs \((s_1, t_1), (s_2, t_2), \dots, (s_k, t_k)\), let \(\mathcal{P} = (P_1, P_2, \dots, P_k)\) be a set of vertex-disjoint paths from \(s_i\) to \(t_i\).  
-The goal of the Disjoint Path Problem is to find the minimum sum of path lengths, \(\sum_{i=1}^{k} |P_i|\).  
+We also design a parameterized algorithm for the \textsc{Disjoint Path Problem}, defined as follows:  
+%Given a directed graph \(G = (V, E)\) and \(k\) vertex pairs \((s_1, t_1), (s_2, t_2), \dots, (s_k, t_k)\), let \(\mathcal{P} = (P_1, P_2, \dots, P_k)\) be a set of vertex-disjoint paths from \(s_i\) to \(t_i\).  
+Given a directed graph \(G = (V, E)\) and \(k\) vertex pairs \((s_1, t_1), (s_2, t_2), \dots, (s_k, t_k)\), let \(\mathcal{P} = (P_1, P_2, \dots, P_k)\) be a set of vertex-disjoint paths such that $P_i$ is a path from \(s_i\) to \(t_i\).  
+The goal of the \textsc{Disjoint Path Problem} is to find the minimum sum of path lengths, \(\sum_{i=1}^{k} |P_i|\).  
 
-\begin{theorem}[proof in appendix~\ref{appendix_B6}]\label{theorem_disjoint_path}
-    Given a DAG \(G\) and its nice DAG-path-decomposition of width \(w\), there exists an algorithm that solves the Disjoint Path Problem on \(G\) in \(O((k+1)^w (w^2 + wk) n + n^2)\) time.  
+\begin{theorem}[proof in Appendix~\ref{appendix_B6}]\label{theorem_disjoint_path}
+    Given a DAG \(G\) and its nice DAG-path-decomposition of width \(w\), there exists an algorithm that solves the \textsc{Disjoint Path Problem} on \(G\) in \(O((k+1)^w (w^2 + wk) n + n^2)\) time.  
 \end{theorem}
 
-Finally, we present an FPT algorithm for the \emph{Directed Steiner Problem (DST problem)}.  
-Given a weighted directed graph \(G = (V, E)\), a root \(r \in V\), and a set of terminals \(R = \{t_1, t_2, \dots, t_k\} \subseteq V\), the DST problem seeks the minimum-weight directed tree rooted at \(r\) that spans all \(t_i \in R\).  
+Finally, we present an FPT algorithm for the \textsc{Directed Steiner Problem} (DST problem).  
+%Given a weighted directed graph \(G = (V, E)\), a root \(r \in V\), and a set of terminals \(R = \{t_1, t_2, \dots, t_k\} \subseteq V\), the DST problem seeks the minimum-weight directed tree rooted at \(r\) that spans all \(t_i \in R\).  
+Given a weighted directed graph \(G = (V, E)\), a root \(r \in V\) of $G$, and a set of terminals \(R = \{t_1, t_2, \dots, t_k\} \subseteq V\), the DST problem finds the minimum-weight directed tree rooted at \(r\) that spans all \(t_i \in R\).  
 
-\begin{theorem}[proof in appendix~\ref{appendix_B7}]\label{theorem_DST}
+\begin{theorem}[proof in Appendix~\ref{appendix_B7}]\label{theorem_DST}
     Given a DAG \(G\) and its nice DAG-path-decomposition of width \(w\), there exists an FPT algorithm that solves the DST problem on \(G\) in \(O(2^w (k+w) n + n^2)\) time.  
 \end{theorem}
 
