@@ -112,7 +112,7 @@ Graduate School of Informatics, Kyoto University, Kyoto, Japan
 \begin{abstract}
 %The abstract should briefly summarize the contents of the paper in 150--250 words.
 
-DAG (Directed Acyclic Graph)-pathwidth is a parameter that measures how closely a directed graph is to a directed path. This parameter is useful for designing parameterized algorithms to solve NP-hard problems even on DAGs.
+DAG (Directed Acyclic Graph)-pathwidth is a parameter that measures how close a directed graph is to a directed path. This parameter is useful for designing parameterized algorithms to solve NP-hard problems even on DAGs.
 %This parameter provides a non-trivial width even for DAG, which is difficult to parameterize with directed pathwidth. 
 %
 In this paper, we first design parameterized algorithms with DAG-pathwidth for various NP-hard problems even on DAGs. Specifically, we design fixed-parameter tractable (FPT) algorithms for the \textsc{Directed Dominating Set Problem} and the \textsc{Max Leaf Outbranching Problem}. Given a DAG with $n$ vertices and a DAG-path-decomposition of width $w$, both problems can be solved exactly in $O(2^w w n)$ time. Similarly, we propose parameterized algorithms for the \textsc{Directed Steiner Tree Problem} and the \textsc{$k$-Disjoint Path Problem}. 
@@ -140,7 +140,7 @@ For directed graphs, \emph{directed pathwidth} was introduced by Reed~\cite{art9
 
 %Kasahara et al.~\cite{art12} proposed \emph{DAG-pathwidth}, which measures how close a directed graph is to a directed path. DAG-pathwidth adds a rule requiring that for any edge, its endpoints must appear in the same bag of the decomposition. This ensures that strongly connected components are contained in a single bag, allowing non-trivial widths for DAGs and facilitating effective FPT algorithm design.
 
-Kasahara et al.~\cite{art12} proposed \emph{DAG-pathwidth}, which measures how close a directed graph is to a directed path. DAG-path decompositions follow the same rules as standard path decompositions, with the added constraint that for any vertex, its first appearance in a bag must respect the topological order of the original input graph, and all vertices within a strongly connected component of the original graph must appear together in one bag. This constraint facilitates the design of efficient fixed-parameter tractable (FPT) algorithms especially on DAGs. While they introduced DAG-pathwidth to analyze the discord $k$-independent set problem, we believe that this concept has broader applicability and can be a valuable tool for analyzing various NP-hard problems on DAGs. Although they demonstrated that computing DAG-pathwidth is NP-hard, they did not provide a practical algorithm for its computation.
+Kasahara et al.~\cite{art12} proposed \emph{DAG-pathwidth}, which measures how close a directed graph is to a directed path. DAG-path decompositions follow the same rules as standard path decompositions, with the added constraint that for any vertex, its first appearance in a bag must respect a topological order of the original input graph, and all vertices within a strongly connected component of the original graph must appear together in one bag. This constraint facilitates the design of efficient fixed-parameter tractable (FPT) algorithms especially on DAGs. While they introduced DAG-pathwidth to analyze the discord $k$-independent set problem, we believe that this concept has broader applicability and can be a valuable tool for analyzing various NP-hard problems on DAGs. Although they showed that computing DAG-pathwidth is NP-hard, they did not provide a non-trivial practical algorithm for its computation.
 
 %Tree decomposition is one of the approach to efficiently solve NP-hard problems. This operation is dividing the vertices of a undirected graph into subsets, treating each subset as a node, and transforming the graph into a tree-like structure. This enables algorithms designed for trees to general graphs, which allows efficient solutions even for NP-hard problems. Each node in a tree decomposition is called bag, and the \emph{width} of the tree decomposition is the maximum number of vertices in a single bag. A \emph{treewidth} is the minimum width across all possible tree decompositions of a graph. A smaller treewidth indicates that the graph's structure is closer to a tree. When the treewidth is bounded by a constant, it is sometimes possible to solve NP-hard problems in polynomial time with respect to the number of vertices.
 
@@ -154,26 +154,29 @@ Kasahara et al.~\cite{art12} proposed \emph{DAG-pathwidth}, which measures how c
 
 %Our contributions are as follows:  
 Based on the above, our contributions are as follows:  
-\begin{enumerate}
+\begin{itemize}
     %\item Constructing parameterized algorithms using DAG-pathwidth for various NP-hard problems on DAGs.  
-    \item We construct parameterized algorithms using DAG-pathwidth for various NP-hard problems on DAGs.  
+    \item We show that DAG-pathwidth can be applied for various NP-hard problems on DAGs (Section~\ref{chapter3}).  
     %\item Proposing approximation algorithms for DAG-path-decomposition and parameterized algorithms to construct decompositions with small width.  
-    \item We propose approximation algorithms for DAG-path-decomposition and parameterized algorithms to construct decompositions with small width.  
+    \item We show the existence of an $O(\log^{3/2} n)$-approximation algorithm for computing the DAG-pathwidth of a DAG (Section~\ref{chapter4}).
+    \item We propose a parameterized algorithm for constructing a DAG-path-decomp-osition with small width (Section~\ref{chapter5}).  
     %\item Extending DAG-pathwidth to DAG treewidth, a parameter measuring the similarity of a directed graph to a directed tree.  
     %\item We newly extend DAG-pathwidth to DAG-treewidth, a parameter measuring the similarity of a directed graph to a directed tree.  
-\end{enumerate}
+\end{itemize}
 
 %In Section 3, we design FPT algorithms for the \textsc{Directed Dominating Set Problem} and the \textsc{Max Leaf Outbranching Problem} on DAGs in $O(2^w wn)$ time, given a DAG with $n$ vertices and a DAG-path-decomposition of width $w$. We also design an FPT algorithm for the \textsc{Directed Steiner Tree Problem}, which runs in $O(2^w(k + w)n + n^2)$ time when the size of the terminal set is $k$. Additionally, we propose a parameterized algorithm for the \textsc{$k$-Disjoint Path Problem}, which runs in $O((k + 1)^w(w^2 + k)n + n^2)$ time. At the end of Section 3, we show the advantages of DAG-pathwidth compared to treewidth using the \textsc{Directed Edge Dominating Set Problem}. While the proposed algorithms are designed for DAGs, they can also be applied to general directed graphs by performing a strongly connected component. In Section 4, we show the existence of a $O(\log^{3/2} n)$-approximation algorithm for DAG-pathwidth on DAGs by demonstrating the equivalence between the one-shot Black Pebbling Problem and the problem of computing the DAG-pathwidth. 
 
 %Finally, in Section 5, we design an algorithm that, given an integer $t$, and a DAG with maximum outdegree $d$, number of roots $l$, provides a DAG-path-decomposition with width $O(l \cdot d^t)$. This algorithm is based on the one for undirected path decompositions \cite{art8}, and both of these algorithms utilize the graph embedding of complete trees.
 
-In Section 3, we design FPT algorithms for the \textsc{Directed Dominating Set Problem} and the \textsc{Max Leaf Outbranching Problem} on DAGs in $O(2^w wn)$ time, given a DAG with $n$ vertices and a DAG-path-decomposition of width $w$. We also design an FPT algorithm for the \textsc{Directed Steiner Tree Problem}, which runs in $O(2^w(k + w)n + n^2)$ time when the size of the terminal set is $k$. Additionally, we propose a parameterized algorithm for the \textsc{$k$-Disjoint Path Problem}, which runs in $O((k + 1)^w(w^2 + k)n + n^2)$ time. At the end of Section 3, we show the advantages of DAG-pathwidth compared to treewidth using the \textsc{Directed Edge Dominating Set Problem}. While the proposed algorithms are designed for DAGs, they can also be applied to general directed graphs by performing a strongly connected component. In Section 4, we show the existence of an $O(\log^{3/2} n)$-approximation algorithm for DAG-pathwidth on DAGs by demonstrating the equivalence between the one-shot Black Pebbling Problem and the problem of computing the DAG-pathwidth. 
+In Section~\ref{sec:DiDS}, given a DAG with $n$ vertices and a DAG-path-decomposition of width $w$, we design an FPT algorithm for the \textsc{Directed Dominating Set Problem}, which runs in $O(2^w wn)$ time. Section~\ref{sec:comp} highlights the advantages of DAG-pathwidth over standard treewidth through the \textsc{Directed Edge Dominating Set Problem}. In Section~\ref{sec:algother}, we design FPT algorithms for the \textsc{Max Leaf Outbranching Problem}, the \textsc{Directed Steiner Tree Problem}, and the \textsc{$k$-Disjoint Path Problem}, which run in $O(2^w wn)$, $O(2^w(k' + w)n + n^2)$, and $O((k + 1)^w(w^2 + k)n + n^2)$, respectively, where $k'$ is the size of the terminal set.
+%While the proposed algorithms are designed for DAGs, they can also be applied to general directed graphs by performing a strongly connected component.
+In Section~\ref{chapter4}, we show the existence of an $O(\log^{3/2} n)$-approximation algorithm for DAG-pathwidth on DAGs by showing the equivalence between the one-shot Black Pebbling Problem and the problem of computing the DAG-pathwidth. 
 %
-Finally, in Section 5, we design an algorithm that, given an integer $t$, and a DAG with maximum outdegree $d$, number of roots $l$, provides a DAG-path-decomposition with width $O(l \cdot d^t)$. This algorithm is based on the one for undirected path decompositions \cite{art8}, and both of these algorithms utilize the graph embedding of complete trees.
+Finally, in Section~\ref{chapter5}, we design an algorithm that, given an integer $t$, and a DAG with maximum outdegree $d$ and number of roots $l$, provides either a DAG-path-decomposition with width $O(l \cdot d^t)$ or a witness that the DAG-pathwidth of the DAG is greater than $t$. This algorithm is based on the one for undirected path decompositions~\cite{art8}, and both of these algorithms utilize a graph embedding of complete trees.
 
 \vspace{4mm}
 \noindent
-\textbf{Related work}\quad The pathwidth of an undirected graph was first proposed by Robertson et al.~\cite{art1}. They also introduced the concept of treewidth~\cite{art2}. Arnborg et al.~\cite{art3} later demonstrated that it is NP-complete to determine whether the treewidth and pathwidth of a graph is at most \(k\). They also studied various FPT algorithms using these parameters~\cite{art4}. It is unknown there exists a polynomial-time algorithm computing a tree decomposition with a width at most any constant factor of treewidth $k$. Similarly, it is also unclear whether constant-factor approximations for pathwidth are achievable. However, Amir~\cite{art5} proposed a polynomial-time algorithm that approximates treewidth within a factor of $O(\sqrt{\log k})$. Tuukka~\cite{art6} also proposed a 2-approximation algorithm with a time complexity of $2^{O(k)}$. Similarly, for pathwidth, Carla et al.~\cite{art7} proposed a polynomial-time algorithm with an approximation ratio of $O(k\sqrt{\log k})$, where \( k \) is the treewidth. In addition, Cattell et al.~\cite{art8} presented a polynomial-time algorithm that computes a path decomposition with a width of $O(2^{pw})$ , where $pw$ is the pathwidth.
+\textbf{Related work}\quad The pathwidth of an undirected graph was first proposed by Robertson et al.~\cite{art1}. They also introduced the concept of treewidth~\cite{art2}. Arnborg et al.~\cite{art3} later demonstrated that it is NP-complete to determine whether the treewidth and pathwidth of a graph is at most \(k\). They also studied various FPT algorithms using these parameters~\cite{art4}. It is unknown whether there exists a polynomial-time algorithm computing a tree decomposition with width at most a constant factor of treewidth $k$. Similarly, it is also unclear whether constant-factor approximations for pathwidth are achievable. However, Amir~\cite{art5} proposed a polynomial-time algorithm that approximates treewidth within a factor of $O(\sqrt{\log k})$. Korhonen~\cite{art6} also proposed a 2-approximation algorithm with a time complexity of $2^{O(k)}$. Similarly, for pathwidth, Groenland et al.~\cite{art7} proposed a polynomial-time algorithm with an approximation ratio of $O(k\sqrt{\log k})$, where \( k \) is the treewidth. In addition, Cattell et al.~\cite{art8} presented a polynomial-time algorithm that computes a path decomposition with width of $O(2^{pw})$ , where $pw$ is the pathwidth.
 
 
 
@@ -184,7 +187,8 @@ Finally, in Section 5, we design an algorithm that, given an integer $t$, and a 
 %\subsection{DAG}
 %A \emph{DAG} (Directed Acyclic Graph) is a directed graph with no cycles. For a DAG $G = (V, E)$ and a vertex $v \in V$ , we define the \emph{predecessors} as $\mathsf{pred}(v) = \{ u \in V | (u, v) \in E\}$ and \emph{successors} as $\mathsf{suc}(v) = \{ w \in V | (v, w) \in E\}$ of $v$.
 
-A \emph{directed acyclic graph} (DAG) is a directed graph with no cycles. For a DAG $G = (V, E)$ and a vertex $v \in V$, we define the \emph{predecessors} as $\mathsf{pred}(v) = \{ u \in V \mid (u, v) \in E\}$ and \emph{successors} as $\mathsf{suc}(v) = \{ w \in V \mid (v, w) \in E\}$ of $v$. The vertices with indegree 0 are called the \emph{roots}.
+We adhere to standard graph theory notation. For a graph $G$, $V[G]$ and $E[G]$ denote its vertex and edge sets, respectively.
+A \emph{directed acyclic graph} (DAG) is a directed graph with no cycles. For a DAG $G = (V, E)$ and a vertex $v \in V$, we define the set of \emph{predecessors} of $v$ as $\mathsf{pred}(v) = \{ u \in V \mid (u, v) \in E\}$ and the set of \emph{successors} of $v$ as $\mathsf{suc}(v) = \{ w \in V \mid (v, w) \in E\}$. The vertices with indegree 0 are called the \emph{roots}.
 A \emph{directed tree} is a DAG that has the unique root $r$, and for any vertex $v$, there is the unique directed path from $r$ to $v$.
 %In particular, a \emph{directed tree} is a DAG that has a unique vertex $r$ with an indegree of 0, and the underlying graph forms a tree.
    
@@ -192,36 +196,40 @@ A \emph{directed tree} is a DAG that has the unique root $r$, and for any vertex
 %\subsection{Various Path Decompositions and Pathwidth}
 
 %Then, we define the \emph{DAG-path-decomposition} and the \emph{DAG-pathwidth} \cite{art12}. Let $H = (V, E)$ be a directed graph. A \emph{DAG-path-decomposition} of $H$ is a sequence $X = (X_1, X_2, \dots, X_s) ~(X_i \subseteq V)$ that satisfies the following three conditions:
-We define the \emph{DAG-path-decomposition} and the \emph{DAG-pathwidth} \cite{art12}. Let $G = (V, E)$ be a directed graph. A \emph{DAG-path-decomposition} of $G$ is a sequence $X = (X_1, X_2, \dots, X_s)$ $(X_i \subseteq V)$ that satisfies the following three conditions:
+We introduce the \emph{DAG-path-decomposition} and the \emph{DAG-pathwidth} \cite{art12}. Let $G = (V, E)$ be a directed graph. A \emph{DAG-path-decomposition} of $G$ is a sequence $X = (X_1, X_2, \dots, X_s)$ $(X_i \subseteq V)$ that satisfies the following three conditions:
 \begin{description}
     \item[(DPD1)] $X_1 \cup X_2 \cup \dots \cup X_s = V$.
-    \item[(DPD2)] For every directed edge $(u, v) \in E$, there exists $i$ such that $u, v \in X_i$ and $v \notin X_{i-1}$. \label{original_rule}
+    \item[(DPD2)] For every directed edge $(u, v) \in E$, there exists an $i$ such that $u, v \in X_i$ and $v \notin X_{i-1}$. \label{original_rule}
     \item[(DPD3)] For any $i, j, k$ $(1 \leq i \leq j \leq k \leq s)$, $X_i \cap X_k \subseteq X_j$. %That is, for any vertex $v \in V$, $v$ induces exactly one non-empty directed path in $X$.
 \end{description}
-In (DPD2), we interpret $X_0 = \emptyset$. Therefore, a directed edge $(u, v)$ satisfies (DPD2) if $u, v \in X_1$. The \emph{width} of $X$ is defined as $\max_i \{ |X_i| - 1 \}$. The \emph{DAG-pathwidth} of $G$ is the minimum width over all possible DAG-path-decompositions of $G$. Note that in \cite{art12}, (DPD2) is changed into the condition that there exists $i$ such that $u, v \in X_i$ and $u \notin X_{i-1}$. In this study, we adopt the above definition for the sake of algorithmic simplicity.
+In (DPD2), we interpret $X_0 = \emptyset$. Therefore, a directed edge $(u, v)$ satisfies (DPD2) if $u, v \in X_1$. The \emph{width} of $X$ is defined as $\max_i \{ |X_i| - 1 \}$. The \emph{DAG-pathwidth} of $G$ is the minimum width over all possible DAG-path-decompositions of $G$. Note that we change the second condition of DAG-path-decomposition from the condition that there exists $i$ such that $u, v \in X_i$ and $u \notin X_{i-1}$ shown in~\cite{art12} into (DPD2) shown above for the sake of algorithmic simplicity.
 
 %The \emph{DAG-pathwidth} of $H$ can also be defined in the same way as the pathwidth. Note that in \cite{art12}, condition~\ref{original_rule} is defined that $u, v \in X_1$ or there exists $i$ $(i \geq 2)$ such that $u, v \in X_i$ and $u \notin X_{i-1}$. In this study, we adopt the above definition for the sake of algorithmic simplicity.
 
 The difference between (undirected) path decomposition,
 directed path decomposition, and DAG-path-decomposition is the second rule. The second rule of path decomposition is ``for any edge $(u, v) \in E$, there exists an $i$ such that $u, v \in X_i$,''  while that of directed path decomposition is ``for any directed edge $(u, v) \in E$, there exist $i, j$ $(i \leq j)$ such that $u \in X_i$, $v \in X_j$.'' %We show their entire definitions in Appendix~\ref{sec:defpd}.
 
-The DAG-pathwidth is a parameter that indicates how closely the structure of a directed graph resembles a directed path. From (DPD3), any vertex $v$ is contained in consecutive bags. Additionally, (DPD2) and (DPD3) imply that for any edge $(u, v)$, $u$ and $v$ first appear together in a single bag or $u$ appears in a bag without $v$, followed by a bag containing both $u$ and $v$. Thus, a DAG-path-decomposition can be interpreted as an operation of adding vertices to bags according to a topological order of the graph.
+%The DAG-pathwidth is a parameter that indicates how closely the structure of a directed graph resembles a directed path. From (DPD3), any vertex $v$ is contained in consecutive bags. Additionally, (DPD2) and (DPD3) imply that for any edge $(u, v)$, $u$ and $v$ first appear together in a single bag or $u$ appears in a bag without $v$, followed by a bag containing both $u$ and $v$. Thus, a DAG-path-decomposition can be interpreted as an operation of adding vertices to bags according to a topological order of the graph.
+
+The DAG-pathwidth is a parameter that indicates how close the structure of a directed graph is to a directed path. From (DPD3), any vertex $v$ is contained in consecutive bags. Additionally, (DPD2) and (DPD3) imply that for any edge $(u, v)$, either $u$ and $v$ first appear together in a single bag, or a series of bags containing $u$ but not $v$ is followed by a bag containing both $u$ and $v$, which marks the first appearance of $v$. Thus, a DAG-path-decomposition can be interpreted as an operation of adding vertices to bags according to a topological order of the graph.
 
 %Computing the DAG-pathwidth for general directed graphs is NP-hard \cite{art12}. However, it can be shown that graphs with DAG-pathwidth 1 are exactly the \emph{directed caterpillar tree}, which is a directed tree such that removing vertices with indegree 1 and outdegree 0 leaves a single directed path. The proof is in appendix.
 
-To facilitate designing a dynamic programming-based algorithm, we define the \emph{nice DAG-path-decomposition} \cite{art12}, which is a DAG-path-decomposition $X = (X_1, X_2, \dots, X_s)$ of a directed graph $H = (V, E)$ that satisfies the following rules:
+To facilitate designing a dynamic programming-based algorithm, we introduce the notion of a \emph{nice DAG-path-decomposition} \cite{art12}, which is a DAG-path-decomposition $X = (X_1, X_2, \dots, X_s)$ of a directed graph $G = (V, E)$ that satisfies the following rules:
 \begin{enumerate}
     \item $X_1 = X_s = \emptyset$.
     \item For any $i$ $(2 \leq i \leq s - 1)$, one of the following holds:
     \begin{itemize}
-        \item (introduce) There exists a strongly connected component $S \subseteq V$ such that $S \cap X_i = \emptyset$ and $X_{i+1} = X_i \cup S$.
-        \item (forget) There exists a vertex $v \in V$ such that $X_{i+1} = X_i \setminus \{v\}$.
+        \item (Introduce) There exists a strongly connected component $S \subseteq V$ such that $S \cap X_i = \emptyset$ and $X_{i+1} = X_i \cup S$.
+        \item (Forget) There exists a vertex $v \in V$ such that $X_{i+1} = X_i \setminus \{v\}$.
     \end{itemize}
 \end{enumerate}
 
-If $H$ is a DAG, each strongly connected component $S$ consists of a single vertex. Thus, the introduce operation can be redefined that there exists a vertex $v \in V$ such that $\{v\} \cap X_i = \emptyset$ and $X_{i+1} = X_i \cup \{v\}$. It means, for any vertex, there exists exactly one introduce bag and one forget bag due to (DPD1) and (DPD3).
+%If $G$ is a DAG, each strongly connected component $S$ consists of a single vertex. Thus, the introduce operation can be redefined that there exists a vertex $v \in V$ such that $\{v\} \cap X_i = \emptyset$ and $X_{i+1} = X_i \cup \{v\}$. It means, for any vertex, there exists exactly one introduce bag and one forget bag due to (DPD1) and (DPD3).
 
-The nice DAG-path-decomposition simplifies the design of dynamic programming algorithms, as each bag involves either introducing or forgetting a single vertex for DAGs. It is shown in \cite{art12} that a nice DAG-path-decomposition with the same width as a given DAG-path-decomposition can be constructed in polynomial time. Moreover, the number of bags is not more than $2|V[H]| + 1$. For DAGs, the number is exactly $2|V[H]| + 1$.
+If $G$ is a DAG, each strongly connected component $S$ consists of a single vertex. Thus, the introduce operation can be redefined that there exists a vertex $v \in V$ such that $v \notin X_i$ and $X_{i+1} = X_i \cup \{v\}$. By (DPD1) and (DPD3), for any vertex $v \in V$, there exist a unique $i$, $i'$ such that $X_{i+1} = X_i \cup S$ and $X_{i'+1} = X_{i'} \setminus \{v\}$. In this case, we say that $X_{i+1}$ \emph{introduces} $v$, and call $X_{i+1}$ and $X_{i'+1}$ the \emph{introduce} and \emph{forget bag} of $v$.
+
+Nice DAG-path-decomposition simplifies the design of dynamic programming algorithms because each bag involves either introducing or forgetting a single vertex for DAGs. It is shown in \cite{art12} that a nice DAG-path-decomposition with the same width as a given DAG-path-decomposition can be constructed in polynomial time. Moreover, the number of bags is not more than $2|V[G]| + 1$. For DAGs, the number is exactly $2|V[G]| + 1$.
 
 
 % move to section 4
@@ -481,16 +489,18 @@ For a directed graph \(G = (V, E)\), a subset \(S \subseteq E\) is a \emph{Direc
 The \emph{minimum DEDS (mDEDS)} is the DEDS \(S\) with the smallest \(|S|\) among all DEDS.  
 The DEDS problem is the problem of determining the size of the mDEDS of \(G\).  
 
-The paper~\cite{art23} proved that the DEDS problem remains NP-hard even for planar bounded degree DAGs. The paper~\cite{art22} established the following result:
-
+The paper~\cite{art23} proved that the DEDS problem remains NP-hard even for planar bounded degree DAGs. %The paper~\cite{art22} established the following result:
+%
 %\begin{proposition}[time Complexity]
 %    The DEDS problem remains NP-hard even for planar bounded degree DAGs.
 %\end{proposition}
-
+%
 %\begin{proposition}[FPT algorithm with treewidth]
-\begin{proposition}[\cite{art22}]
-    If the treewidth of the underlying graph of a DAG \(G\) is at most \(tw\), then there exists an FPT algorithm that solves the DEDS problem on \(G\) in \(4^{2tw^2} 8^{2tw} n^{O(1)}\) time.  
-\end{proposition}
+%\begin{proposition}[\cite{art22}]
+%    If the treewidth of the underlying graph of a DAG \(G\) is at most \(tw\), then there exists an FPT algorithm that solves the DEDS problem on \(G\) in \(4^{2tw^2} 8^{2tw} n^{O(1)}\) time.  
+%\end{proposition}
+%
+The paper~\cite{art22} showed that if the treewidth of the underlying graph of a DAG \(G\) is at most \(tw\), then there exists an FPT algorithm that solves the DEDS problem on \(G\) in \(4^{2tw^2} 8^{2tw} n^{O(1)}\) time.  
 
 In a standard tree decomposition, for an edge $(u, w) \in E$, $w$ might appears in a bag before $u$, which complicates the design of a tree dcomposition-based algorithm, as evidenced by the intricate structure of the algorithm in~\cite{art22}.
 %
@@ -519,7 +529,7 @@ That is, the line graph of a directed graph is obtained by replacing the vertice
 
 %DAG-pathwidth-based algorithm reformulates the mDEDS problem as the problem of finding the mDiDS of the line graph and solves it using the DAG-path-decomposition of the line graph.  
 A DAG-pathwidth-based algorithm reformulates the mDEDS problem as the problem of finding the minimum DiDS of the line graph and solves it using the DAG-path-decomposition of the line graph.  
-We first prove the following two lemmas, which immediately lead to \textbf{Theorem~\ref{DEDS_FPT}}.  
+We first prove the following two lemmas, which immediately lead to Theorem~\ref{DEDS_FPT}.  
 
 \begin{lemma}[proof in Appendix~\ref{appendix_B1}]\label{DAG_path_decomposition(L(G))}
     Given a DAG \(G\) with \(n\) vertices and its nice DAG-path-decomposition of width \(w\), a nice DAG-path-decomposition of \(L(G)\) with width at most \(w^2\) can be constructed in \(O(w^2 n)\) time.  
@@ -1011,8 +1021,8 @@ This work was supported by JSPS KAKENHI Grant Numbers JP24H00690 and JP24H00697.
 
 \section{Proofs of Section~\ref{chapter3}}
 
-\subsection{Algorithm to solve DiDS problem and the proof of \textbf{Theorem~\ref{theorem_dids}}}\label{appendix_B4}
-To construct an algorithm satisfying \textbf{Theorem~\ref{theorem_dids}}, we first define the function $\mathsf{DS}$. The function $\mathsf{DS}$ partitions each bag $X_i$ into two disjoint vertex sets $A_i, B_i \subseteq X_i ~(A_i \cup B_i = X_i, A_i \cap B_i = \varnothing)$. Then, among the directed dominating sets of the subgraph $G_i$ induced by $X_1 \cup X_2 \cup \dots \cup X_i$, it finds the smallest directed dominating set that includes all elements of $A_i$ and none of $B_i$. By computing this for all combinations of $A_i$ and $B_i$, we obtain the minimum dominating set for $G_i$. By considering all $i$, the minimum dominating set of the input graph $G$. The function $\mathsf{DS}$ is defined as follows:
+\subsection{Algorithm to solve DiDS problem and the proof of Theorem~\ref{theorem_dids}}\label{appendix_B4}
+To construct an algorithm satisfying Theorem~\ref{theorem_dids}, we first define the function $\mathsf{DS}$. The function $\mathsf{DS}$ partitions each bag $X_i$ into two disjoint vertex sets $A_i, B_i \subseteq X_i ~(A_i \cup B_i = X_i, A_i \cap B_i = \varnothing)$. Then, among the directed dominating sets of the subgraph $G_i$ induced by $X_1 \cup X_2 \cup \dots \cup X_i$, it finds the smallest directed dominating set that includes all elements of $A_i$ and none of $B_i$. By computing this for all combinations of $A_i$ and $B_i$, we obtain the minimum dominating set for $G_i$. By considering all $i$, the minimum dominating set of the input graph $G$. The function $\mathsf{DS}$ is defined as follows:
     %
     \begin{equation}\label{def_ds}
         \mathsf{DS}(i, A_i, B_i) = \min \left\{ |S_i| \left |
@@ -1047,7 +1057,7 @@ Using $\mathsf{DS}$, we define the algorithm $\mathsf{Compute}(P)$, which output
     \item Final Step: If $i = s$, output $\mathsf{DS}(s, \varnothing, \varnothing)$.
 \end{enumerate}
 
-To demonstrate \textbf{Theorem~\ref{theorem_dids}}, it is sufficient to prove the following two Lemmas.
+To demonstrate Theorem~\ref{theorem_dids}, it is sufficient to prove the following two Lemmas.
 
 \begin{lemma}\label{dids}
     $\mathsf{Compute}$ returns the size of the minimum DiDS of $G$.
@@ -1077,7 +1087,7 @@ To demonstrate \textbf{Theorem~\ref{theorem_dids}}, it is sufficient to prove th
         \end{align*}
         which satisfies definition (\ref{def_ds}).
     \end{itemize}
-    Thus, by induction, \textbf{Lemma~\ref{dids}} is proven.
+    Thus, by induction, Lemma~\ref{dids} is proven.
 \end{proof}
 
 \begin{lemma}
@@ -1088,7 +1098,7 @@ To demonstrate \textbf{Theorem~\ref{theorem_dids}}, it is sufficient to prove th
     Since $|X_i| \leq w+1$, the number of combinations of $A, B$ is at most $2^{w+1}$. The number of bags is $2|V|+1$. Checking $\mathsf{pred}(v) \cap A_i \neq \varnothing$ takes $O(w)$ time. Thus, the overall complexity is $O(2^w w n)$.
 \end{proof}
 
-\subsection{\textbf{Lemma~\ref{DAG_path_decomposition(L(G))}}}\label{appendix_B1}
+\subsection{Lemma~\ref{DAG_path_decomposition(L(G))}}\label{appendix_B1}
 \begin{proof}
     Suppose that a nice DAG-path-decomposition $X=(X_1, X_2, \dots, X_s)$ of a DAG $G$ with width $w$ is given. For each $i=1, 2, \dots, s$, define $X^L_i = \{(u, v) \in E[G]~|~v \in X_i \}$. Then, $X^L=(X^L_1, X^L_2, \dots, X^L_s)$ forms a DAG-path-decomposition of $L(G)$ with width at most $w^2$. We prove this below. 
     
@@ -1106,15 +1116,15 @@ To demonstrate \textbf{Theorem~\ref{theorem_dids}}, it is sufficient to prove th
 
 
 
-\subsection{\textbf{Lemma~\ref{mDEDS_mDiDS}}}\label{appendix_B2}
+\subsection{Lemma~\ref{mDEDS_mDiDS}}\label{appendix_B2}
 \begin{proof}
     First, we show that if $S$ is a DEDS of DAG $G$, then $S$ is also a DiDS of $L(G)$. If $S\in E[G]$ is a DEDS, for any edge $(v, w) \in E[G]$, either $(v, w) \in S$ holds or there exists some edge $(u, v) \in S$. In $L(G)$, for any vertex $(v, w) \in V[L(G)]$, either $(v, w) \in S$ holds or there exists some vertex $(u, v) \in S$. Thus, $S$ is a DiDS of $L(G)$. Similarly, if $S \in V[L(G)]$ is a DiDS of $L(G)$, then $S$ is a DEDS of $G$. Hence, the DEDS of $G$ and the DiDS of $L(G)$ correspond one-to-one. Therefore, the mDEDS of $G$ and the minimum DiDS of $L(G)$ are equal.
 \end{proof}
 
 
-\subsection{\textbf{Theorem~\ref{DEDS_FPT}}}\label{appendix_B3}
+\subsection{Theorem~\ref{DEDS_FPT}}\label{appendix_B3}
 \begin{proof}
-    By \textbf{Lemma~\ref{mDEDS_mDiDS}}, it suffices to compute the minimum DiDS of $L(G)$. By \textbf{Lemma~\ref{DAG_path_decomposition(L(G))}}, given a nice DAG-path-decomposition $X$ of $G$ with width $w$, we can construct a DAG-path-decomposition $X^L$ of $L(G)$ with width at most $w^2$ and convert to nice DAG-path-decomposition $X^L_{nice}$ in polynomial time. Therefore, we can compute the minimum DiDS of $L(G)$ using the algorithm described in \textbf{Theorem~\ref{theorem_dids}}. Noting that $X^L_{nice}$ has width $O(w^2)$ and $O(n^2)$ bags, the time complexity of this computation is $O(2^{w^2}w^2n^2)$.
+    By Lemma~\ref{mDEDS_mDiDS}, it suffices to compute the minimum DiDS of $L(G)$. By Lemma~\ref{DAG_path_decomposition(L(G))}, given a nice DAG-path-decomposition $X$ of $G$ with width $w$, we can construct a DAG-path-decomposition $X^L$ of $L(G)$ with width at most $w^2$ and convert to nice DAG-path-decomposition $X^L_{nice}$ in polynomial time. Therefore, we can compute the minimum DiDS of $L(G)$ using the algorithm described in Theorem~\ref{theorem_dids}. Noting that $X^L_{nice}$ has width $O(w^2)$ and $O(n^2)$ bags, the time complexity of this computation is $O(2^{w^2}w^2n^2)$.
 \end{proof}
 
 
@@ -1128,7 +1138,7 @@ To demonstrate \textbf{Theorem~\ref{theorem_dids}}, it is sufficient to prove th
 
 
 
-\subsection{Algorithm to solve MaxLOB problem and the proof of \textbf{Theorem~\ref{theorem_lob}}}\label{appendix_B5}
+\subsection{Algorithm to solve MaxLOB problem and the proof of Theorem~\ref{theorem_lob}}\label{appendix_B5}
 
 The input graph is assumed to be a DAG with a single root $r$. In this case, there must exist a directed spanning tree with the maximum number of leaves in $G$. It is sufficient to prove the following lemma.
 
@@ -1143,7 +1153,7 @@ The input graph is assumed to be a DAG with a single root $r$. In this case, the
 
 \end{proof}
 
-To construct an algorithm satisfying \textbf{Theorem~\ref{theorem_lob}}, we define the function $\mathsf{LOB}$. Let the nice DAG-path-decomposition of DAG $G = (V, E)$ be $P = (X_1, X_2, \\ \dots, X_s)$. For each $i$ $(i=1, 2, \dots, s)$, let vertex sets $A_i, B_i \subseteq V$ satisfy $A_i \cup B_i = X_i$ and $A_i \cap B_i = \varnothing$. Let $G_i$ be the subgraph of $G$ induced by the vertex set $X_1 \cup X_2 \cup \dots \cup X_i$.
+To construct an algorithm satisfying Theorem~\ref{theorem_lob}, we define the function $\mathsf{LOB}$. Let the nice DAG-path-decomposition of DAG $G = (V, E)$ be $P = (X_1, X_2, \\ \dots, X_s)$. For each $i$ $(i=1, 2, \dots, s)$, let vertex sets $A_i, B_i \subseteq V$ satisfy $A_i \cup B_i = X_i$ and $A_i \cap B_i = \varnothing$. Let $G_i$ be the subgraph of $G$ induced by the vertex set $X_1 \cup X_2 \cup \dots \cup X_i$.
 This algorithm finds all directed spanning trees of $G_i$ in which $A_i$ forms the leaf set and $B_i$ does not form the leaf set. By calculating this for all combinations of $A_i$ and $B_i$, the maximum number of leaves directed spanning tree for $G_i$ is obtained. By performing this calculation for all $i$, the maximum number of leaves directed spanning tree for the input graph $G$ is obtained. $\mathsf{LOB}$ is defined as follows, where the leaf set of a directed tree $T$ is denoted as $\mathsf{Leaf}(T)$:
 
 \begin{equation}\label{def_lob}
@@ -1181,14 +1191,14 @@ Using $\mathsf{LOB}$, we define the algorithm $\mathsf{Compute}(P)$ to output th
     \item Final Step: If $i = s$, output $\mathsf{LOB}(s, \varnothing, \varnothing)$.
 \end{enumerate}
 
-To demonstrate \textbf{Theorem~\ref{theorem_lob}}, it is sufficient to prove the following two Lemmas.
+To demonstrate Theorem~\ref{theorem_lob}, it is sufficient to prove the following two Lemmas.
 
 \begin{lemma}\label{lob}
     $\mathsf{Compute}$ outputs the solution of MaxLOB for $G$.
 \end{lemma}
 
 \begin{proof}
-    From the First Step of $\mathsf{Compute}$, if $G$ consists only of root $r$, it outputs 1. It is the solution to MaxLOB. Next, consider the case where $G$ contains vertices other than $r$. The proof of \textbf{Lemma~\ref{lob}} follows by showing that $\mathsf{LOB}(i, A_i, B_i)$ satisfies the definition (\ref{def_lob}) of $\mathsf{LOB}$ for each $i$. This is done by induction on $i$. For convenience, we refer to non-leaf vertices of a tree as stems.\\
+    From the First Step of $\mathsf{Compute}$, if $G$ consists only of root $r$, it outputs 1. It is the solution to MaxLOB. Next, consider the case where $G$ contains vertices other than $r$. The proof of Lemma~\ref{lob} follows by showing that $\mathsf{LOB}(i, A_i, B_i)$ satisfies the definition (\ref{def_lob}) of $\mathsf{LOB}$ for each $i$. This is done by induction on $i$. For convenience, we refer to non-leaf vertices of a tree as stems.\\
     When $i=1$, the First Step of $\mathsf{Compute}$ gives $\mathsf{LOB}(1, \{r\}, \varnothing) = -\infty$ and \\ $\mathsf{LOB}(1, \varnothing, \{r\}) = 0$. Since $r$ cannot be a leaf, it clearly satisfies the definition (\ref{def_lob}).\\
     For $i=k$, assume that $\mathsf{LOB}(i, A_i, B_i)$ satisfies definition (\ref{def_lob}). We consider the cases where $X_{k+1}$ introduces or forgets $v \in V$.
     \begin{itemize}
@@ -1208,7 +1218,7 @@ To demonstrate \textbf{Theorem~\ref{theorem_lob}}, it is sufficient to prove the
         \]
         which satisfies the definition of $\mathsf{LOB}$.
     \end{itemize}
-    Thus, by induction, \textbf{Lemma~\ref{lob}} is proven.
+    Thus, by induction, Lemma~\ref{lob} is proven.
 \end{proof}
 
 \begin{lemma}\label{complexity_lob}
@@ -1231,9 +1241,9 @@ To demonstrate \textbf{Theorem~\ref{theorem_lob}}, it is sufficient to prove the
 
 
 
-\subsection{Algorithm to Solve the Disjoint Path Problem and Proof of \textbf{Theorem~\ref{theorem_disjoint_path}}}\label{appendix_B6}
+\subsection{Algorithm to Solve the Disjoint Path Problem and Proof of Theorem~\ref{theorem_disjoint_path}}\label{appendix_B6}
 
-To construct an algorithm satisfying \textbf{Theorem~\ref{theorem_disjoint_path}}, we define the function $\mathsf{Cal}$. Let $X = (X_1, X_2, \dots, X_s)$ be a nice DAG-path-decomposition of a DAG $G = (V, E)$. For each $i$ $(i = 1, 2, \dots, s)$, let the vertex sets $A^1_i, A^2_i, \dots, A^k_i, B_i \subseteq V$ satisfy $A^1_i \cup A^2_i \cup \dots \cup A^k_i \cup B_i = X_i$, and assume that any two of $A^1_i, A^2_i, \dots, A^k_i, B_i$ have no common elements. Define $G_i$ as the subgraph of $G$ induced by the vertex set $X_1 \cup X_2 \cup \dots \cup X_i$, and set $\mathscr{A}_i = (A^1_i, A^2_i, \dots, A^k_i)$.
+To construct an algorithm satisfying Theorem~\ref{theorem_disjoint_path}, we define the function $\mathsf{Cal}$. Let $X = (X_1, X_2, \dots, X_s)$ be a nice DAG-path-decomposition of a DAG $G = (V, E)$. For each $i$ $(i = 1, 2, \dots, s)$, let the vertex sets $A^1_i, A^2_i, \dots, A^k_i, B_i \subseteq V$ satisfy $A^1_i \cup A^2_i \cup \dots \cup A^k_i \cup B_i = X_i$, and assume that any two of $A^1_i, A^2_i, \dots, A^k_i, B_i$ have no common elements. Define $G_i$ as the subgraph of $G$ induced by the vertex set $X_1 \cup X_2 \cup \dots \cup X_i$, and set $\mathscr{A}_i = (A^1_i, A^2_i, \dots, A^k_i)$.
 
 The function $\mathsf{Cal}$ determines whether each $A^m_i\ (m=1, 2, \dots, k)$ can be part of a vertex-disjoint path starting from $s_m$ for each $G_i$. Among such combinations of vertex-disjoint paths, it finds the one with the minimum total path length. By computing this for all possible combinations of $A^1_i, A^2_i, \dots, A^k_i, B_i$, we obtain the minimum total length of vertex-disjoint paths in $G_i$. Performing this calculation for all $i$ yields the minimum total length of vertex-disjoint paths in the input graph $G$. The function $\mathsf{Cal}$ is defined as follows:
 
@@ -1288,7 +1298,7 @@ Using $\mathsf{Cal}$, we present the algorithm $\mathsf{Compute}(P)$ that output
 \end{enumerate}
 
 
-To demonstrate \textbf{Theorem~\ref{theorem_disjoint_path}}, it is sufficient to prove the following two Lemmas.
+To demonstrate Theorem~\ref{theorem_disjoint_path}, it is sufficient to prove the following two Lemmas.
 
 \begin{lemma}\label{dpp}
     $\mathsf{Compute}$ outputs a solution to the Disjoint Path Problem of $G$.
@@ -1314,7 +1324,7 @@ To demonstrate \textbf{Theorem~\ref{theorem_disjoint_path}}, it is sufficient to
         \\
         Since $G_{i+1} = G_i$, the total path length remains unchanged. Thus, the two cases—whether $v$ is part of some path or in $B_i$—are considered. Taking the minimum of both values from the previous step, equation~\ref{cal3} correctly determines the minimum path sum, satisfying definition~(\ref{def_cal}).
     \end{itemize}
-    By induction, \textbf{Lemma~\ref{dpp}} is proven.
+    By induction, Lemma~\ref{dpp} is proven.
 \end{proof}
 
 
@@ -1334,9 +1344,9 @@ By modifying the above algorithm, we can construct algorithms for solving relate
 
 
 
-\subsection{Algorithm to Solve the DST Problem and the Proof of \textbf{Theorem~\ref{theorem_DST}}}\label{appendix_B7}
+\subsection{Algorithm to Solve the DST Problem and the Proof of Theorem~\ref{theorem_DST}}\label{appendix_B7}
 
-To construct an algorithm satisfying \textbf{Theorem~\ref{theorem_DST}}, we define the function $\mathsf{ST}$. Let the nice DAG-path-decomposition of the DAG $G = (V, E)$ be $P = (X_1, X_2, \dots, X_s)$. For some $i$ $(i = 1, 2, \dots, s)$, let $A_i, B_i \subseteq V$ satisfy $A_i \cup B_i = X_i$ and $A_i \cap B_i = \varnothing$. Let $G_i$ be the subgraph of $G$ induced by the vertex set $X_1 \cup X_2 \cup \dots \cup X_i$.
+To construct an algorithm satisfying Theorem~\ref{theorem_DST}, we define the function $\mathsf{ST}$. Let the nice DAG-path-decomposition of the DAG $G = (V, E)$ be $P = (X_1, X_2, \dots, X_s)$. For some $i$ $(i = 1, 2, \dots, s)$, let $A_i, B_i \subseteq V$ satisfy $A_i \cup B_i = X_i$ and $A_i \cap B_i = \varnothing$. Let $G_i$ be the subgraph of $G$ induced by the vertex set $X_1 \cup X_2 \cup \dots \cup X_i$.
 
 The function $\mathsf{ST}$ computes the directed Steiner tree that includes all vertices in $R \cap V[G_i]$ for each $G_i$. The Steiner tree contains all vertices in $A_i$, excludes all vertices in $B_i$, and has the minimum size. By computing this for all combinations of $A_i$ and $B_i$, we obtain the minimum directed Steiner tree for $G_i$. By repeating this computation for all $i$, we eventually obtain the minimum directed Steiner tree for the entire input graph $G$. Let the weight of edge $e$ be denoted by $d(e)$. We define the function $\mathsf{ST}$ as follows:
 
@@ -1377,7 +1387,7 @@ When given a nice DAG-path-decomposition $P$ of DAG $G$, root $r$, and terminal 
     \item Final Step: If $i = s'$, output $\mathsf{ST}(s'; \varnothing, \varnothing)$.
 \end{enumerate}
 
-To demonstrate \textbf{Theorem~\ref{theorem_DST}}, it is sufficient to prove the following two lemmas.
+To demonstrate Theorem~\ref{theorem_DST}, it is sufficient to prove the following two lemmas.
 
 \begin{lemma}\label{dst}
     The function $\mathsf{Compute}$ outputs the total weight of the minimum-DST of $G$, with root $r$ and containing all vertices in $R$.
@@ -1402,7 +1412,7 @@ To demonstrate \textbf{Theorem~\ref{theorem_DST}}, it is sufficient to prove the
     \item Case 2: $X_{k+1}$ forgets $v$\\
     From $G_{k+1} = G_k$, the directed tree $G^{opt}_{T(k+1, A_{k+1}, B_{k+1})}$ is equal to either $G_{T_A} = G^{opt}_{T(k, A_k, B_k)}$ when $v \in A_k$, or $G_{T_B} = G^{opt}_{T(k, A_k, B_k)}$ when $v \in B_k$, whichever has the smaller total weight. By assumption, if $v \in A_k$, then $\mathsf{ST}(k; A_k, B_k) = \sum_{(u, v) \in E[G^{opt}_{T_A}]} d(u, v)$, and if $v \in B_k$, then $\mathsf{ST}(k; A_k, B_k) = \sum_{(u, v) \in E[G^{opt}_{T_B}]} d(u, v)$. Furthermore, if $v \in A_k$, then $A_{k+1} \cup \{v\} = A_k$ and $B_{k+1} = B_k$; if $v \in B_k$, then $A_{k+1} = A_k$ and $B_{k+1} \cup \{v\} = B_k$. Therefore, we conclude that $\mathsf{ST}(k+1; A_{k+1}, B_{k+1})$ is represented by equation (\ref{ST_def}).
 \end{itemize}
-Thus, for $i = k+1$, both equations (\ref{ST_intro}) and (\ref{ST_forget}) represent equation (\ref{ST_def}). By mathematical induction, \textbf{Lemma~\ref{dst}} is proven.
+Thus, for $i = k+1$, both equations (\ref{ST_intro}) and (\ref{ST_forget}) represent equation (\ref{ST_def}). By mathematical induction, Lemma~\ref{dst} is proven.
 
 \end{proof}
 
@@ -1452,7 +1462,7 @@ Furthermore, by a simple extension of the above algorithm, we can efficiently so
 
 \section{Proof of Section~\ref{chapter4}}
 
-\subsection{\textbf{Lemma~\ref{lemma_approximation2}}}\label{appendix_C1}
+\subsection{Lemma~\ref{lemma_approximation2}}\label{appendix_C1}
 \begin{proof}
     First, we show that if $X$ is a nice DAG-path-decomposition of a DAG $G$, then $X$ is also a strategy of one-shot BP. Let $X=(X_1, X_2, \dots, X_s)$ be a nice DAG-path-decomposition of $G$. Since $X_1 = \varnothing$ in a nice DAG-path-decomposition, it satisfies (BP1). By (DPD1) and (DPD3), every vertex is introduced exactly once, satisfying (BP4) and (BP5). Furthermore, by the rule of introduce and (DPD2), if $v \in V$ is introduced at $X_i$, then for any $(u, v) \in E$, it holds that $u \in X_{i-1}$. This satisfies (BP2). Additionally, since each vertex is forgotten exactly once, the forget and unpebble operations are clearly equivalent, thus satisfying (BP3). Therefore, the introduce and forget operations in $X$ correspond to the pebble and unpebble operations, respectively, proving that $X$ is a one-shot BP of $G$.
 
@@ -1462,7 +1472,9 @@ Furthermore, by a simple extension of the above algorithm, we can efficiently so
 
 \section{Figures and Proofs of Section~\ref{chapter5}}
 
-\subsection{Figure~\ref{fig:10}, \ref{fig:11}, \ref{fig:12}, \ref{fig:13}, \ref{fig:14}}\label{location_figures}
+\subsection{Figures}\label{location_figures}
+
+Here, we show some figures.
 
 \ifthenelse{\boolean{Draft}}{
 \begin{figure}[H]
@@ -1502,7 +1514,7 @@ Furthermore, by a simple extension of the above algorithm, we can efficiently so
         \centering
         \includegraphics[width=6cm]{pic13.eps}
         \vspace{2.6cm}
-        \caption{Illustration of the proof of \textbf{Lemma~\ref{blue_reachable}}. The recent common descendant of $r_0$ and $v$ is denoted as $r_0'$. The proof demonstrates that a contradiction arises if the blue vertex $v$ is not included in $G_{r_0}$, which consists of $r_0$ and its descendants.}
+        \caption{Illustration of the proof of Lemma~\ref{blue_reachable}. The recent common descendant of $r_0$ and $v$ is denoted as $r_0'$. The proof demonstrates that a contradiction arises if the blue vertex $v$ is not included in $G_{r_0}$, which consists of $r_0$ and its descendants.}
         \label{fig:13}
     \end{minipage}
     \hfill
@@ -1510,7 +1522,7 @@ Furthermore, by a simple extension of the above algorithm, we can efficiently so
         \centering
         \includegraphics[width=6cm]{pic14.eps}
         \vspace{0.0cm}
-        \caption{Illustration of the proof of \textbf{Lemma~\ref{lemma_(3)}}. The blue vertices represent blue, the red check-marked vertices indicate token-removed vertices, and the other red vertices indicate vertices with tokens placed on them. The proof demonstrates that a contradiction arises if there are no vertices in $V_{h(M_{t, d, l})}$.}
+        \caption{Illustration of the proof of Lemma~\ref{lemma_(3)}. The blue vertices represent blue, the red check-marked vertices indicate token-removed vertices, and the other red vertices indicate vertices with tokens placed on them. The proof demonstrates that a contradiction arises if there are no vertices in $V_{h(M_{t, d, l})}$.}
         \label{fig:14}
     \end{minipage}
 \end{figure}
@@ -1523,7 +1535,7 @@ Furthermore, by a simple extension of the above algorithm, we can efficiently so
 
 
 
-\subsection{\textbf{Lemma~\ref{comp_tree}}}\label{appendix_D2}
+\subsection{Lemma~\ref{comp_tree}}\label{appendix_D2}
 \begin{proof}
     We prove this by mathematical induction on $h$. 
     
@@ -1540,7 +1552,7 @@ Furthermore, by a simple extension of the above algorithm, we can efficiently so
 \end{proof}
 
 
-\subsection{\textbf{Lemma~\ref{lemma_embedding}}}\label{appendix_D3}
+\subsection{Lemma~\ref{lemma_embedding}}\label{appendix_D3}
 \begin{proof}
     First, we show that $G'$ is always connected. Token placement and replacement occur only in Line 2 of $\mathsf{GrowTokenTree}$ or Lines 6 and 8 of $\mathsf{FindEmbedding}$. The former explicitly ensures token placement maintains connectivity, and the latter replaces all tokens in the directed tree rooted at $T \cdot b$ with corresponding tokens in the directed tree rooted at $T$ immediately after removing $T$. This guarantees that connectivity is preserved after processing Lines 6 and 8. Thus, $G'$ remains connected at all times.
 
@@ -1549,7 +1561,7 @@ Furthermore, by a simple extension of the above algorithm, we can efficiently so
 
 
 
-\subsection{\textbf{Lemma~\ref{lemma_(1)}}}\label{appendix_D4}
+\subsection{Lemma~\ref{lemma_(1)}}\label{appendix_D4}
 \begin{proof}
     %Suppose that in Line 4 of $\mathsf{FindEmbedding}$, all vertices of $H'$ have turned red at step $i=s$, leading to termination.
     Suppose that Line 20 of $\mathsf{FindEmbedding}$ is executed and all vertices of $H'$ have turned red at step $i=s$.
@@ -1561,20 +1573,20 @@ Furthermore, by a simple extension of the above algorithm, we can efficiently so
 \end{proof}
 
 
-\subsection{\textbf{Lemma~\ref{lemma_(2)}}}\label{appendix_D5}
+\subsection{Lemma~\ref{lemma_(2)}}\label{appendix_D5}
 \begin{proof}
     %Suppose that in Line 4 of $\mathsf{FindEmbedding}$, at step $i=s$, the condition $|X_s| = |V[M_{t, d, l}]|$ holds,
     Suppose that Line 17 of $\mathsf{FindEmbedding}$ is executed at step $i=s$ (i.e., the condition $|X_s| = |V[M_{t, d, l}]|$ holds),
-    and let $A'$ be the subgraph of $H'$ induced by the vertex set $X_1 \cup X_2 \cup \dots \cup X_s$. Then, the sequence of vertex sets output by the algorithm, $X_{A'} = (X_1, X_2, \dots , X_s)$, forms a DAG-path-decomposition of $A'$. By definition of $A'$, (DPD1) is clearly satisfied. Additionally,(DPD2) and (DPD3) are satisfied by the argument similar to \textbf{Lemma~\ref{lemma_(1)}}. Thus, $X_{A'}$ is a DAG-path-decomposition of $A'$.
+    and let $A'$ be the subgraph of $H'$ induced by the vertex set $X_1 \cup X_2 \cup \dots \cup X_s$. Then, the sequence of vertex sets output by the algorithm, $X_{A'} = (X_1, X_2, \dots , X_s)$, forms a DAG-path-decomposition of $A'$. By definition of $A'$, (DPD1) is clearly satisfied. Additionally,(DPD2) and (DPD3) are satisfied by the argument similar to Lemma~\ref{lemma_(1)}. Thus, $X_{A'}$ is a DAG-path-decomposition of $A'$.
 
-    Let $A$ be the subgraph of $H$ induced by $V[A'] \cap V[H]$ and $B$ be the subgraph of $H$ induced by $V[H] \backslash V[A]$. Since $A$ and $B$ are disjoint and (DPD2) ensures that only edges from $A$ to $B$ exist. Defining $X_A = (X_1 \cap V[H], X_2 \cap V[H], \dots , X_s \cap V[H])$, this decomposition satisfies the three rules of the DAG-path-decomposition of $A$. Therefore, $X_A$ forms a DAG-path-decomposition of $A$ with width at most $ld^{t+3}-1$ by the argument similar to \textbf{Lemma~\ref{lemma_(1)}}.
+    Let $A$ be the subgraph of $H$ induced by $V[A'] \cap V[H]$ and $B$ be the subgraph of $H$ induced by $V[H] \backslash V[A]$. Since $A$ and $B$ are disjoint and (DPD2) ensures that only edges from $A$ to $B$ exist. Defining $X_A = (X_1 \cap V[H], X_2 \cap V[H], \dots , X_s \cap V[H])$, this decomposition satisfies the three rules of the DAG-path-decomposition of $A$. Therefore, $X_A$ forms a DAG-path-decomposition of $A$ with width at most $ld^{t+3}-1$ by the argument similar to Lemma~\ref{lemma_(1)}.
 
-    Next, let $A'_M$ be the subgraph of $H'$ induced by the end bag $X_s$ in $X_{A'}$. Since at step $i=s$, all tokens in $M_{t, d, l}$ have been used in the embedding, \textbf{Lemma~\ref{lemma_embedding}} implies that $A'_M$ represents an embedding of $M_{t, d, l}$ into $H'$. Since $M_{t, d, l}$ has height $\lceil \log_d l \rceil +t+2$, and $A'$ contains $A'_M$, the subgraph induced by $V[A'] \backslash V[A]$ forms a complete directed $d$-ary tree of height at most $\lceil \log_d l \rceil$. Thus, $A$ contains a complete directed $d$-ary tree $T_A$ of height at least $(\lceil \log_d l \rceil +t+2) - (\lceil \log_d l \rceil) = t+2$, meaning that an embedding from $T_A$ to $A$ exists. 
+    Next, let $A'_M$ be the subgraph of $H'$ induced by the end bag $X_s$ in $X_{A'}$. Since at step $i=s$, all tokens in $M_{t, d, l}$ have been used in the embedding, Lemma~\ref{lemma_embedding} implies that $A'_M$ represents an embedding of $M_{t, d, l}$ into $H'$. Since $M_{t, d, l}$ has height $\lceil \log_d l \rceil +t+2$, and $A'$ contains $A'_M$, the subgraph induced by $V[A'] \backslash V[A]$ forms a complete directed $d$-ary tree of height at most $\lceil \log_d l \rceil$. Thus, $A$ contains a complete directed $d$-ary tree $T_A$ of height at least $(\lceil \log_d l \rceil +t+2) - (\lceil \log_d l \rceil) = t+2$, meaning that an embedding from $T_A$ to $A$ exists. 
 
-    By \textbf{Lemma~\ref{comp_tree}}, the DAG-pathwidth of $T_A$ is $t+1$, implying that the DAG-pathwidth of $A$ is at least $t+1$. Since $H$ contains $A$ as a subgraph, the DAG-pathwidth of $H$ must be greater than $t$. Consequently, the DAG-pathwidth of $A$ is greater than $t$ but at most $ld^{t+3}-1$.
+    By Lemma~\ref{comp_tree}, the DAG-pathwidth of $T_A$ is $t+1$, implying that the DAG-pathwidth of $A$ is at least $t+1$. Since $H$ contains $A$ as a subgraph, the DAG-pathwidth of $H$ must be greater than $t$. Consequently, the DAG-pathwidth of $A$ is greater than $t$ but at most $ld^{t+3}-1$.
 \end{proof}
 
-\subsection{\textbf{Lemma~\ref{lemma_(3)}}}\label{appendix_D7}
+\subsection{Lemma~\ref{lemma_(3)}}\label{appendix_D7}
 
 Before proving Lemma~\ref{lemma_(3)}, we show the following.  
 
@@ -1587,7 +1599,7 @@ Before proving Lemma~\ref{lemma_(3)}, we show the following.
     
     Define $A_{r_0}$ as the set of children of $r'_0$ whose descendants include $r_0$, and let $A'_{r_0}$ be the set of other children of $r'_0$. Let $G_{A_{r_0}}$ be the subgraph induced by the descendants of the vertices in $A_{r_0}$ and $G_{A'_{r_0}}$ be the subgraph induced by the descendants of the vertices in $A'_{r_0}$ that are not in $G_{A_{r_0}}$. Additionally, let $G_{r_0}$ be the subgraph induced by the descendants of $r_0$. By assumption, $v \notin V[G_{r_0}]$, meaning $v \in V[G_{A_{r_0}}] \setminus V[G_{r_0}]$ or $v \in V[G_{A'_{r_0}}]$ (see Figure~\ref{fig:13} in Appendix~\ref{location_figures}).
     
-    Consider the first moment $i = l$ $(l \leq k)$ when a token $\lambda$ is placed on a vertex in $G_{A_{r_0}}$. At this moment, all vertices in $G_{A'_{r_0}}$ must have had their tokens removed. We justify this below. Any vertex in $H'$ is either (a) blue, (b) red with a token, or (c) red and a token is already removed. Since $v$ is blue at $i = l$, Line 5 of $\mathsf{FindEmbedding}$ requires that its parent must be (a) or (b). If the parent is (a), we continue checking its parent, which must also be (a) or (b). If all ancestors of $v$ are (a), at least one blue vertex exists in $A'_{r_0}$ at $i = l$, contradicting the conditions of Line 5. If at least one ancestor is (b), then, when an token $T_{r'_0}$ placed on $r'_0$ has been removed, $T_{r'_0}$ must have had at least two \textit{tokened} children, one in $G_{A'_{r_0}}$ and another elsewhere. Since $T_{r'_0}$ has been removed from $r'_0$ at $i = l$, this contradicts Line 5 of $\mathsf{FindEmbedding}$ which requires that a removed token has at most one \textit{tokened} child. Therefore, $v \notin V[G_{A'_{r_0}}]$ must hold. Given that $v \notin V[G_{A_{r_0}}]$ by assumption, it must hold that $v \in V[G_{A_{r_0}}] \setminus V[G_{r_0}]$. However, in this case, a common ancestor of $v$ and $r_0$ must be included in $A_{r_0}$, which contradicts the fact that there exists no common ancestor of $v$ and $r_0$ among the descendants of $r'_0$. Thus, the claim of \textbf{Lemma~\ref{lemma_(3)}} is proven.
+    Consider the first moment $i = l$ $(l \leq k)$ when a token $\lambda$ is placed on a vertex in $G_{A_{r_0}}$. At this moment, all vertices in $G_{A'_{r_0}}$ must have had their tokens removed. We justify this below. Any vertex in $H'$ is either (a) blue, (b) red with a token, or (c) red and a token is already removed. Since $v$ is blue at $i = l$, Line 5 of $\mathsf{FindEmbedding}$ requires that its parent must be (a) or (b). If the parent is (a), we continue checking its parent, which must also be (a) or (b). If all ancestors of $v$ are (a), at least one blue vertex exists in $A'_{r_0}$ at $i = l$, contradicting the conditions of Line 5. If at least one ancestor is (b), then, when an token $T_{r'_0}$ placed on $r'_0$ has been removed, $T_{r'_0}$ must have had at least two \textit{tokened} children, one in $G_{A'_{r_0}}$ and another elsewhere. Since $T_{r'_0}$ has been removed from $r'_0$ at $i = l$, this contradicts Line 5 of $\mathsf{FindEmbedding}$ which requires that a removed token has at most one \textit{tokened} child. Therefore, $v \notin V[G_{A'_{r_0}}]$ must hold. Given that $v \notin V[G_{A_{r_0}}]$ by assumption, it must hold that $v \in V[G_{A_{r_0}}] \setminus V[G_{r_0}]$. However, in this case, a common ancestor of $v$ and $r_0$ must be included in $A_{r_0}$, which contradicts the fact that there exists no common ancestor of $v$ and $r_0$ among the descendants of $r'_0$. Thus, the claim of Lemma~\ref{lemma_(3)} is proven.
 \end{proof}
 
 Now, we prove Lemma~\ref{lemma_(3)}.
@@ -1600,14 +1612,14 @@ Now, we prove Lemma~\ref{lemma_(3)}.
         \item $T'$ has no \textit{untokened} children. \label{cond22}
     \end{enumerate}
     
-    Note that we do not need to consider the case where $u'$ has no children, because in this case, we can remove the token placed on $u'$, preventing the state described in (3) from occurring. If condition \ref{cond22} holds, then $T'$ is either a leaf or all of $T'$'s children are \textit{tokened}. However, neither of these conditions can hold, because by assumption, the endpoint $T'$ of $P'$ is not a leaf, and if $T'$ has a \textit{tokened} child, it would contradict the fact that $P'$ is the longest path. Therefore, condition \ref{cond11} must hold. Let $r_0$ be the vertex where the root token $\lambda$ is placed. Let $G_{r_0}$ be the subgraph induced by the descendants of $r_0$ in $H'$, and let $V_h$ be the set of vertices in $G_{r_0}$ where tokens with height $h\ (1 \leq h \leq h(M_{t, d, l}))$ on the $M_{t, d, l}$ graph are placed . Also, let $\mathcal{V} = \bigcup_{1 \leq h \leq h(M_{t, d, l})} V_h$. By assumption, $u' \in V_{h'}\ (1 \leq h' \leq h(M_{t, d, l})-1)$. Furthermore, by \textbf{Lemma~\ref{blue_reachable}}, both the blue vertices $v', w^{(1)}$ are reachable from $r_0$, so they are contained in $G_{r_0}$. Additionally, considering the placement of tokens in $\mathsf{GrowTokenTree}$, we observe that the children of a blue vertex cannot be red, meaning that $v', w^{(1)}$ and their descendants are not in $\mathcal{V}$. Now, for $w^{(1)}$, one of the following must always hold:
+    Note that we do not need to consider the case where $u'$ has no children, because in this case, we can remove the token placed on $u'$, preventing the state described in (3) from occurring. If condition \ref{cond22} holds, then $T'$ is either a leaf or all of $T'$'s children are \textit{tokened}. However, neither of these conditions can hold, because by assumption, the endpoint $T'$ of $P'$ is not a leaf, and if $T'$ has a \textit{tokened} child, it would contradict the fact that $P'$ is the longest path. Therefore, condition \ref{cond11} must hold. Let $r_0$ be the vertex where the root token $\lambda$ is placed. Let $G_{r_0}$ be the subgraph induced by the descendants of $r_0$ in $H'$, and let $V_h$ be the set of vertices in $G_{r_0}$ where tokens with height $h\ (1 \leq h \leq h(M_{t, d, l}))$ on the $M_{t, d, l}$ graph are placed . Also, let $\mathcal{V} = \bigcup_{1 \leq h \leq h(M_{t, d, l})} V_h$. By assumption, $u' \in V_{h'}\ (1 \leq h' \leq h(M_{t, d, l})-1)$. Furthermore, by Lemma~\ref{blue_reachable}, both the blue vertices $v', w^{(1)}$ are reachable from $r_0$, so they are contained in $G_{r_0}$. Additionally, considering the placement of tokens in $\mathsf{GrowTokenTree}$, we observe that the children of a blue vertex cannot be red, meaning that $v', w^{(1)}$ and their descendants are not in $\mathcal{V}$. Now, for $w^{(1)}$, one of the following must always hold:
 
 \begin{enumerate}
     \item All of $w^{(1)}$'s parents are in $\mathcal{V}$. \label{cond_a}
     \item There exists at least one blue parent of $w^{(1)}$ that is not in $\mathcal{V}$. \label{cond_b}
 \end{enumerate}
 
-    Note that there are no red parents of $w^{(1)}$ that are not in $\mathcal{V}$. This is because, by a similar argument to \textbf{Lemma~\ref{blue_reachable}}, each of $w^{(1)}$'s parents must either be (a) blue or (b) red with a token. Thus, if any parent satisfies (a), condition \ref{cond_b} holds; otherwise, condition \ref{cond_a} holds. If condition \ref{cond_a} holds, a token should be placed on $w^{(1)}$. This is because each of $w^{(1)}$'s parents must be included in one of $V_1, V_2, \dots, V_{h'}$, and each parent has exactly $d$ children, the maximum outdegree in $H'$. Therefore, each parent must have at least one \textit{untokened} child, and this token can be placed on $w^{(1)}$. Thus, the condition \ref{cond_a} contradicts the assumption that $w^{(1)}$ is blue. Therefore, condition \ref{cond_b} must hold. 
+    Note that there are no red parents of $w^{(1)}$ that are not in $\mathcal{V}$. This is because, by a similar argument to Lemma~\ref{blue_reachable}, each of $w^{(1)}$'s parents must either be (a) blue or (b) red with a token. Thus, if any parent satisfies (a), condition \ref{cond_b} holds; otherwise, condition \ref{cond_a} holds. If condition \ref{cond_a} holds, a token should be placed on $w^{(1)}$. This is because each of $w^{(1)}$'s parents must be included in one of $V_1, V_2, \dots, V_{h'}$, and each parent has exactly $d$ children, the maximum outdegree in $H'$. Therefore, each parent must have at least one \textit{untokened} child, and this token can be placed on $w^{(1)}$. Thus, the condition \ref{cond_a} contradicts the assumption that $w^{(1)}$ is blue. Therefore, condition \ref{cond_b} must hold. 
     
     If condition \ref{cond_b} holds for $w^{(1)}$, let $w^{(2)}$ be one of blue parents of $w^{(1)}$ satisfying condition \ref{cond_b}. By similar reasoning, a blue parent $w^{(3)}$ of $w^{(2)}$ satisfying condition \ref{cond_b} must exist. Repeating this argument, since the number of vertices in $H'$ is finite, there must eventually be a blue vertex $w^{(n)}$ that satisfies condition \ref{cond_a}. Therefore, a contradiction arises, and there must be at least one path from the root to a leaf in the \textit{tokened} token set on $M_{t, d, l}$ (see Figure~\ref{fig:14} in Appendix~\ref{location_figures}).
     
@@ -1631,15 +1643,15 @@ Now, we prove Lemma~\ref{lemma_(3)}.
 
 
 
-\subsection{\textbf{Theorem~\ref{approximation3}}}\label{appendix_D8}
+\subsection{Theorem~\ref{approximation3}}\label{appendix_D8}
 \begin{proof}
-    By inputting the DAG $H$ into $\mathsf{FindEmbedding}$, the algorithm will always terminate in one of the cases (1), (2), or (3). If it terminates in case (1), by \textbf{Lemma~\ref{lemma_(1)}}, \textbf{Theorem~\ref{approximation3}}(a) holds. If it terminates in case (2), by \textbf{Lemma~\ref{lemma_(2)}}, \textbf{Theorem~\ref{approximation3}}(b) holds. If it terminates in case (3), by \textbf{Lemma~\ref{lemma_(3)}} and setting $A = H$, \textbf{Theorem~\ref{approximation3}}(b) holds. Therefore, \textbf{Theorem~\ref{approximation3}} is proven.
+    By inputting the DAG $H$ into $\mathsf{FindEmbedding}$, the algorithm will always terminate in one of the cases (1), (2), or (3). If it terminates in case (1), by Lemma~\ref{lemma_(1)}, Theorem~\ref{approximation3}(a) holds. If it terminates in case (2), by Lemma~\ref{lemma_(2)}, Theorem~\ref{approximation3}(b) holds. If it terminates in case (3), by Lemma~\ref{lemma_(3)} and setting $A = H$, Theorem~\ref{approximation3}(b) holds. Therefore, Theorem~\ref{approximation3} is proven.
 \end{proof}
 
 
-\subsection{\textbf{Corollary~\ref{cor}}}\label{appendix_D9}
+\subsection{Corollary~\ref{cor}}\label{appendix_D9}
 \begin{proof}
-    By \textbf{Theorem~\ref{approximation3}}, $\mathsf{FindEmbedding}$ either outputs a witness that the DAG-pathwidth of $H$ is greater than $t$, or outputs a DAG-path-decomposition of width $O(ld^t)$. We now show that $\mathsf{FindEmbedding}$ terminates in polynomial time. In $\mathsf{GrowTokenTree}$, the condition check of Line 1 takes $O(dn)$ time, and the while loop is repeated at most $|V[M_{t, d, l}]| = O(d^t)$ times. Also, due to the removal of $T$ in Line 6 of $\mathsf{FindEmbedding}$, the vertices where $T$ was placed remain red, so this operation is performed $O(n)$ times. Therefore, the while loop in Line 4 is also repeated $O(n)$ times. Furthermore, the while loop in Line 10 clearly repeats at most $d^2$ times. Other steps are processed in $O(1)$ time. Thus, the algorithm terminates in $O(n^2)$ time if $d$ and $l$ are bounded by constants.
+    By Theorem~\ref{approximation3}, $\mathsf{FindEmbedding}$ either outputs a witness that the DAG-pathwidth of $H$ is greater than $t$, or outputs a DAG-path-decomposition of width $O(ld^t)$. We now show that $\mathsf{FindEmbedding}$ terminates in polynomial time. In $\mathsf{GrowTokenTree}$, the condition check of Line 1 takes $O(dn)$ time, and the while loop is repeated at most $|V[M_{t, d, l}]| = O(d^t)$ times. Also, due to the removal of $T$ in Line 6 of $\mathsf{FindEmbedding}$, the vertices where $T$ was placed remain red, so this operation is performed $O(n)$ times. Therefore, the while loop in Line 4 is also repeated $O(n)$ times. Furthermore, the while loop in Line 10 clearly repeats at most $d^2$ times. Other steps are processed in $O(1)$ time. Thus, the algorithm terminates in $O(n^2)$ time if $d$ and $l$ are bounded by constants.
 \end{proof}
 
 
